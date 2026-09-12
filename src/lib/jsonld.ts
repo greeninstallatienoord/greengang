@@ -71,6 +71,36 @@ export function localBusinessJsonLd(): Record<string, unknown> {
   }
 }
 
+export function serviceAreaPageJsonLd(): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: 'Werkgebied Noord-Nederland',
+    description: site.copy.localText,
+    url: absoluteUrl('/werkgebied'),
+    inLanguage: 'nl-NL',
+    about: {
+      '@id': businessEntityId(),
+    },
+    mentions: serviceArea.provinces.map((province) => ({
+      '@type': 'AdministrativeArea',
+      name: province.name,
+    })),
+    mainEntity: {
+      '@type': 'Place',
+      name: business.address.city,
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: business.address.street,
+        postalCode: business.address.postalCode,
+        addressLocality: business.address.city,
+        addressRegion: business.address.region,
+        addressCountry: business.address.countryCode,
+      },
+    },
+  }
+}
+
 export function contactPageJsonLd(): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
