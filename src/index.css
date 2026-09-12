@@ -1,0 +1,122 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Source Sans 3', 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+
+  --color-brand: #1a8a34;
+  --color-brand-dark: #14692a;
+  --color-brand-deep: #0f4f20;
+  --color-brand-soft: #e7f5ea;
+  --color-ink: #121417;
+  --color-ink-muted: #3f464d;
+  --color-line: #d7ddd6;
+  --color-surface: #f3f5f2;
+  --color-paper: #ffffff;
+  --color-surface-raised: #ffffff;
+  --color-accent: #1a8a34;
+  --color-accent-foreground: #ffffff;
+  --color-danger: #9b2c2c;
+  --color-whatsapp: #128c7e;
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+
+  --shadow-card: 0 1px 2px rgb(18 20 23 / 0.05), 0 8px 24px rgb(18 20 23 / 0.05);
+  --shadow-header: 0 1px 0 rgb(18 20 23 / 0.06);
+
+  --space-section: 3.5rem;
+  --space-section-lg: 5rem;
+  --container-max: 72rem;
+  --container-narrow: 48rem;
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-enter: 550ms;
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+}
+
+@layer base {
+  html {
+    overflow-x: clip;
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    @apply m-0 min-h-dvh overflow-x-clip bg-surface font-sans text-base leading-relaxed text-ink antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-wrap: break-word;
+  }
+
+  #root {
+    @apply min-h-dvh;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand;
+  }
+
+  img,
+  svg {
+    @apply max-w-full;
+  }
+
+  img {
+    @apply h-auto;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .display {
+    font-family: var(--font-display);
+  }
+
+  .fade-up {
+    animation: fade-up var(--duration-enter) ease both;
+  }
+
+  .eyebrow {
+    @apply text-sm font-semibold uppercase tracking-[0.14em] text-brand-dark;
+  }
+}
+
+@keyframes adminDrawer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

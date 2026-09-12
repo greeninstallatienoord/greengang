@@ -1,0 +1,132 @@
+import { business } from './business'
+import { site } from './site'
+import type { SeoRecord, ServiceSlug } from '../types'
+
+export const pageSeo = {
+  home: {
+    title: site.name,
+    description: site.description,
+    path: '/',
+  },
+  cvKetel: {
+    title: 'CV-ketel installeren of vervangen',
+    description:
+      'Installatie of vervanging van een cv-ketel door Green Installatie Noord in Oude Pekela. Advies, offerte en onderhoud zonder standaardprijzen op de site.',
+    path: '/cv-ketel',
+  },
+  airco: {
+    title: 'Airconditioning laten installeren',
+    description:
+      'Airconditioning-installatie in Oude Pekela voor koelen en, waar passend, verwarmen. Green Installatie Noord bekijkt de ruimte voordat er een voorstel komt.',
+    path: '/airco',
+  },
+  warmtepomp: {
+    title: 'Warmtepomp advies en installatie',
+    description:
+      'Advies en installatie van een warmtepomp vanuit Oude Pekela, afgestemd op de woning. Geen algemene geschiktheidsclaim; wel een duidelijk voortraject.',
+    path: '/warmtepomp',
+  },
+  onderhoud: {
+    title: 'CV-ketel onderhoud en service',
+    description:
+      'Onderhoud en service van cv-ketels en klimaatinstallaties vanuit Oude Pekela. Plan een controle of meld een storing bij Green Installatie Noord.',
+    path: '/service-onderhoud',
+  },
+  about: {
+    title: 'Over Green Installatie Noord',
+    description:
+      'Wie Green Installatie Noord is en hoe we werken bij cv-ketel, airco, warmtepomp en onderhoud. Bedrijfsfeiten volgen zodra ze bevestigd zijn.',
+    path: '/over-ons',
+  },
+  areas: {
+    title: 'Werkgebied',
+    description:
+      'Het werkgebied van Green Installatie Noord wordt per plaats gepubliceerd. Geen verzonnen gemeenten; wel een structuur voor lokale pagina’s.',
+    path: '/werkgebied',
+  },
+  blog: {
+    title: 'Kennisbank over cv-ketel, airco en warmtepomp',
+    description:
+      'Nuchtere artikelen over cv-ketels, airconditioning, warmtepompen en onderhoud. Bedoeld om een gesprek voor te bereiden, niet als vultekst.',
+    path: '/blog',
+  },
+  contact: {
+    title: 'Contact met Green Installatie Noord',
+    description:
+      `Neem contact op met ${business.businessName} in ${business.address.city}. Bel ${business.phone}, mail ${business.email} of stuur een bericht.`,
+    path: '/contact',
+  },
+  quote: {
+    title: 'Offerte aanvragen voor installatie of onderhoud',
+    description:
+      'Vraag een offerte aan voor cv-ketel, airconditioning, warmtepomp of onderhoud. Vier stappen, optioneel een foto van de situatie.',
+    path: '/offerte-aanvragen',
+  },
+  appointment: {
+    title: 'Afspraak aanvragen bij Green Installatie Noord',
+    description:
+      'Vraag een afspraak aan voor cv-ketel, airco, warmtepomp of cv-ketel service en onderhoud. Kies een datum en vrij tijdstip. Bevestiging volgt later.',
+    path: '/afspraak-maken',
+  },
+  faq: {
+    title: 'Vragen over cv-ketel, airco, warmtepomp en onderhoud',
+    description:
+      'Antwoorden over installatie, onderhoud, offertes en afspraken bij Green Installatie Noord. Zonder beloftes die we niet kunnen onderbouwen.',
+    path: '/veelgestelde-vragen',
+  },
+} as const satisfies Record<string, SeoRecord>
+
+export const serviceSeo: Record<ServiceSlug, SeoRecord> = {
+  'cv-ketel': pageSeo.cvKetel,
+  airco: pageSeo.airco,
+  warmtepomp: pageSeo.warmtepomp,
+  'service-onderhoud': pageSeo.onderhoud,
+}
+
+export const blogCategorySeo: Record<
+  string,
+  { title: string; description: string; intro: string }
+> = {
+  'cv-ketel': {
+    title: 'Artikelen over cv-ketels',
+    description:
+      'Artikelen over beoordelen, vervangen en onderhouden van een cv-ketel. Geen standaardleeftijd als harde waarheid.',
+    intro:
+      'Stukken over de cv-ketel: wanneer beoordeling zinvol is, wat onderhoud inhoudt, en hoe u een gesprek voorbereidt.',
+  },
+  airco: {
+    title: 'Artikelen over airconditioning',
+    description:
+      'Artikelen over airconditioning in huis: koelen, soms verwarmen, en vragen vóór installatie.',
+    intro:
+      'Korte stukken over airconditioning per ruimte. Geen merkenlijst, wel de vragen die het advies scherp maken.',
+  },
+  warmtepomp: {
+    title: 'Artikelen over warmtepompen',
+    description:
+      'Artikelen over het overwegen van een warmtepomp. Maatwerk, geen algemene “past altijd”-boodschap.',
+    intro:
+      'Oriëntatie op de warmtepomp: wat u kunt verzamelen en waarom de woning eerst beoordeeld moet worden.',
+  },
+  onderhoud: {
+    title: 'Artikelen over onderhoud en service',
+    description:
+      'Artikelen over onderhoud van cv-ketels en klimaatinstallaties, zonder vaste termijnen als belofte.',
+    intro:
+      'Onderhoud is controle, geen garantie op “nooit meer storing”. Deze stukken helpen het bezoek voor te bereiden.',
+  },
+  'energie-comfort': {
+    title: 'Artikelen over energie en comfort',
+    description:
+      'Artikelen over comfort in huis: verwarmen, koelen en de keuze tussen systemen, zonder energieclaims.',
+    intro:
+      'Comfort en energiegebruik hangen af van de woning. We schrijven wat u kunt vragen, niet wat we niet kunnen meten.',
+  },
+  'praktische-tips': {
+    title: 'Praktische tips voor installatiewerk',
+    description:
+      'Praktische tips om een offerte of afspraak voor te bereiden bij cv-ketel, airco of warmtepomp.',
+    intro:
+      'Handvatten voor het gesprek: wat u kunt noteren, fotograferen of beslissen voordat er een voorstel komt.',
+  },
+}

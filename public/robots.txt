@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+Disallow: /privacy
+Disallow: /cookies
+Disallow: /voorwaarden
+Disallow: /algemene-voorwaarden
+Disallow: /disclaimer
+Disallow: /blackberry97
+Disallow: /blackberry97/
+
+Sitemap: https://greeninstallatienoord.nl/sitemap.xml

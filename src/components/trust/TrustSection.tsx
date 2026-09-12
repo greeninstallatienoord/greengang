@@ -1,0 +1,188 @@
+import { business } from '../../data/business'
+import {
+  approvedBrands,
+  approvedCertifications,
+  approvedGuarantees,
+  approvedMemberships,
+  approvedNotes,
+  approvedProjects,
+  approvedReviewPlatforms,
+  approvedReviews,
+  hasTrustContent,
+  trustContent,
+} from '../../data/trust'
+import { Card } from '../Card'
+import { Container } from '../Container'
+import { Heading } from '../Heading'
+import { Section } from '../Section'
+import { CertificationCard } from './CertificationCard'
+import { GoogleReviewsCta } from './GoogleReviewsCta'
+import { ReviewCard } from './ReviewCard'
+
+export function TrustSection() {
+  if (!hasTrustContent()) return null
+
+  const notes = approvedNotes()
+  const certifications = approvedCertifications()
+  const reviews = approvedReviews()
+  const platforms = approvedReviewPlatforms()
+  const brands = approvedBrands()
+  const projects = approvedProjects()
+  const guarantees = approvedGuarantees()
+  const memberships = approvedMemberships()
+
+  return (
+    <Section className="bg-paper">
+      <Container>
+        <Heading as="h2">Vakmanschap &amp; kwaliteit</Heading>
+        <p className="mt-3 max-w-2xl text-ink-muted">
+          Alleen wat we kunnen onderbouwen. Certificaten, garanties, merken en
+          recensies verschijnen hier pas na controle. Geen verzonnen scores.
+        </p>
+
+        {notes.length > 0 || trustContent.yearsOfExperience !== null ? (
+          <div className="mt-8 grid gap-5 md:grid-cols-2">
+            {notes.map((item) => (
+              <Card key={item.title}>
+                <h3 className="font-semibold">{item.title}</h3>
+                <p className="mt-2 text-sm text-ink-muted">{item.text}</p>
+              </Card>
+            ))}
+            {trustContent.yearsOfExperience !== null ? (
+              <Card>
+                <h3 className="font-semibold">Ervaring</h3>
+                <p className="mt-2 text-sm text-ink-muted">
+                  {trustContent.yearsOfExperience} jaar
+                </p>
+              </Card>
+            ) : null}
+            {trustContent.completedProjects !== null ? (
+              <Card>
+                <h3 className="font-semibold">Projecten</h3>
+                <p className="mt-2 text-sm text-ink-muted">
+                  {trustContent.completedProjects} afgeronde projecten
+                </p>
+              </Card>
+            ) : null}
+          </div>
+        ) : null}
+
+        {certifications.length > 0 ? (
+          <div className="mt-10">
+            <h3 className="text-xl font-semibold">Certificeringen</h3>
+            <div className="mt-4 grid gap-5 md:grid-cols-2">
+              {certifications.map((item) => (
+                <CertificationCard key={item.id} certification={item} />
+              ))}
+            </div>
+          </div>
+        ) : null}
+
+        {guarantees.length > 0 ? (
+          <div className="mt-10">
+            <h3 className="text-xl font-semibold">Garanties</h3>
+            <div className="mt-4 grid gap-5 md:grid-cols-2">
+              {guarantees.map((item) => (
+                <Card key={item.title}>
+                  <h3 className="font-semibold">{item.title}</h3>
+                  <p className="mt-2 text-sm text-ink-muted">{item.text}</p>
+                </Card>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
+        {reviews.length > 0 ? (
+          <div className="mt-10">
+            <h3 className="text-xl font-semibold">Ervaringen</h3>
+            <div className="mt-4 grid gap-5 md:grid-cols-2">
+              {reviews.map((item) => (
+                <ReviewCard key={item.id} review={item} />
+              ))}
+            </div>
+          </div>
+        ) : null}
+
+        {platforms.length > 0 || Boolean(business.googleBusinessProfile) ? (
+          <div className="mt-10 grid gap-5 md:grid-cols-2">
+            <GoogleReviewsCta />
+            {platforms.map((item) => (
+              <Card key={item.id}>
+                <h3 className="font-semibold">{item.name}</h3>
+                <p className="mt-2 text-sm text-ink-muted">
+                  Ervaringen staan op het bronplatform. We nemen de tekst hier
+                  niet over zolang hergebruik niet is afgestemd.
+                </p>
+                <p className="mt-4 text-sm">
+                  <a
+                    href={item.url}
+                    className="font-semibold underline underline-offset-2"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Bekijk ervaringen op {item.name}
+                  </a>
+                </p>
+              </Card>
+            ))}
+          </div>
+        ) : null}
+
+        {memberships.length > 0 ? (
+          <div className="mt-10">
+            <h3 className="text-xl font-semibold">Lidmaatschappen</h3>
+            <ul className="mt-4 grid gap-3">
+              {memberships.map((item) => (
+                <li key={item.name}>
+                  {item.url ? (
+                    <a
+                      href={item.url}
+                      className="font-semibold underline"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      {item.name}
+                    </a>
+                  ) : (
+                    <span className="font-semibold">{item.name}</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
+        {brands.length > 0 ? (
+          <div className="mt-10">
+            <h3 className="text-xl font-semibold">Merken</h3>
+            <ul className="mt-4 flex flex-wrap gap-2 text-sm">
+              {brands.map((item) => (
+                <li key={item.name} className="rounded-md bg-surface px-3 py-1">
+                  {item.name}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
+        {projects.length > 0 ? (
+          <div className="mt-10">
+            <h3 className="text-xl font-semibold">Projecten</h3>
+            <div className="mt-4 grid gap-5 md:grid-cols-2">
+              {projects.map((item) => (
+                <Card key={item.title}>
+                  <h3 className="font-semibold">{item.title}</h3>
+                  <p className="mt-2 text-sm text-ink-muted">{item.summary}</p>
+                </Card>
+              ))}
+            </div>
+          </div>
+        ) : null}
+      </Container>
+    </Section>
+  )
+}
+
+export function TrustShowcase() {
+  return <TrustSection />
+}
