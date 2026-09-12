@@ -2,6 +2,12 @@ name = "greengang"
 main = "worker/src/index.ts"
 compatibility_date = "2026-09-01"
 compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+routes = [
+  { pattern = "greeninstallatienoord.nl", custom_domain = true },
+  { pattern = "development.greeninstallatienoord.nl", custom_domain = true },
+]
 
 [assets]
 directory = "./dist"
