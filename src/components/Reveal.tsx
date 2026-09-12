@@ -1,13 +1,14 @@
-import type { ReactNode } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import { useEffect, useRef } from 'react'
 import { cn } from '../lib/cn'
 
 type RevealProps = {
   className?: string
   children: ReactNode
+  delay?: number
 }
 
-export function Reveal({ className, children }: RevealProps) {
+export function Reveal({ className, children, delay = 0 }: RevealProps) {
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -32,7 +33,11 @@ export function Reveal({ className, children }: RevealProps) {
   }, [])
 
   return (
-    <div ref={ref} className={cn('reveal-block', className)}>
+    <div
+      ref={ref}
+      className={cn('reveal-block', className)}
+      style={delay ? ({ '--reveal-delay': `${delay}ms` } as CSSProperties) : undefined}
+    >
       {children}
     </div>
   )

@@ -60,9 +60,9 @@ export function PageHero({
             <MediaImage
               asset={image}
               alt={imageAlt}
-              className="rounded-none max-h-[18rem] sm:max-h-[24rem] lg:max-h-none"
-              ratio="4 / 5"
-              sizes="(min-width: 1024px) 42vw, 100vw"
+              className="rounded-none max-h-[16.5rem] sm:max-h-[18rem] lg:max-h-[20rem]"
+              ratio="16 / 10"
+              sizes="(min-width: 1024px) 38vw, 100vw"
               priority
             />
           ) : null}

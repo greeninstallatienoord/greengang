@@ -15,6 +15,7 @@ import { services } from '../data/services'
 import { pageImages } from '../data/media'
 import { MediaImage } from '../components/media/MediaImage'
 import { Heading } from '../components/Heading'
+import { Reveal } from '../components/Reveal'
 import { serviceArea } from '../data/region'
 import { site } from '../data/site'
 
@@ -46,38 +47,57 @@ export function AboutPage() {
         title="Installatiewerk dat begint met goed luisteren"
         intro="Green Installatie Noord installeert en onderhoudt cv-ketels, airconditioning en warmtepompen. Eerst de situatie, dan een voorstel."
         image={pageImages.aboutHero}
-        actions={<CtaPair showCall />}
+        actions={<CtaPair equal />}
       />
 
       <Section>
-        <Container className="grid items-end gap-10 lg:grid-cols-12">
-          <div className="lg:col-span-6">
-            <p className="eyebrow">Het bedrijf</p>
-            <Heading as="h2" className="mt-3">
-              Vanuit Oude Pekela actief in Noord-Nederland
-            </Heading>
-            <p className="lead mt-4">
-              De werkplaats en het adres liggen in Oude Pekela. Het werkgebied is
-              Noord-Nederland, met Groningen als thuisprovincie en daarnaast
-              Drenthe en Friesland.
-            </p>
-            <p className="mt-5 max-w-xl text-ink-muted">
-              We plaatsen hier geen verzonnen geschiedenis, teamfoto of jaartal.
-              Wat vaststaat: vier diensten, een bereikbaar adres, en een
-              werkwijze die begint bij uw woning.
-            </p>
+        <Container>
+          <Reveal>
+            <div className="max-w-2xl">
+              <p className="eyebrow">Het bedrijf</p>
+              <Heading as="h2" className="mt-3">
+                Vanuit Oude Pekela actief in Noord-Nederland
+              </Heading>
+              <p className="lead mt-4">
+                De werkplaats en het adres liggen in Oude Pekela. Het werkgebied is
+                Noord-Nederland, met Groningen als thuisprovincie en daarnaast
+                Drenthe en Friesland.
+              </p>
+              <p className="mt-5 max-w-xl text-ink-muted">
+                We plaatsen hier geen verzonnen geschiedenis, teamfoto of jaartal.
+                Wat vaststaat: vier diensten, een bereikbaar adres, en een
+                werkwijze die begint bij uw woning.
+              </p>
+            </div>
+          </Reveal>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            <Reveal delay={40}>
+              <figure>
+                <MediaImage
+                  asset={pageImages.aboutHouse}
+                  className="rounded-none"
+                  ratio="16 / 10"
+                  sizes="(min-width: 640px) 44vw, 100vw"
+                />
+                <figcaption className="mt-2 text-sm text-ink-muted">
+                  Plaatsing aan de gevel. Foto uit eigen werk.
+                </figcaption>
+              </figure>
+            </Reveal>
+            <Reveal delay={110}>
+              <figure>
+                <MediaImage
+                  asset={pageImages.aboutCraft}
+                  className="rounded-none"
+                  ratio="16 / 10"
+                  sizes="(min-width: 640px) 44vw, 100vw"
+                />
+                <figcaption className="mt-2 text-sm text-ink-muted">
+                  Afgewerkte buitenunit en leiding. Foto uit eigen werk.
+                </figcaption>
+              </figure>
+            </Reveal>
           </div>
-          <figure className="lg:col-span-6">
-            <MediaImage
-              asset={pageImages.aboutHouse}
-              className="rounded-none"
-              ratio="4 / 5"
-              sizes="(min-width: 1024px) 44vw, 100vw"
-            />
-            <figcaption className="mt-3 text-sm text-ink-muted">
-              Plaatsing aan de gevel. Foto uit eigen werk.
-            </figcaption>
-          </figure>
         </Container>
       </Section>
 
@@ -85,19 +105,8 @@ export function AboutPage() {
 
       <Section className="bg-paper">
         <Container>
-          <figure>
-            <MediaImage
-              asset={pageImages.aboutCraft}
-              className="rounded-none"
-              ratio="16 / 10"
-              sizes="100vw"
-            />
-            <figcaption className="mt-3 text-sm text-ink-muted">
-              Afgewerkte buitenunit en leiding. Foto uit eigen werk.
-            </figcaption>
-          </figure>
-          <div className="mt-10 grid gap-10 lg:grid-cols-12">
-            <div className="lg:col-span-5">
+          <Reveal>
+            <div className="max-w-2xl">
               <p className="eyebrow">Vakmanschap</p>
               <Heading as="h2" className="mt-3">
                 Nette montage, duidelijke uitleg
@@ -108,15 +117,17 @@ export function AboutPage() {
                 onderbouwd zijn.
               </p>
             </div>
-            <ul className="grid gap-6 lg:col-span-7">
-              {expect.map((item) => (
-                <li key={item.title} className="border-b border-line pb-6">
+          </Reveal>
+          <ul className="mt-8 grid gap-4 sm:grid-cols-3">
+            {expect.map((item, index) => (
+              <Reveal key={item.title} delay={index * 70}>
+                <li className="border-t border-line pt-4">
                   <h3 className="font-semibold tracking-[-0.015em]">{item.title}</h3>
                   <p className="mt-1 text-sm leading-relaxed text-ink-muted">{item.text}</p>
                 </li>
-              ))}
-            </ul>
-          </div>
+              </Reveal>
+            ))}
+          </ul>
         </Container>
       </Section>
 
@@ -124,15 +135,15 @@ export function AboutPage() {
 
       <Section>
         <Container className="grid gap-10 lg:grid-cols-12">
-          <div className="lg:col-span-6">
+          <Reveal className="lg:col-span-6">
             <Heading as="h2">Bereikbaar</Heading>
             <p className="mt-2 text-sm font-semibold">{site.name}</p>
             <div className="mt-6">
               <ContactDetails />
             </div>
             <SocialLinks className="mt-6" />
-          </div>
-          <div className="lg:col-span-6">
+          </Reveal>
+          <Reveal className="lg:col-span-6" delay={80}>
             <Heading as="h2">Werkgebied</Heading>
             <p className="mt-4 text-ink-muted">{serviceArea.statement}</p>
             <ul className="mt-6 grid gap-3">
@@ -143,7 +154,7 @@ export function AboutPage() {
                 </li>
               ))}
             </ul>
-          </div>
+          </Reveal>
         </Container>
       </Section>
 

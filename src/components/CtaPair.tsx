@@ -12,6 +12,7 @@ type CtaPairProps = {
   className?: string
   showCall?: boolean
   onDark?: boolean
+  equal?: boolean
 }
 
 export function CtaPair({
@@ -22,6 +23,7 @@ export function CtaPair({
   className,
   showCall = false,
   onDark = false,
+  equal = false,
 }: CtaPairProps) {
   const phoneHref = site.contact.phoneHref
   const resolvedSize = size ?? (compact ? 'sm' : 'md')
@@ -29,11 +31,17 @@ export function CtaPair({
   return (
     <div
       className={cn(
-        'flex flex-col items-stretch gap-2.5 min-[400px]:flex-row min-[400px]:flex-wrap min-[400px]:items-center',
+        equal
+          ? 'grid grid-cols-2 gap-2'
+          : 'flex flex-col items-stretch gap-2.5 min-[400px]:flex-row min-[400px]:flex-wrap min-[400px]:items-center',
         className,
       )}
     >
-      <ButtonLink to={quoteTo} size={resolvedSize}>
+      <ButtonLink
+        to={quoteTo}
+        size={resolvedSize}
+        className={equal ? 'w-full px-2 text-center text-[0.8125rem] leading-tight sm:text-[0.9rem]' : undefined}
+      >
         {site.copy.ctaQuote}
       </ButtonLink>
       <ButtonLink
@@ -41,12 +49,15 @@ export function CtaPair({
         variant="secondary"
         size={resolvedSize}
         className={
-          onDark
-            ? 'border-white/80 bg-white/12 text-white hover:border-white hover:bg-white/22'
-            : undefined
+          cn(
+            equal && 'w-full px-2 text-center text-[0.8125rem] leading-tight sm:text-[0.9rem]',
+            onDark
+              ? 'border-white/80 bg-white/12 text-white hover:border-white hover:bg-white/22'
+              : undefined,
+          )
         }
       >
-        <CalendarDays size={16} strokeWidth={1.75} aria-hidden="true" />
+        {equal ? null : <CalendarDays size={16} strokeWidth={1.75} aria-hidden="true" />}
         {site.copy.ctaAppointment}
       </ButtonLink>
       {showCall ? (
