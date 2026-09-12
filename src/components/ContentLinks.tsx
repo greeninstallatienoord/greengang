@@ -21,6 +21,7 @@ export function ContentLinks({ items, className }: ContentLinksProps) {
               target="_blank"
             >
               {item.label}
+              <span className="font-normal text-ink-muted"> (externe bron)</span>
             </a>
           ) : (
             <Link to={item.href} className="font-semibold underline underline-offset-2">

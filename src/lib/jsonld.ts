@@ -1,3 +1,4 @@
+import { blogCategoryLabels } from '../data/blog'
 import { business, schemaOpeningHoursSpecification, verifiedSameAs } from '../data/business'
 import { serviceArea } from '../data/region'
 import { site } from '../data/site'
@@ -185,8 +186,43 @@ function citationNodes(resources: ContentLink[] | undefined) {
     }))
 }
 
+export function collectionPageJsonLd(input: {
+  name: string
+  description: string
+  path: string
+  items: { name: string; path: string }[]
+}): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: input.name,
+    description: input.description,
+    url: absoluteUrl(input.path),
+    inLanguage: 'nl',
+    isPartOf: {
+      '@type': 'WebSite',
+      name: site.name,
+      url: site.url,
+    },
+    about: {
+      '@id': businessEntityId(),
+    },
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: input.items.length,
+      itemListElement: input.items.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.name,
+        url: absoluteUrl(item.path),
+      })),
+    },
+  }
+}
+
 export function articleJsonLd(post: BlogPost): Record<string, unknown> {
   const citations = citationNodes(post.resources)
+  const path = `/blog/${post.slug}`
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -195,14 +231,25 @@ export function articleJsonLd(post: BlogPost): Record<string, unknown> {
     datePublished: post.publishedAt,
     dateModified: post.updatedAt,
     inLanguage: 'nl',
+    url: absoluteUrl(path),
     image: absoluteUrl('/og-image.jpg'),
+    articleSection: blogCategoryLabels[post.category],
+    keywords: post.tags.join(', '),
     author: {
       '@id': businessEntityId(),
     },
     publisher: {
       '@id': businessEntityId(),
     },
-    mainEntityOfPage: absoluteUrl(`/blog/${post.slug}`),
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': absoluteUrl(path),
+    },
+    isPartOf: {
+      '@type': 'CollectionPage',
+      '@id': absoluteUrl('/blog'),
+      name: 'Kennisbank',
+    },
     about: post.relatedServiceSlugs.map((slug) => ({
       '@type': 'Service',
       url: absoluteUrl(`/${slug}`),

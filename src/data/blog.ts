@@ -1,7 +1,15 @@
 import type { BlogCategorySlug, BlogPost } from '../types'
+import { officialResource } from './citations'
 import { featuredGuideSlugs, guidePosts } from './guides'
 
 export { featuredGuideSlugs }
+
+export const blogCategoryServiceHref: Partial<Record<BlogCategorySlug, string>> = {
+  'cv-ketel': '/cv-ketel',
+  airco: '/airco',
+  warmtepomp: '/warmtepomp',
+  onderhoud: '/service-onderhoud',
+}
 
 export const blogCategoryLabels: Record<BlogCategorySlug, string> = {
   'cv-ketel': 'CV-ketel',
@@ -53,7 +61,16 @@ const corePosts: BlogPost[] = [
           'Noteer wat u merkt: geluid, drukverlies, wisselend warm water of een foutcode. Een foto van de opstelling helpt bij een eerste inschatting, maar is niet verplicht.',
           'Via een offerteaanvraag voor cv-ketelinstallatie of een afspraak kan Green Installatie Noord de situatie met u doornemen. Een beoordeling is geen opdracht tot vervanging.',
         ],
+        links: [
+          { label: 'Gids: cv-ketel beoordelen', href: '/blog/gids-cv-ketel' },
+          { label: 'Dienst: cv-ketel', href: '/cv-ketel' },
+          { label: 'Offerte aanvragen', href: '/offerte-aanvragen?dienst=cv-ketel' },
+        ],
       },
+    ],
+    resources: [
+      officialResource('rijksoverheidCo'),
+      officialResource('techniekNederland'),
     ],
   },
   {
@@ -85,8 +102,14 @@ const corePosts: BlogPost[] = [
         paragraphs: [
           'Onderhoud is planbaar. Een storing vraagt om service: eerst de oorzaak, daarna de oplossing. Soms blijkt tijdens onderhoud dat reparatie of vervanging logischer is. Dat hoort u dan duidelijk, zonder omwegen.',
         ],
+        links: [
+          { label: 'Checklist voor een onderhoudsbezoek', href: '/blog/checklist-onderhoud' },
+          { label: 'Dienst: service en onderhoud', href: '/service-onderhoud' },
+          { label: 'Afspraak maken', href: '/afspraak-maken?dienst=service-onderhoud' },
+        ],
       },
     ],
+    resources: [officialResource('techniekNederland')],
   },
   {
     slug: 'airco-koelen-en-verwarmen',
@@ -118,8 +141,14 @@ const corePosts: BlogPost[] = [
           'Welke ruimte wilt u aanpakken? Waar kan de buitenunit staan? Is er een logische leidingweg? En wilt u vooral koelen, of ook bijverwarmen?',
           'Green Installatie Noord installeert airconditioning en helpt die vragen vertalen naar een voorstel. Plaatsing is maatwerk; daarom eerst de ruimte, dan de offerte.',
         ],
+        links: [
+          { label: 'Dienst: airconditioning', href: '/airco' },
+          { label: 'Gids: airco onderhouden', href: '/blog/gids-airco-onderhoud' },
+          { label: 'Offerte aanvragen', href: '/offerte-aanvragen?dienst=airco' },
+        ],
       },
     ],
+    resources: [officialResource('iltFgassen')],
   },
   {
     slug: 'warmtepomp-waar-op-letten',
@@ -151,7 +180,16 @@ const corePosts: BlogPost[] = [
           'Bouwjaar of isolatiestappen, type afgifte, en of u volledig van het gas af wilt of een hybride stap overweegt. Hoe meer context, hoe gerichter het advies.',
           'Geschiktheid en type systeem volgen pas na beoordeling, niet vanaf deze pagina. Start bij warmtepompinstallatie of een afspraak voor advies.',
         ],
+        links: [
+          { label: 'Gids: warmtepomp overwegen', href: '/blog/gids-warmtepomp' },
+          { label: 'Dienst: warmtepomp', href: '/warmtepomp' },
+          { label: 'ISDE-subsidie (RVO)', href: 'https://www.rvo.nl/subsidies-financiering/isde', external: true },
+        ],
       },
+    ],
+    resources: [
+      officialResource('milieuCentraalWp'),
+      officialResource('rvoIsde'),
     ],
   },
   {
@@ -183,8 +221,14 @@ const corePosts: BlogPost[] = [
         paragraphs: [
           'Bij een aanvraag voor service en onderhoud kijken we naar het toestel en, als die er is, de voorgeschiedenis. Het bezoek zelf is de plek voor een concreet advies.',
         ],
+        links: [
+          { label: 'Dienst: service en onderhoud', href: '/service-onderhoud' },
+          { label: 'Checklist onderhoud', href: '/blog/checklist-onderhoud' },
+          { label: 'Veelgestelde vragen', href: '/veelgestelde-vragen' },
+        ],
       },
     ],
+    resources: [officialResource('techniekNederland')],
   },
   {
     slug: 'kiezen-tussen-systemen',
@@ -219,6 +263,12 @@ const corePosts: BlogPost[] = [
         paragraphs: [
           'Kies in het offerteformulier “Ik weet het nog niet” of stel de vraag via contact. Wij helpen de vraag scherp te krijgen voordat er een systeem wordt voorgesteld.',
         ],
+        links: [
+          { label: 'CV-ketel', href: '/cv-ketel' },
+          { label: 'Airconditioning', href: '/airco' },
+          { label: 'Warmtepomp', href: '/warmtepomp' },
+          { label: 'Contact', href: '/contact' },
+        ],
       },
     ],
   },
@@ -251,8 +301,14 @@ const corePosts: BlogPost[] = [
         paragraphs: [
           'Als het om de hele woning en de winter gaat, start u bij de cv-ketel of een warmtepompgesprek. Gaat het om één ruimte in de zomer, dan is airconditioning meestal het gesprek. Twijfelt u, gebruik dan de kennisbank of het contactformulier.',
         ],
+        links: [
+          { label: 'Kiezen tussen systemen', href: '/blog/kiezen-tussen-systemen' },
+          { label: 'Isolatie (Milieu Centraal)', href: 'https://www.milieucentraal.nl/energie-besparen/isolatie/', external: true },
+          { label: 'Contact', href: '/contact' },
+        ],
       },
     ],
+    resources: [officialResource('milieuCentraalIsolatie')],
   },
   {
     slug: 'offerte-voorbereiden',
@@ -281,7 +337,12 @@ const corePosts: BlogPost[] = [
         id: 'foto',
         heading: 'Foto’s zijn optioneel',
         paragraphs: [
-          'Een foto van de bestaande ketel, de plek voor een buitenunit of de technische ruimte helpt. Zonder foto kunnen we nog steeds verder. In het offerteformulier kunt u bestanden toevoegen; zonder backend worden ze nog niet verstuurd.',
+          'Een foto van de bestaande ketel, de plek voor een buitenunit of de technische ruimte helpt. Zonder foto kunnen we nog steeds verder. In het offerteformulier kunt u optioneel bestanden toevoegen.',
+        ],
+        links: [
+          { label: 'Checklist voor de installatiedag', href: '/blog/checklist-installatie' },
+          { label: 'Offerte aanvragen', href: '/offerte-aanvragen' },
+          { label: 'Afspraak maken', href: '/afspraak-maken' },
         ],
       },
     ],

@@ -238,6 +238,7 @@ export const guidePosts: BlogPost[] = [
     relatedServiceSlugs: ['cv-ketel', 'airco', 'warmtepomp'],
     relatedArticleSlugs: ['offerte-voorbereiden', 'gids-cv-ketel', 'gids-warmtepomp'],
     faqIds: ['installatie-voorbereiden', 'offerte-wat-nodig', 'afspraak-hoe'],
+    resources: [resource(officialSources.techniekNederland)],
     sections: [
       {
         id: 'toegang',

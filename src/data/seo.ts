@@ -53,7 +53,7 @@ export const pageSeo = {
   blog: {
     title: 'Kennisbank over cv-ketel, airco en warmtepomp',
     description:
-      'Nuchtere artikelen over cv-ketels, airconditioning, warmtepompen en onderhoud. Bedoeld om een gesprek voor te bereiden, niet als vultekst.',
+      'Artikelen over cv-ketel, airconditioning, warmtepomp en onderhoud in Noord-Nederland. Officiële bronnen erbij, zonder verzonnen cijfers of gekochte backlinks.',
     path: '/blog',
   },
   contact: {

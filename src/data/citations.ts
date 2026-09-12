@@ -1,3 +1,5 @@
+import type { ContentLink } from '../types'
+
 export type OfficialSource = {
   id: string
   label: string
@@ -66,4 +68,11 @@ export function sourceList(
   ...ids: (keyof typeof officialSources)[]
 ): OfficialSource[] {
   return ids.map((id) => officialSources[id])
+}
+
+export function officialResource(
+  id: keyof typeof officialSources,
+): ContentLink {
+  const source = officialSources[id]
+  return { label: source.label, href: source.url, external: true }
 }

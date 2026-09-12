@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom'
 import type { BlogPost } from '../../types'
+import { BlogPostGrid } from '../blog/BlogPostGrid'
 import { Container } from '../Container'
 import { Heading } from '../Heading'
 import { Section } from '../Section'
@@ -19,15 +19,9 @@ export function RelatedArticles({
     <Section>
       <Container>
         <Heading as="h2">{title}</Heading>
-        <ul className="mt-4 grid gap-2">
-          {posts.map((post) => (
-            <li key={post.slug}>
-              <Link to={`/blog/${post.slug}`} className="font-semibold underline">
-                {post.title}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <div className="mt-6">
+          <BlogPostGrid posts={posts} />
+        </div>
       </Container>
     </Section>
   )
