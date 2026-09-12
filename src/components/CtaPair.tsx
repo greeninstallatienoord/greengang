@@ -42,7 +42,7 @@ export function CtaPair({
         size={resolvedSize}
         className={
           onDark
-            ? 'border-white/45 bg-transparent text-white hover:border-white/70 hover:bg-white/10'
+            ? 'border-white/80 bg-white/12 text-white hover:border-white hover:bg-white/22'
             : undefined
         }
       >

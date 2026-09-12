@@ -56,18 +56,18 @@
   }
 
   html[data-cookie-banner='on'] {
-    --cookie-banner-offset: 17rem;
+    --cookie-banner-offset: 13.5rem;
   }
 
-  @media (min-width: 25rem) {
+  @media (min-width: 24rem) {
     html[data-cookie-banner='on'] {
-      --cookie-banner-offset: 11.5rem;
+      --cookie-banner-offset: 12rem;
     }
   }
 
   @media (min-width: 40rem) {
     html[data-cookie-banner='on'] {
-      --cookie-banner-offset: 8rem;
+      --cookie-banner-offset: 9.5rem;
     }
   }
 

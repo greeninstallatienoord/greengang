@@ -41,7 +41,7 @@ export function CookiePreferences({
 
   return (
     <div
-      className="fixed inset-0 z-[60] flex items-end justify-center bg-ink/35 p-3 sm:items-center sm:p-4"
+      className="fixed inset-0 z-[60] flex items-end justify-center bg-ink/45 p-3 sm:items-center sm:p-4"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) onClose()
       }}
@@ -52,7 +52,7 @@ export function CookiePreferences({
         aria-modal="true"
         aria-labelledby={titleId}
         tabIndex={-1}
-        className="max-h-[min(90dvh,36rem)] w-full max-w-md overflow-auto border border-line bg-paper p-5 shadow-lift outline-none sm:p-6"
+        className="max-h-[min(90dvh,36rem)] w-full max-w-md overflow-auto rounded-t-2xl border border-line bg-paper p-5 shadow-lift outline-none sm:rounded-2xl sm:p-6"
       >
         <h2 id={titleId} className="text-lg font-semibold">
           Cookievoorkeuren
