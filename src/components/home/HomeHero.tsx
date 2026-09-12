@@ -2,65 +2,77 @@ import { pageImages, mediaPositionStyle } from '../../data/media'
 import { serviceArea } from '../../data/region'
 import { site } from '../../data/site'
 import { ButtonLink } from '../ButtonLink'
+import { Container } from '../Container'
 
 const hero = pageImages.homeHero
 const heroCrop = mediaPositionStyle({
-  objectPosition: '78% 62%',
-  objectPositionMobile: '82% 68%',
+  objectPosition: '72% 54%',
+  objectPositionMobile: '78% 58%',
 })
 
 export function HomeHero() {
   return (
-    <section className="bg-paper">
-      <div className="lg:grid lg:grid-cols-2 lg:items-stretch">
-        <div className="relative aspect-[16/10] overflow-hidden sm:aspect-[16/9] lg:aspect-auto lg:min-h-[22rem] lg:max-h-[28rem]">
-          <img
-            src={hero.src}
-            alt=""
-            width={hero.width}
-            height={hero.height}
-            fetchPriority="high"
-            decoding="async"
-            className="media-photo absolute inset-0 size-full max-w-none object-cover"
-            style={heroCrop}
-          />
-          <p className="sr-only">{hero.alt}</p>
-        </div>
+    <section className="relative isolate overflow-hidden bg-brand-deep text-white">
+      <img
+        src={hero.src}
+        alt=""
+        width={hero.width}
+        height={hero.height}
+        fetchPriority="high"
+        decoding="async"
+        className="hero-bg media-photo absolute inset-0 size-full max-w-none object-cover"
+        style={heroCrop}
+      />
+      <div
+        className="absolute inset-0 bg-gradient-to-t from-brand-deep via-brand-deep/72 to-brand-deep/28"
+        aria-hidden="true"
+      />
+      <div
+        className="absolute inset-0 bg-gradient-to-r from-brand-deep/80 via-brand-deep/25 to-transparent"
+        aria-hidden="true"
+      />
+      <p className="sr-only">{hero.alt}</p>
 
-        <div className="flex flex-col justify-center px-5 py-7 sm:px-8 sm:py-10 lg:px-12 lg:py-12 xl:px-16">
-          <div className="max-w-[30rem]">
-            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-brand-dark">
-              {site.copy.eyebrow}
-            </p>
-            <h1 className="mt-2 font-display text-[clamp(1.85rem,6.6vw,2.85rem)] font-medium leading-[1.12] tracking-[-0.025em] text-ink">
-              CV-ketel, airco en warmtepomp
-            </h1>
-            <p className="mt-3 text-[0.95rem] leading-relaxed text-ink-muted sm:text-base">
-              {site.copy.heroText}
-            </p>
-            <div className="mt-5 grid grid-cols-2 gap-2">
-              <ButtonLink
-                to="/offerte-aanvragen"
-                size="md"
-                className="w-full px-2 text-center text-[0.8125rem] leading-tight sm:text-[0.9rem]"
-              >
-                Offerte aanvragen
-              </ButtonLink>
-              <ButtonLink
-                to="/afspraak-maken"
-                variant="secondary"
-                size="md"
-                className="w-full px-2 text-center text-[0.8125rem] leading-tight sm:text-[0.9rem]"
-              >
-                Afspraak maken
-              </ButtonLink>
-            </div>
-            <p className="mt-4 text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-ink-muted">
-              {serviceArea.provinces.map((item) => item.name).join(' · ')}
-            </p>
+      <Container className="relative flex min-h-[28rem] flex-col justify-end pb-10 pt-16 sm:min-h-[32rem] sm:pb-12 lg:min-h-[min(36rem,72dvh)] lg:justify-center lg:py-20">
+        <div className="max-w-xl">
+          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-white/72">
+            {site.copy.eyebrow}
+          </p>
+          <h1 className="mt-3 font-display text-[clamp(2rem,7vw,3.35rem)] font-medium leading-[1.08] tracking-[-0.03em]">
+            {site.copy.heroTitle}
+          </h1>
+          <p className="mt-4 max-w-md text-[0.98rem] leading-relaxed text-white/86 sm:text-lg">
+            {site.copy.heroText}
+          </p>
+
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <ButtonLink
+              to="/offerte-aanvragen"
+              size="lg"
+              className="min-h-12 px-6 sm:min-w-[13.5rem]"
+            >
+              {site.copy.ctaQuote}
+            </ButtonLink>
+            <ButtonLink
+              to="/afspraak-maken"
+              variant="ghost"
+              size="lg"
+              className="min-h-12 border border-white/45 bg-white/8 px-6 text-white hover:border-white hover:bg-white/16 sm:min-w-[13.5rem]"
+            >
+              {site.copy.ctaAppointment}
+            </ButtonLink>
           </div>
+
+          <p className="mt-5 text-sm">
+            <a href={site.contact.phoneHref} className="font-semibold text-white/90 underline-offset-4 hover:underline">
+              Of bel {site.contact.phone}
+            </a>
+          </p>
+          <p className="mt-3 text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-white/55">
+            {serviceArea.provinces.map((item) => item.name).join(' · ')}
+          </p>
         </div>
-      </div>
+      </Container>
     </section>
   )
 }

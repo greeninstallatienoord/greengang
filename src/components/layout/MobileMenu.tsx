@@ -142,33 +142,31 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
         <div className="grid gap-2 border-t border-line px-4 py-3 pb-[max(0.85rem,env(safe-area-inset-bottom))]">
           <ButtonLink
             to="/offerte-aanvragen"
-            className="w-full min-h-11"
+            className="w-full min-h-12"
             tabIndex={open ? undefined : -1}
             onClick={onClose}
           >
             {site.copy.ctaQuote}
           </ButtonLink>
-          <div className="grid grid-cols-2 gap-2">
-            <ButtonLink
-              to="/afspraak-maken"
-              variant="secondary"
-              className="w-full min-h-11"
-              tabIndex={open ? undefined : -1}
-              onClick={onClose}
-            >
-              {site.copy.ctaAppointment}
-            </ButtonLink>
-            <ButtonLink
-              to={site.contact.phoneHref}
-              variant="ghost"
-              className="w-full min-h-11"
-              external
-              tabIndex={open ? undefined : -1}
-              onClick={onClose}
-            >
-              Bel
-            </ButtonLink>
-          </div>
+          <ButtonLink
+            to="/afspraak-maken"
+            variant="secondary"
+            className="w-full min-h-12"
+            tabIndex={open ? undefined : -1}
+            onClick={onClose}
+          >
+            {site.copy.ctaAppointment}
+          </ButtonLink>
+          <ButtonLink
+            to={site.contact.phoneHref}
+            variant="ghost"
+            className="w-full min-h-11"
+            external
+            tabIndex={open ? undefined : -1}
+            onClick={onClose}
+          >
+            Bel {site.contact.phone}
+          </ButtonLink>
         </div>
       </div>
     </div>

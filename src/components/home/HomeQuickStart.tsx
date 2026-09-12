@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { quoteServiceOptions, situationsFor } from '../../data/forms'
 import type { QuoteServiceOption, QuoteSituation } from '../../types'
@@ -9,20 +9,22 @@ import { Section } from '../Section'
 
 const services = quoteServiceOptions.filter((item) => item.value !== 'overig')
 
+function situationForService(
+  service: QuoteServiceOption,
+  current: QuoteSituation,
+): QuoteSituation {
+  const allowed = situationsFor(service)
+  return allowed.some((item) => item.value === current)
+    ? current
+    : (allowed[0]?.value ?? 'weet-ik-niet')
+}
+
 export function HomeQuickStart() {
   const navigate = useNavigate()
   const [service, setService] = useState<QuoteServiceOption>('cv-ketel')
   const [situation, setSituation] = useState<QuoteSituation>('weet-ik-niet')
   const situations = situationsFor(service)
-
-  useEffect(() => {
-    const allowed = situationsFor(service)
-    setSituation((current) =>
-      allowed.some((item) => item.value === current)
-        ? current
-        : (allowed[0]?.value ?? 'weet-ik-niet'),
-    )
-  }, [service])
+  const selectedSituation = situationForService(service, situation)
 
   return (
     <Section className="bg-brand-deep text-white">
@@ -45,7 +47,7 @@ export function HomeQuickStart() {
           onSubmit={(event) => {
             event.preventDefault()
             navigate(
-              `/offerte-aanvragen?dienst=${encodeURIComponent(service)}&situatie=${encodeURIComponent(situation)}`,
+              `/offerte-aanvragen?dienst=${encodeURIComponent(service)}&situatie=${encodeURIComponent(selectedSituation)}`,
             )
           }}
         >
@@ -54,7 +56,11 @@ export function HomeQuickStart() {
             <select
               className="min-h-12 rounded-sm border border-white/20 bg-white px-3 text-ink"
               value={service}
-              onChange={(event) => setService(event.target.value as QuoteServiceOption)}
+              onChange={(event) => {
+                const next = event.target.value as QuoteServiceOption
+                setService(next)
+                setSituation((current) => situationForService(next, current))
+              }}
             >
               {services.map((item) => (
                 <option key={item.value} value={item.value}>
@@ -67,7 +73,7 @@ export function HomeQuickStart() {
             <span className="font-semibold text-white">Situatie</span>
             <select
               className="min-h-12 rounded-sm border border-white/20 bg-white px-3 text-ink"
-              value={situation}
+              value={selectedSituation}
               onChange={(event) => setSituation(event.target.value as QuoteSituation)}
             >
               {situations.map((item) => (
@@ -77,7 +83,7 @@ export function HomeQuickStart() {
               ))}
             </select>
           </label>
-          <Button type="submit" className="min-h-12 w-full sm:w-auto">
+          <Button type="submit" className="min-h-12 w-full sm:w-auto sm:px-6">
             Verder
           </Button>
         </form>

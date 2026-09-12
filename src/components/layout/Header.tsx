@@ -84,10 +84,15 @@ export function Header() {
               ))}
             </nav>
 
-            <div className="hidden items-center gap-2 lg:flex">
-              <ButtonLink to="/afspraak-maken" variant="secondary" size="sm">
+            <div className="hidden items-center gap-3 lg:flex">
+              <NavLink
+                to="/afspraak-maken"
+                className={({ isActive }) =>
+                  cn('nav-link px-1', isActive && 'nav-link-active')
+                }
+              >
                 {site.copy.ctaAppointment}
-              </ButtonLink>
+              </NavLink>
               <ButtonLink to="/offerte-aanvragen" size="sm">
                 {site.copy.ctaQuote}
               </ButtonLink>
