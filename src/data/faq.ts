@@ -117,6 +117,13 @@ export const faqs: FaqItem[] = [
     question: 'Wat moet ik doen bij twijfel over koolmonoxide?',
     answer:
       'Koolmonoxide is reukloos. Officiële uitleg staat bij de Rijksoverheid. Bij acute klachten of een CO-alarm: volg dat advies en schakel hulpdiensten in. Voor een niet-spoedeisende beoordeling van de ketel kunt u contact of een afspraak aanvragen. Wij publiceren geen eigen medische of meetclaims.',
+    sources: [
+      {
+        label: 'Rijksoverheid over koolmonoxide',
+        href: 'https://www.rijksoverheid.nl/onderwerpen/koolmonoxide',
+        external: true,
+      },
+    ],
   },
   {
     id: 'airco-onderhoud',
@@ -125,6 +132,7 @@ export const faqs: FaqItem[] = [
     question: 'Wat kan ik zelf doen aan onderhoud van de airco?',
     answer:
       'Filters en vrije ruimte rond binnen- en buitenunit kunt u volgens de handleiding bijhouden. Werk aan koudemiddel is gereguleerd en hoort bij een bevoegde vakman. Zie de airco-onderhoudgids voor het onderscheid.',
+    sources: [{ label: 'Kennisbank', href: '/blog' }],
   },
   {
     id: 'installatie-voorbereiden',
@@ -132,6 +140,7 @@ export const faqs: FaqItem[] = [
     question: 'Hoe bereid ik een installatie of onderhoudsbezoek voor?',
     answer:
       'Maak de opstelling bereikbaar, noteer wat u merkt, en zet vragen over scope en planning op papier. Foto’s helpen. Checklists staan in de kennisbank; ze zijn geen toelatingseis.',
+    sources: [{ label: 'Kennisbank', href: '/blog' }],
   },
   {
     id: 'afspraak-annuleren',

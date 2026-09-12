@@ -116,6 +116,7 @@ export type FaqItem = {
   answer: string
   category: string
   relatedServiceSlug?: ServiceSlug
+  sources?: Array<{ label: string; href: string; external?: boolean }>
 }
 
 export type BlogCategorySlug =

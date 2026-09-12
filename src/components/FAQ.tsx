@@ -13,7 +13,7 @@ export function FAQ({ items }: FAQProps) {
   return (
     <div>
       {items.map((item) => (
-        <FAQItem key={item.id} question={item.question} answer={item.answer} />
+        <FAQItem key={item.id} item={item} />
       ))}
     </div>
   )
