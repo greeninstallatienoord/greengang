@@ -12,13 +12,13 @@ type ServiceCardProps = {
 
 export function ServiceCard({ service }: ServiceCardProps) {
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-lg border border-line bg-paper shadow-card transition-shadow hover:shadow-md">
+    <article className="group flex h-full flex-col overflow-hidden border border-line bg-paper">
       <MediaImage
         asset={serviceImage(service.slug)}
         className="rounded-none"
         sizes="(min-width: 1024px) 33vw, 100vw"
       />
-      <div className="flex flex-1 flex-col p-5">
+      <div className="flex flex-1 flex-col p-6">
         <h3 className="text-xl font-semibold">
           <Link to={service.href} className="hover:text-brand-dark">
             {service.name}
@@ -29,7 +29,7 @@ export function ServiceCard({ service }: ServiceCardProps) {
         <div className="mt-5 flex flex-wrap gap-2">
           <Link
             to={service.href}
-            className="inline-flex min-h-10 items-center gap-1 text-sm font-semibold text-brand-dark"
+            className="inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-brand-dark"
           >
             {site.copy.ctaMore}
             <ArrowRight size={16} aria-hidden="true" />

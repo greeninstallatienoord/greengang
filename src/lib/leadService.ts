@@ -3,7 +3,13 @@ import { api } from './api'
 
 export type LeadResult = SubmissionResult
 
+const UNAVAILABLE =
+  'We konden uw aanvraag nu niet versturen. Controleer uw verbinding of bel 06 28 73 91 34.'
+
 export async function submitLead(payload: LeadRequest): Promise<LeadResult> {
+  if (payload.website?.trim()) {
+    return { ok: false, message: 'Het formulier kon niet worden verwerkt.' }
+  }
   if (!payload.privacyAccepted) {
     return {
       ok: false,
@@ -13,17 +19,15 @@ export async function submitLead(payload: LeadRequest): Promise<LeadResult> {
 
   const result = await api.quotes(payload)
   if (result.ok) {
-    return { ok: true, confirmedByServer: true, id: result.data.id }
-  }
-  if (result.unavailable) {
-    if (import.meta.env.DEV) {
-      console.info('[leadService] preview only — geen serverbevestiging')
-    }
     return {
       ok: true,
-      confirmedByServer: false,
-      id: `preview-lead-${Date.now()}`,
+      confirmedByServer: true,
+      id: result.data.id,
+      emailWarning: result.data.emailWarning,
     }
+  }
+  if (result.unavailable) {
+    return { ok: false, message: UNAVAILABLE }
   }
   return { ok: false, message: result.message }
 }

@@ -13,6 +13,7 @@ import { PageFaq } from '../page/PageFaq'
 import { PageHero } from '../page/PageHero'
 import { RelatedArticles } from '../page/RelatedArticles'
 import { RelatedServices } from '../page/RelatedServices'
+import { ArticleWorkNote } from './ArticleWorkNote'
 import { CTASection } from '../sections/CTASection'
 import { Section } from '../Section'
 import { PageMeta } from '../seo/PageMeta'
@@ -67,9 +68,10 @@ export function ArticleTemplate({ post }: ArticleTemplateProps) {
             asset={blogImage(post.category)}
             alt={post.imageAlt}
             className="mb-8"
+            ratio="16 / 10"
             sizes="(min-width: 768px) 48rem, 100vw"
           />
-          <nav aria-label="Inhoudsopgave" className="mb-10 rounded-lg border border-line bg-paper p-4">
+          <nav aria-label="Inhoudsopgave" className="mb-10 border border-line bg-paper p-5">
             <h2 className="text-base font-semibold">Inhoud</h2>
             <ol className="mt-3 grid gap-2 text-sm">
               {post.sections.map((section) => (
@@ -92,8 +94,9 @@ export function ArticleTemplate({ post }: ArticleTemplateProps) {
               {section.links ? <ContentLinks items={section.links} /> : null}
             </article>
           ))}
+          <ArticleWorkNote />
           {post.resources && post.resources.length > 0 ? (
-            <aside className="mt-10 rounded-lg border border-line bg-paper p-5">
+            <aside className="mt-10 border border-line bg-paper p-5">
               <h2 className="text-xl font-semibold">Officiële bronnen</h2>
               <p className="mt-2 text-sm text-ink-muted">
                 Externe links gaan naar overheids- of vakbronnen. Dat zijn geen

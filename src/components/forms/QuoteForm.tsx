@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useSessionDraft } from '../../hooks/useSessionDraft'
 import { focusFirstError } from '../../lib/focusError'
@@ -9,7 +9,6 @@ import {
   situationsFor,
 } from '../../data/forms'
 import { submitLead } from '../../lib/leadService'
-import { site } from '../../data/site'
 import { photoHint } from '../../lib/photos'
 import {
   required,
@@ -32,7 +31,11 @@ import { FormPrivacyNote } from './FormPrivacyNote'
 import { PhotoUpload } from './PhotoUpload'
 import { ProgressSteps } from './ProgressSteps'
 
-const steps = ['Dienst', 'Situatie', 'Gegevens', 'Versturen']
+const steps = ['Dienst', 'Situatie', 'Gegevens', 'Controle']
+
+function newKey(): string {
+  return crypto.randomUUID()
+}
 
 const emptyLead: LeadRequest = {
   service: 'cv-ketel',
@@ -49,10 +52,38 @@ const emptyLead: LeadRequest = {
   preferredContact: 'geen-voorkeur',
   photos: [],
   privacyAccepted: false,
+  website: '',
+  idempotencyKey: '',
+}
+
+function freshLead(service: QuoteServiceOption = 'cv-ketel'): LeadRequest {
+  return { ...emptyLead, service, photos: [], idempotencyKey: newKey() }
 }
 
 function isServiceOption(value: string): value is QuoteServiceOption {
   return quoteServiceOptions.some((option) => option.value === value)
+}
+
+function ReviewRow({
+  label,
+  value,
+  onEdit,
+}: {
+  label: string
+  value: string
+  onEdit: () => void
+}) {
+  return (
+    <div className="flex justify-between gap-4 border-b border-line py-2">
+      <dt className="text-ink-muted">{label}</dt>
+      <dd className="max-w-[70%] text-right">
+        <span className="block font-medium break-words whitespace-pre-wrap">{value || '-'}</span>
+        <button type="button" className="mt-1 text-sm underline underline-offset-2" onClick={onEdit}>
+          Wijzigen
+        </button>
+      </dd>
+    </div>
+  )
 }
 
 export function QuoteForm() {
@@ -62,15 +93,21 @@ export function QuoteForm() {
     preset && isServiceOption(preset) && preset !== 'overig' ? preset : null
   const [step, setStep] = useState(initialService ? 1 : 0)
   const [status, setStatus] = useState<FormStatus>('idle')
-  const [confirmedByServer, setConfirmedByServer] = useState(false)
+  const [emailWarning, setEmailWarning] = useState('')
+  const [submitError, setSubmitError] = useState('')
   const [honeypot, setHoneypot] = useState('')
   const [photoError, setPhotoError] = useState<string | undefined>()
   const [errors, setErrors] = useState<Record<string, string | undefined>>({})
+  const lock = useRef(false)
   const [form, setForm, clearDraft] = useSessionDraft<LeadRequest>('gin-quote-draft', {
-    ...emptyLead,
-    service: initialService ?? 'cv-ketel',
-    photos: [],
+    ...freshLead(initialService ?? 'cv-ketel'),
   })
+
+  useEffect(() => {
+    setForm((current) =>
+      current.idempotencyKey ? current : { ...current, idempotencyKey: newKey() },
+    )
+  }, [setForm])
 
   const primaryServices = quoteServiceOptions.filter((item) => item.value !== 'overig')
   const situations = situationsFor(form.service)
@@ -82,6 +119,10 @@ export function QuoteForm() {
   )
   const situationLabel =
     situations.find((item) => item.value === form.situation)?.label ?? form.situation
+  const address = [form.street, form.houseNumber, form.postalCode, form.city]
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .join(' ')
 
   function update<K extends keyof LeadRequest>(key: K, value: LeadRequest[K]) {
     setForm((current) => ({ ...current, [key]: value }))
@@ -122,30 +163,42 @@ export function QuoteForm() {
   }
 
   async function handleSubmit() {
+    if (lock.current || status === 'submitting') return
     if (!validateStep(3) || honeypot || photoError) return
+    lock.current = true
     setStatus('submitting')
-    const result = await submitLead(form)
+    setSubmitError('')
+    const result = await submitLead({
+      ...form,
+      website: honeypot,
+      idempotencyKey: form.idempotencyKey || newKey(),
+    })
     if (result.ok) {
       clearDraft()
-      setConfirmedByServer(result.confirmedByServer)
+      setEmailWarning(result.emailWarning ?? '')
       setStatus('success')
       return
     }
+    lock.current = false
+    setSubmitError(result.message)
     setStatus('error')
   }
 
   if (status === 'success') {
     return (
       <FormSuccess
-        title="Offerteaanvraag voorbereid"
-        confirmedByServer={confirmedByServer}
-        previewText={`De velden zijn gecontroleerd. Er is nog geen koppeling met onze inbox, dus ${site.name} heeft deze aanvraag nog niet ontvangen. Zodra de serverbevestiging live is, ziet u hier een ontvangstbevestiging.`}
-        confirmedText="We hebben uw offerteaanvraag ontvangen en nemen contact met u op."
+        title="Offerteaanvraag ontvangen"
+        confirmedByServer
+        previewText=""
+        confirmedText="Bedankt voor uw aanvraag bij Green Installatie Noord. We hebben uw offerteaanvraag ontvangen. Dit is nog geen offerte. We nemen contact met u op."
+        warning={emailWarning || undefined}
         onReset={() => {
           clearDraft()
+          lock.current = false
           setStatus('idle')
           setStep(0)
-          setForm(emptyLead)
+          setEmailWarning('')
+          setForm(freshLead())
         }}
       />
     )
@@ -153,7 +206,7 @@ export function QuoteForm() {
 
   return (
     <form
-      className="rounded-lg border border-line bg-paper p-5 shadow-card sm:p-7"
+      className="border border-line bg-paper p-5 sm:p-7"
       onSubmit={(event) => {
         event.preventDefault()
         if (step === 3) void handleSubmit()
@@ -176,14 +229,14 @@ export function QuoteForm() {
       {step === 0 ? (
         <fieldset>
           <legend className="mb-4 text-lg font-semibold">
-            Waar kunnen we u mee helpen?
+            Wat wilt u laten doen?
           </legend>
           <div className="grid gap-3 sm:grid-cols-2">
             {primaryServices.map((option) => (
               <button
                 key={option.value}
                 type="button"
-                className="rounded-md border border-line p-4 text-left hover:border-brand hover:bg-brand-soft/60"
+                className="min-h-14 rounded-md border border-line p-4 text-left text-base hover:border-brand hover:bg-brand-soft/60"
                 onClick={() => chooseService(option.value)}
               >
                 <span className="block font-semibold">{option.label}</span>
@@ -194,7 +247,7 @@ export function QuoteForm() {
           <p className="mt-4 text-sm">
             <button
               type="button"
-              className="underline underline-offset-2"
+              className="inline-flex min-h-11 items-center underline underline-offset-2"
               onClick={() => chooseService('overig')}
             >
               Ik weet het nog niet / andere vraag
@@ -212,7 +265,7 @@ export function QuoteForm() {
               <button
                 key={option.value}
                 type="button"
-                className="rounded-md border border-line p-3 text-left font-medium hover:border-brand hover:bg-brand-soft/60"
+                className="min-h-12 rounded-md border border-line p-3.5 text-left text-base font-medium hover:border-brand hover:bg-brand-soft/60"
                 onClick={() => {
                   update('situation', option.value as QuoteSituation)
                   setStep(2)
@@ -227,7 +280,7 @@ export function QuoteForm() {
 
       {step === 2 ? (
         <div className="grid gap-4">
-          <FormPrivacyNote purpose="We vragen naam, telefoon en e-mail om u te kunnen terugbellen of mailen over deze offerte. Adres is niet verplicht." />
+          <FormPrivacyNote purpose="We vragen naam, telefoon en e-mail om u te kunnen terugbellen of mailen over deze offerteaanvraag. Adres is niet verplicht. U stuurt een aanvraag, geen bestelling." />
           <div className="grid gap-4 sm:grid-cols-2">
             <Field id="firstName" label="Voornaam" error={errors.firstName}>
               <TextInput
@@ -268,7 +321,7 @@ export function QuoteForm() {
             <Field
               id="email"
               label="E-mail"
-              hint="Om de aanvraag of een vraag schriftelijk te bevestigen."
+              hint="Om de ontvangst van de aanvraag te bevestigen."
               error={errors.email}
             >
               <TextInput
@@ -282,7 +335,7 @@ export function QuoteForm() {
               />
             </Field>
           </div>
-          <details className="rounded-md border border-line p-3">
+          <details className="rounded-md border border-line p-3" open={Boolean(address)}>
             <summary className="cursor-pointer font-semibold">
               Adres toevoegen (optioneel)
             </summary>
@@ -325,37 +378,14 @@ export function QuoteForm() {
               </Field>
             </div>
           </details>
-        </div>
-      ) : null}
-
-      {step === 3 ? (
-        <div className="grid gap-4">
-          <h2 className="text-lg font-semibold">Controleer en verstuur</h2>
-          <dl className="grid gap-2 text-sm">
-            <div className="flex justify-between gap-4 border-b border-line py-2">
-              <dt className="text-ink-muted">Dienst</dt>
-              <dd className="font-medium">{serviceLabel}</dd>
-            </div>
-            <div className="flex justify-between gap-4 border-b border-line py-2">
-              <dt className="text-ink-muted">Situatie</dt>
-              <dd className="font-medium">{situationLabel}</dd>
-            </div>
-            <div className="flex justify-between gap-4 border-b border-line py-2">
-              <dt className="text-ink-muted">Contact</dt>
-              <dd className="max-w-[60%] text-right font-medium break-words">
-                {form.firstName} {form.lastName}
-                <br />
-                {form.phone} · {form.email}
-              </dd>
-            </div>
-          </dl>
           <Field
             id="message"
-            label="Toelichting (optioneel)"
-            hint="Kort wat u wilt, bijvoorbeeld vervanging of één ruimte koelen."
+            label="Is er nog iets dat we moeten weten?"
+            hint="Optioneel. Bijzonderheden van de woning, toegang of wat u al heeft laten kijken."
           >
             <TextArea
               id="message"
+              className="min-h-40"
               value={form.message}
               maxLength={FIELD_MAX.message}
               onChange={(event) => update('message', event.target.value)}
@@ -376,11 +406,11 @@ export function QuoteForm() {
             </legend>
             <div className="grid gap-2">
               {contactMethods.map((method) => (
-                <label key={method.value} className="flex items-center gap-2">
+                <label key={method.value} className="flex min-h-11 items-center gap-3">
                   <input
                     type="radio"
                     name="contact"
-                    className="accent-brand"
+                    className="size-5 accent-brand"
                     checked={form.preferredContact === method.value}
                     onChange={() =>
                       update('preferredContact', method.value as ContactMethod)
@@ -391,11 +421,35 @@ export function QuoteForm() {
               ))}
             </div>
           </fieldset>
-          <label className="flex items-start gap-3 text-sm">
+        </div>
+      ) : null}
+
+      {step === 3 ? (
+        <div className="grid gap-4">
+          <h2 className="text-lg font-semibold">Controleer uw aanvraag</h2>
+          <p className="text-sm text-ink-muted">
+            U stuurt een offerteaanvraag. Dit is geen bestelling en nog geen opdracht.
+          </p>
+          <dl className="grid gap-2 text-sm">
+            <ReviewRow label="Dienst" value={serviceLabel} onEdit={() => setStep(0)} />
+            <ReviewRow label="Situatie" value={situationLabel} onEdit={() => setStep(1)} />
+            <ReviewRow
+              label="Naam"
+              value={`${form.firstName} ${form.lastName}`.trim()}
+              onEdit={() => setStep(2)}
+            />
+            <ReviewRow label="E-mail" value={form.email} onEdit={() => setStep(2)} />
+            <ReviewRow label="Telefoon" value={form.phone} onEdit={() => setStep(2)} />
+            {address ? <ReviewRow label="Adres" value={address} onEdit={() => setStep(2)} /> : null}
+            {form.message ? (
+              <ReviewRow label="Opmerking" value={form.message} onEdit={() => setStep(2)} />
+            ) : null}
+          </dl>
+          <label className="flex min-h-11 items-start gap-3 text-sm">
             <input
               id="privacy"
               type="checkbox"
-              className="mt-1 accent-brand"
+              className="mt-1 size-5 shrink-0 accent-brand"
               checked={form.privacyAccepted}
               aria-invalid={Boolean(errors.privacy)}
               aria-describedby={errors.privacy ? 'privacy-error' : undefined}
@@ -414,9 +468,9 @@ export function QuoteForm() {
               {errors.privacy}
             </p>
           ) : null}
-          {status === 'error' ? (
+          {submitError ? (
             <p className="text-sm text-danger" role="alert">
-              Versturen is niet gelukt. Probeer het opnieuw.
+              {submitError}
             </p>
           ) : null}
         </div>
@@ -440,7 +494,7 @@ export function QuoteForm() {
           </Button>
         ) : (
           <Button type="submit" disabled={status === 'submitting' || Boolean(photoError)}>
-            {status === 'submitting' ? 'Controleren…' : 'Aanvraag afronden'}
+            {status === 'submitting' ? 'Versturen…' : 'Aanvraag versturen'}
           </Button>
         )}
       </div>

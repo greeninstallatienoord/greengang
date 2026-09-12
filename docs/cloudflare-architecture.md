@@ -7,7 +7,7 @@ Maintainer notes for Green Installatie Noord. This document describes the prepar
 - React 19 + Vite + TypeScript
 - Tailwind CSS 4
 - React Router public routes under `RootLayout` (header, footer, cookie banner)
-- Static hosting target: Cloudflare Pages (`public/_redirects` SPA fallback)
+- Static hosting: Vite `dist/` served by the same Worker (`greengang`) via `[assets]`
 - Verified business data: `src/data/business.ts`
 - Forms: contact, offerte, afspraak — still work without the Worker (preview, `confirmedByServer: false`)
 
@@ -17,11 +17,9 @@ Do not rebuild this frontend. The Worker is an API beside it.
 
 ```
 Browser
-  → React (Vite / Pages)
-  → /api/*  (same origin in production; Vite proxy in development)
-  → Cloudflare Worker (`greeninstallatienoord-api`)
-  → D1 `greeninstallatie` (id f0728db7-edb9-438c-9a64-5d04ee828137)
-  → Resend (server-side only)
+  → Worker `greengang` (development.greeninstallatienoord.nl)
+       ├── /api/* → existing Worker API → D1 / Resend
+       └── everything else → Vite dist/ (React Router SPA)
 ```
 
 The browser never receives `RESEND_API_KEY` or `ADMIN_SESSION_SECRET`.
@@ -104,7 +102,7 @@ See `docs/environment-variables.md`.
 - SQL via bound parameters only
 - Email HTML escaped
 - Request body cap: 80 KB
-- SPA `_redirects` can serve HTML for unknown paths; the API client requires `application/json`
+- SPA fallback is Wrangler `[assets] not_found_handling = "single-page-application"`; do not add `public/_redirects` to `/index.html` (Cloudflare error 100324)
 
 ## Future extension points
 

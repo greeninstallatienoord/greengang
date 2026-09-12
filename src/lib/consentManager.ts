@@ -1,6 +1,6 @@
 import type { ConsentCategory, ConsentPreferences } from '../types'
 
-export const CONSENT_STORAGE_KEY = 'gin-consent-v1'
+export const CONSENT_STORAGE_KEY = 'gin-consent-v2'
 export const CONSENT_CHANGED_EVENT = 'gin-consent-changed'
 export const OPEN_PREFERENCES_EVENT = 'gin-open-cookie-preferences'
 
@@ -18,22 +18,22 @@ export const consentCopy: Record<
   necessary: {
     title: 'Noodzakelijk',
     description:
-      'Altijd aan. Deze website onthoudt alleen dat u een cookiekeuze heeft gemaakt, zodat de melding niet elke keer terugkomt.',
+      'Altijd aan. We onthouden in deze browser dat u een cookiekeuze heeft gemaakt, zodat de melding niet bij elk bezoek terugkomt. Onvoltooide formulieren kunnen tijdelijk in deze browser blijven staan tot u ze verstuurt of wist.',
   },
   preferences: {
     title: 'Voorkeuren',
     description:
-      'Optioneel. Bijvoorbeeld extra lettertypen van een externe dienst. Zonder deze keuze blijft de site gewoon leesbaar.',
+      'Optioneel. Alleen als we later een extra dienst koppelen die bij deze categorie hoort. Er is nu geen voorkeursscript aangesloten.',
   },
   analytics: {
-    title: 'Statistieken',
+    title: 'Analytisch',
     description:
-      'Optioneel. Alleen als we later een meetprogramma aansluiten. Er start nu geen statistiek-script.',
+      'Optioneel. Alleen als we later een meetprogramma aansluiten. Er is nu geen statistiek-script aangesloten.',
   },
   marketing: {
     title: 'Marketing',
     description:
-      'Optioneel. Alleen voor eventuele latere advertentie- of remarketingcodes. Er start nu geen marketing-script.',
+      'Optioneel. Alleen als we later advertentiecodes plaatsen. Er is nu geen marketing-script aangesloten.',
   },
 }
 
@@ -46,9 +46,32 @@ type OptionalScript = {
 
 const scripts: OptionalScript[] = []
 
+const CATEGORY_ORDER: ConsentCategory[] = [
+  'necessary',
+  'preferences',
+  'analytics',
+  'marketing',
+]
+
 export function registerOptionalScript(script: OptionalScript): void {
   if (scripts.some((item) => item.id === script.id)) return
   scripts.push({ ...script, loaded: false })
+}
+
+export function optionalConsentCategories(): Array<Exclude<ConsentCategory, 'necessary'>> {
+  const used = new Set<Exclude<ConsentCategory, 'necessary'>>()
+  for (const script of scripts) used.add(script.category)
+  return (['preferences', 'analytics', 'marketing'] as const).filter((key) => used.has(key))
+}
+
+export function visibleConsentCategories(): ConsentCategory[] {
+  return CATEGORY_ORDER.filter(
+    (key) => key === 'necessary' || optionalConsentCategories().includes(key),
+  )
+}
+
+export function hasOptionalScripts(): boolean {
+  return scripts.length > 0
 }
 
 export function hasConsent(category: ConsentCategory): boolean {
@@ -69,7 +92,7 @@ export function getConsent(): ConsentPreferences | null {
 }
 
 export function setConsent(preferences: ConsentPreferences): void {
-  const next = { ...preferences, necessary: true }
+  const next = { ...defaultConsent, ...preferences, necessary: true }
   localStorage.setItem(CONSENT_STORAGE_KEY, JSON.stringify(next))
   window.dispatchEvent(
     new CustomEvent(CONSENT_CHANGED_EVENT, { detail: next }),
@@ -82,11 +105,9 @@ export function openPreferences(): void {
 }
 
 export function acceptAllConsent(): ConsentPreferences {
-  const next: ConsentPreferences = {
-    necessary: true,
-    preferences: true,
-    analytics: true,
-    marketing: true,
+  const next = { ...defaultConsent }
+  for (const category of optionalConsentCategories()) {
+    next[category] = true
   }
   setConsent(next)
   return next
@@ -108,27 +129,5 @@ export function syncOptionalScripts(): void {
 }
 
 export function initConsentRuntime(): void {
-  registerOptionalScript({
-    id: 'google-fonts',
-    category: 'preferences',
-    load: loadPreferenceFonts,
-  })
   syncOptionalScripts()
-}
-
-function loadPreferenceFonts(): void {
-  if (document.getElementById('gin-optional-fonts')) return
-  const preconnectGoogle = document.createElement('link')
-  preconnectGoogle.rel = 'preconnect'
-  preconnectGoogle.href = 'https://fonts.googleapis.com'
-  const preconnectGstatic = document.createElement('link')
-  preconnectGstatic.rel = 'preconnect'
-  preconnectGstatic.href = 'https://fonts.gstatic.com'
-  preconnectGstatic.crossOrigin = 'anonymous'
-  const stylesheet = document.createElement('link')
-  stylesheet.id = 'gin-optional-fonts'
-  stylesheet.rel = 'stylesheet'
-  stylesheet.href =
-    'https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap'
-  document.head.append(preconnectGoogle, preconnectGstatic, stylesheet)
 }

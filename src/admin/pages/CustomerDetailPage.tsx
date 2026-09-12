@@ -1,83 +1,140 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { api } from '../../lib/api'
+import { BackLink } from '../components/BackLink'
+import { InfoList } from '../components/InfoList'
+import { Notice } from '../components/Notice'
 import { PageHeader } from '../components/PageHeader'
+import { Skeleton } from '../components/Skeleton'
 import { StatusBadge } from '../components/StatusBadge'
-import { appointmentStatusLabel, formatDate, quoteStatusLabel, serviceLabel } from '../labels'
+import {
+  appointmentStatusLabel,
+  contactStatusLabel,
+  formatDate,
+  quoteStatusLabel,
+  serviceLabel,
+} from '../labels'
 import { adminUrl } from '../adminPath'
 
 export function CustomerDetailPage() {
   const { id = '' } = useParams()
-  const [item, setItem] = useState<
-    | (Record<string, string> & {
-        appointments: Array<Record<string, string>>
-        quotes: Array<Record<string, string>>
-      })
-    | null
-  >(null)
+  type CustomerDetail = {
+    name?: string
+    email?: string
+    phone?: string
+    address?: string
+    created_at?: string
+    appointments: Array<Record<string, string>>
+    quotes: Array<Record<string, string>>
+    contacts: Array<Record<string, string>>
+  }
+
+  const [item, setItem] = useState<CustomerDetail | null>(null)
   const [error, setError] = useState('')
 
   useEffect(() => {
     void api.admin.customer(id).then((result) => {
-      if (result.ok) setItem(result.data)
+      if (result.ok) setItem({ ...result.data, contacts: result.data.contacts ?? [] })
       else setError(result.message)
     })
   }, [id])
 
-  if (error) return <p className="text-danger">{error}</p>
-  if (!item) return <p className="text-sm text-ink-muted">Laden…</p>
+  if (error) return <Notice tone="error">{error}</Notice>
+  if (!item) return <Skeleton rows={5} />
 
   return (
     <div>
-      <p className="mb-3 text-sm">
-        <Link to={adminUrl('customers')} className="underline">
-          Terug naar klanten
-        </Link>
-      </p>
+      <BackLink to={adminUrl('customers')}>Terug naar klanten</BackLink>
       <PageHeader title={item.name ?? 'Klant'} />
-      <dl className="grid gap-3 text-sm">
-        <Info label="E-mail" value={item.email} />
-        <Info label="Telefoon" value={item.phone} />
-        <Info label="Adres" value={item.address} />
-      </dl>
+      <InfoList
+        items={[
+          { label: 'Naam', value: item.name },
+          { label: 'E-mail', value: item.email, href: item.email ? `mailto:${item.email}` : undefined },
+          { label: 'Telefoon', value: item.phone, href: item.phone ? `tel:${item.phone}` : undefined },
+          { label: 'Adres', value: item.address },
+          { label: 'Sinds', value: formatDate(item.created_at) },
+        ]}
+      />
 
-      <h2 className="mt-8 text-base font-semibold">Afspraken</h2>
-      <ul className="mt-3 grid gap-2">
-        {item.appointments.length === 0 ? <li className="text-sm text-ink-muted">Geen afspraken.</li> : null}
-        {item.appointments.map((row) => (
-          <li key={row.id}>
-            <Link to={adminUrl(`appointments/${row.id}`)} className="flex justify-between gap-3 rounded-md border border-line bg-paper px-3 py-3 text-sm">
-              <span>
-                {serviceLabel[row.service ?? ''] ?? row.service} · {formatDate(row.appointment_date)} · {row.appointment_time}
-              </span>
-              <StatusBadge value={row.status ?? ''} label={appointmentStatusLabel[row.status ?? '']} />
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <RelationList
+        title="Afspraken"
+        empty="Geen afspraken."
+        items={item.appointments}
+        href={(row) => adminUrl(`appointments/${row.id}`)}
+        label={(row) =>
+          `${serviceLabel[row.service ?? ''] ?? row.service} · ${formatDate(row.appointment_date)} · ${row.appointment_time}`
+        }
+        status={(row) => ({
+          value: row.status ?? '',
+          label: appointmentStatusLabel[row.status ?? ''] ?? row.status ?? '',
+        })}
+      />
 
-      <h2 className="mt-8 text-base font-semibold">Offertes</h2>
-      <ul className="mt-3 grid gap-2">
-        {item.quotes.length === 0 ? <li className="text-sm text-ink-muted">Geen offertes.</li> : null}
-        {item.quotes.map((row) => (
-          <li key={row.id}>
-            <Link to={adminUrl(`quotes/${row.id}`)} className="flex justify-between gap-3 rounded-md border border-line bg-paper px-3 py-3 text-sm">
-              <span>{serviceLabel[row.service ?? ''] ?? row.service}</span>
-              <StatusBadge value={row.status ?? ''} label={quoteStatusLabel[row.status ?? '']} />
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <RelationList
+        title="Offertes"
+        empty="Geen offertes."
+        items={item.quotes}
+        href={(row) => adminUrl(`quotes/${row.id}`)}
+        label={(row) => `${serviceLabel[row.service ?? ''] ?? row.service} · ${formatDate(row.created_at)}`}
+        status={(row) => ({
+          value: row.status ?? '',
+          label: quoteStatusLabel[row.status ?? ''] ?? row.status ?? '',
+        })}
+      />
+
+      <RelationList
+        title="Contactaanvragen"
+        empty="Geen contactaanvragen."
+        items={item.contacts}
+        href={(row) => adminUrl(`contact/${row.id}`)}
+        label={(row) => row.message || formatDate(row.created_at)}
+        status={(row) => ({
+          value: row.status ?? '',
+          label: contactStatusLabel[row.status ?? ''] ?? row.status ?? '',
+        })}
+      />
     </div>
   )
 }
 
-function Info({ label, value }: { label: string; value?: string }) {
-  if (!value) return null
+function RelationList({
+  title,
+  empty,
+  items,
+  href,
+  label,
+  status,
+}: {
+  title: string
+  empty: string
+  items: Array<Record<string, string>>
+  href: (row: Record<string, string>) => string
+  label: (row: Record<string, string>) => string
+  status: (row: Record<string, string>) => { value: string; label: string }
+}) {
   return (
-    <div className="rounded-md border border-line bg-paper px-3 py-2">
-      <dt className="text-ink-muted">{label}</dt>
-      <dd className="font-medium break-words">{value}</dd>
-    </div>
+    <section className="mt-8">
+      <h2 className="mb-3 text-sm font-semibold tracking-[-0.01em]">{title}</h2>
+      {items.length === 0 ? (
+        <p className="text-sm text-[var(--admin-muted)]">{empty}</p>
+      ) : (
+        <ul className="grid gap-px overflow-hidden border border-[var(--admin-line)] bg-[var(--admin-line)]">
+          {items.map((row) => {
+            const badge = status(row)
+            return (
+              <li key={row.id}>
+                <Link
+                  to={href(row)}
+                  className="flex items-start justify-between gap-3 bg-[var(--admin-panel)] px-4 py-3 text-sm transition-colors hover:bg-[var(--admin-hover)]"
+                >
+                  <span className="min-w-0 line-clamp-2">{label(row)}</span>
+                  <StatusBadge value={badge.value} label={badge.label} />
+                </Link>
+              </li>
+            )
+          })}
+        </ul>
+      )}
+    </section>
   )
 }

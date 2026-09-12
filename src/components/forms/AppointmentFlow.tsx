@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { bookingServiceLabel, bookingServices, formatBookingDate } from '../../data/booking'
 import { useSessionDraft } from '../../hooks/useSessionDraft'
@@ -18,7 +18,11 @@ import { Field, TextArea, TextInput } from './Field'
 import { FormPrivacyNote } from './FormPrivacyNote'
 import { ProgressSteps } from './ProgressSteps'
 
-const steps = ['Dienst', 'Datum', 'Gegevens', 'Controleren']
+const steps = ['Dienst', 'Datum', 'Tijd', 'Gegevens', 'Controle']
+
+function newKey(): string {
+  return crypto.randomUUID()
+}
 
 const emptyBooking: BookingRequest = {
   service: 'cv-ketel',
@@ -33,10 +37,37 @@ const emptyBooking: BookingRequest = {
   message: '',
   privacyAccepted: false,
   website: '',
+  idempotencyKey: '',
+}
+
+function freshBooking(service: ServiceSlug = 'cv-ketel'): BookingRequest {
+  return { ...emptyBooking, service, idempotencyKey: newKey() }
 }
 
 function isServiceSlug(value: string | null): value is ServiceSlug {
   return bookingServices.some((item) => item.slug === value)
+}
+
+function ReviewRow({
+  label,
+  value,
+  onEdit,
+}: {
+  label: string
+  value: string
+  onEdit: () => void
+}) {
+  return (
+    <div className="flex justify-between gap-4 border-b border-line py-2">
+      <dt className="text-ink-muted">{label}</dt>
+      <dd className="max-w-[70%] text-right">
+        <span className="block font-medium break-words whitespace-pre-wrap">{value}</span>
+        <button type="button" className="mt-1 text-sm underline underline-offset-2" onClick={onEdit}>
+          Wijzigen
+        </button>
+      </dd>
+    </div>
+  )
 }
 
 export function AppointmentFlow() {
@@ -53,11 +84,17 @@ export function AppointmentFlow() {
   )
   const [availableSlots, setAvailableSlots] = useState<string[]>([])
   const [errors, setErrors] = useState<Record<string, string | undefined>>({})
+  const lock = useRef(false)
   const [form, setForm, clearDraft] = useSessionDraft<BookingRequest>('gin-booking-draft', {
-    ...emptyBooking,
-    service: isServiceSlug(preset) ? preset : 'cv-ketel',
+    ...freshBooking(isServiceSlug(preset) ? preset : 'cv-ketel'),
   })
   const slotsLegend = useId()
+
+  useEffect(() => {
+    setForm((current) =>
+      current.idempotencyKey ? current : { ...current, idempotencyKey: newKey() },
+    )
+  }, [setForm])
 
   useEffect(() => {
     void getSlotConfig().then(setSlotConfig)
@@ -98,8 +135,13 @@ export function AppointmentFlow() {
 
   function validate(current: number): boolean {
     if (current === 1) {
+      const next = { preferredDate: dateError(form.preferredDate) }
+      setErrors(next)
+      if (next.preferredDate) focusFirstError(next)
+      return !next.preferredDate
+    }
+    if (current === 2) {
       const next = {
-        preferredDate: dateError(form.preferredDate),
         preferredTimeWindow: !form.preferredTimeWindow
           ? 'Kies een beschikbaar tijdstip.'
           : availableSlots.length > 0 && !availableSlots.includes(form.preferredTimeWindow)
@@ -107,10 +149,10 @@ export function AppointmentFlow() {
             : undefined,
       }
       setErrors(next)
-      if (next.preferredDate || next.preferredTimeWindow) focusFirstError(next)
-      return !next.preferredDate && !next.preferredTimeWindow
+      if (next.preferredTimeWindow) focusFirstError(next)
+      return !next.preferredTimeWindow
     }
-    if (current === 2) {
+    if (current === 3) {
       const next = {
         firstName: required(form.firstName, 'Voornaam'),
         lastName: required(form.lastName, 'Achternaam'),
@@ -123,7 +165,7 @@ export function AppointmentFlow() {
       if (!ok) focusFirstError(next)
       return ok
     }
-    if (current === 3 && !form.privacyAccepted) {
+    if (current === 4 && !form.privacyAccepted) {
       const next = { privacy: 'Bevestig dat u de privacyverklaring heeft gelezen.' }
       setErrors(next)
       focusFirstError(next)
@@ -134,23 +176,29 @@ export function AppointmentFlow() {
   }
 
   async function handleSubmit() {
-    if (!validate(3)) return
+    if (lock.current || status === 'submitting') return
+    if (!validate(4)) return
+    lock.current = true
     setStatus('submitting')
     setSubmitError('')
-    const result = await submitBooking(form)
+    const result = await submitBooking({
+      ...form,
+      idempotencyKey: form.idempotencyKey || newKey(),
+    })
     if (result.ok) {
       clearDraft()
       setEmailWarning(result.emailWarning ?? '')
       setStatus('success')
       return
     }
+    lock.current = false
     setSubmitError(result.message)
     setStatus('error')
   }
 
   if (status === 'success') {
     return (
-      <div className="rounded-lg border border-line bg-paper p-5 shadow-card sm:p-7">
+      <div className="border border-line bg-paper p-5 sm:p-7">
         <p className="text-sm font-semibold text-brand-dark">Aanvraag ontvangen</p>
         <h2 className="mt-2 text-2xl font-semibold">Bedankt, uw afspraakaanvraag is ontvangen.</h2>
         <p className="mt-3 text-ink-muted">
@@ -183,7 +231,7 @@ export function AppointmentFlow() {
       className="relative rounded-lg border border-line bg-paper p-5 shadow-card sm:p-7"
       onSubmit={(event) => {
         event.preventDefault()
-        if (step === 3) void handleSubmit()
+        if (step === 4) void handleSubmit()
       }}
       noValidate
     >
@@ -227,90 +275,93 @@ export function AppointmentFlow() {
       ) : null}
 
       {step === 1 ? (
-        <div className="grid gap-5">
-          <Field
+        <Field
+          id="preferredDate"
+          label="Datum"
+          hint="Alleen dagen waarop we plannen. Verleden is uitgeschakeld."
+          error={errors.preferredDate}
+        >
+          <TextInput
             id="preferredDate"
-            label="Datum"
-            hint="Alleen dagen waarop we plannen. Verleden is uitgeschakeld."
+            type="date"
+            className="min-h-12"
+            min={slotConfig?.today}
+            max={slotConfig?.maxDate}
+            value={form.preferredDate}
             error={errors.preferredDate}
-          >
-            <TextInput
-              id="preferredDate"
-              type="date"
-              className="min-h-12"
-              min={slotConfig?.today}
-              max={slotConfig?.maxDate}
-              value={form.preferredDate}
-              error={errors.preferredDate}
-              onChange={(event) => {
-                update('preferredDate', event.target.value)
-                update('preferredTimeWindow', '')
-                setAvailableSlots([])
-                setSlotsLoading(Boolean(event.target.value))
-                setAvailabilityMessage(
-                  event.target.value
-                    ? 'Beschikbare tijden worden geladen…'
-                    : 'Kies eerst een datum. Daarna ziet u alleen echte vrije tijden.',
-                )
-              }}
-            />
-          </Field>
-
-          <div>
-            <p id={slotsLegend} className="mb-2 text-sm font-semibold">
-              Beschikbare tijden
-            </p>
-            <p className="mb-3 text-sm text-ink-muted" aria-live="polite">
-              {availabilityMessage}
-            </p>
-            {slotsLoading ? (
-              <p className="text-sm text-ink-muted" role="status">
-                Laden…
-              </p>
-            ) : null}
-            {!slotsLoading && form.preferredDate && availableSlots.length === 0 ? (
-              <p className="rounded-md border border-dashed border-line px-3 py-4 text-sm text-ink-muted">
-                Geen vrije tijden voor deze datum. Er worden geen voorbeeldtijden getoond.
-              </p>
-            ) : null}
-            {availableSlots.length > 0 ? (
-              <div
-                role="radiogroup"
-                aria-labelledby={slotsLegend}
-                aria-invalid={Boolean(errors.preferredTimeWindow)}
-                className="grid grid-cols-2 gap-2 sm:grid-cols-3"
-              >
-                {availableSlots.map((slot) => {
-                  const selected = form.preferredTimeWindow === slot
-                  return (
-                    <button
-                      key={slot}
-                      type="button"
-                      role="radio"
-                      aria-checked={selected}
-                      className={`min-h-12 rounded-md border text-base font-semibold ${
-                        selected
-                          ? 'border-brand bg-brand-soft text-brand-dark'
-                          : 'border-line bg-paper hover:border-brand'
-                      }`}
-                      onClick={() => update('preferredTimeWindow', slot)}
-                    >
-                      {slot}
-                    </button>
-                  )
-                })}
-              </div>
-            ) : null}
-            {errors.preferredTimeWindow ? (
-              <p className="mt-2 text-sm text-danger" role="alert">
-                {errors.preferredTimeWindow}
-              </p>
-            ) : null}
-          </div>
-        </div>
+            onChange={(event) => {
+              update('preferredDate', event.target.value)
+              update('preferredTimeWindow', '')
+              setAvailableSlots([])
+              setSlotsLoading(Boolean(event.target.value))
+              setAvailabilityMessage(
+                event.target.value
+                  ? 'Beschikbare tijden worden geladen…'
+                  : 'Kies eerst een datum. Daarna ziet u alleen echte vrije tijden.',
+              )
+            }}
+          />
+        </Field>
       ) : null}
 
       {step === 2 ? (
+        <div>
+          <p className="mb-2 text-sm text-ink-muted">
+            Datum: {form.preferredDate ? formatBookingDate(form.preferredDate) : '-'}
+          </p>
+          <p id={slotsLegend} className="mb-2 text-sm font-semibold">
+            Beschikbare tijden
+          </p>
+          <p className="mb-3 text-sm text-ink-muted" aria-live="polite">
+            {availabilityMessage}
+          </p>
+          {slotsLoading ? (
+            <p className="text-sm text-ink-muted" role="status">
+              Laden…
+            </p>
+          ) : null}
+          {!slotsLoading && form.preferredDate && availableSlots.length === 0 ? (
+            <p className="rounded-md border border-dashed border-line px-3 py-4 text-sm text-ink-muted">
+              Geen vrije tijden voor deze datum. Er worden geen voorbeeldtijden getoond.
+            </p>
+          ) : null}
+          {availableSlots.length > 0 ? (
+            <div
+              role="radiogroup"
+              aria-labelledby={slotsLegend}
+              aria-invalid={Boolean(errors.preferredTimeWindow)}
+              className="grid grid-cols-2 gap-2 sm:grid-cols-3"
+            >
+              {availableSlots.map((slot) => {
+                const selected = form.preferredTimeWindow === slot
+                return (
+                  <button
+                    key={slot}
+                    type="button"
+                    role="radio"
+                    aria-checked={selected}
+                    className={`min-h-12 rounded-md border text-base font-semibold ${
+                      selected
+                        ? 'border-brand bg-brand-soft text-brand-dark'
+                        : 'border-line bg-paper hover:border-brand'
+                    }`}
+                    onClick={() => update('preferredTimeWindow', slot)}
+                  >
+                    {slot}
+                  </button>
+                )
+              })}
+            </div>
+          ) : null}
+          {errors.preferredTimeWindow ? (
+            <p className="mt-2 text-sm text-danger" role="alert">
+              {errors.preferredTimeWindow}
+            </p>
+          ) : null}
+        </div>
+      ) : null}
+
+      {step === 3 ? (
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="sm:col-span-2">
             <FormPrivacyNote purpose="We vragen naam, telefoon, e-mail en adres om de afspraakaanvraag te kunnen behandelen. Dit is nog geen bevestigde afspraak." />
@@ -369,9 +420,14 @@ export function AppointmentFlow() {
             </Field>
           </div>
           <div className="sm:col-span-2">
-            <Field id="message" label="Bericht (optioneel)">
+            <Field
+              id="message"
+              label="Is er nog iets dat we moeten weten?"
+              hint="Optioneel. Toegang, storing of wat we moeten meenemen."
+            >
               <TextArea
                 id="message"
+                className="min-h-40"
                 value={form.message}
                 maxLength={FIELD_MAX.message}
                 onChange={(event) => update('message', event.target.value)}
@@ -381,28 +437,45 @@ export function AppointmentFlow() {
         </div>
       ) : null}
 
-      {step === 3 ? (
+      {step === 4 ? (
         <div className="grid gap-3 text-sm">
           <h2 className="text-lg font-semibold">Controleer uw aanvraag</h2>
+          <p className="text-ink-muted">
+            U stuurt een afspraakaanvraag. Dit is nog geen bevestigde afspraak.
+          </p>
           <dl className="grid gap-2">
-            <Row label="Dienst" value={bookingServiceLabel(form.service)} />
-            <Row
+            <ReviewRow
+              label="Dienst"
+              value={bookingServiceLabel(form.service)}
+              onEdit={() => setStep(0)}
+            />
+            <ReviewRow
               label="Datum"
               value={form.preferredDate ? formatBookingDate(form.preferredDate) : ''}
+              onEdit={() => setStep(1)}
             />
-            <Row label="Tijd" value={form.preferredTimeWindow} />
-            <Row label="Adres" value={form.address} />
-            <Row
-              label="Contact"
-              value={`${form.firstName} ${form.lastName}\n${form.phone} · ${form.email}`}
+            <ReviewRow
+              label="Tijd"
+              value={form.preferredTimeWindow}
+              onEdit={() => setStep(2)}
             />
-            {form.message ? <Row label="Bericht" value={form.message} /> : null}
+            <ReviewRow
+              label="Naam"
+              value={`${form.firstName} ${form.lastName}`.trim()}
+              onEdit={() => setStep(3)}
+            />
+            <ReviewRow label="E-mail" value={form.email} onEdit={() => setStep(3)} />
+            <ReviewRow label="Telefoon" value={form.phone} onEdit={() => setStep(3)} />
+            <ReviewRow label="Adres" value={form.address} onEdit={() => setStep(3)} />
+            {form.message ? (
+              <ReviewRow label="Opmerking" value={form.message} onEdit={() => setStep(3)} />
+            ) : null}
           </dl>
-          <label className="flex items-start gap-3">
+          <label className="flex min-h-11 items-start gap-3">
             <input
               id="privacy"
               type="checkbox"
-              className="mt-1 size-5 accent-brand"
+              className="mt-1 size-5 shrink-0 accent-brand"
               checked={form.privacyAccepted}
               aria-invalid={Boolean(errors.privacy)}
               aria-describedby={errors.privacy ? 'privacy-error' : undefined}
@@ -429,7 +502,7 @@ export function AppointmentFlow() {
         </div>
       ) : null}
 
-      <div className="sticky bottom-0 z-10 mt-6 flex justify-between gap-3 border-t border-line bg-paper py-3">
+      <div className="sticky bottom-[var(--cookie-banner-offset)] z-10 mt-6 flex justify-between gap-3 border-t border-line bg-paper py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
         <Button
           variant="ghost"
           disabled={step === 0 || status === 'submitting'}
@@ -437,7 +510,7 @@ export function AppointmentFlow() {
         >
           Vorige
         </Button>
-        {step < 3 ? (
+        {step < 4 ? (
           <Button
             onClick={() => {
               if (validate(step)) setStep((value) => value + 1)
@@ -447,19 +520,10 @@ export function AppointmentFlow() {
           </Button>
         ) : (
           <Button type="submit" disabled={status === 'submitting'}>
-            {status === 'submitting' ? 'Versturen…' : 'Afspraak aanvragen'}
+            {status === 'submitting' ? 'Versturen…' : 'Aanvraag versturen'}
           </Button>
         )}
       </div>
     </form>
-  )
-}
-
-function Row({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex justify-between gap-4 border-b border-line py-2">
-      <dt className="text-ink-muted">{label}</dt>
-      <dd className="max-w-[65%] text-right font-medium break-words whitespace-pre-wrap">{value}</dd>
-    </div>
   )
 }

@@ -3,12 +3,12 @@ import { cn } from '../lib/cn'
 import type { HeadingLevel } from '../types'
 
 const sizeClass: Record<HeadingLevel, string> = {
-  h1: 'display text-[1.75rem] font-semibold tracking-tight sm:text-4xl lg:text-[2.75rem] lg:leading-tight',
-  h2: 'display text-2xl font-semibold tracking-tight sm:text-3xl',
-  h3: 'text-xl font-semibold tracking-tight sm:text-2xl',
-  h4: 'text-lg font-semibold',
+  h1: 'font-display text-[clamp(1.85rem,4.4vw,3.05rem)] font-medium leading-[1.14] tracking-[-0.02em]',
+  h2: 'font-display text-[clamp(1.5rem,2.6vw,2.15rem)] font-medium leading-[1.2] tracking-[-0.018em]',
+  h3: 'text-[1.15rem] font-semibold leading-[1.3] tracking-[-0.015em] sm:text-[1.3rem]',
+  h4: 'text-lg font-semibold tracking-[-0.012em]',
   h5: 'text-base font-semibold',
-  h6: 'text-sm font-semibold uppercase tracking-wide',
+  h6: 'text-xs font-semibold uppercase tracking-[0.14em]',
 }
 
 type HeadingProps = {
@@ -19,9 +19,11 @@ type HeadingProps = {
 
 export function Heading({ as = 'h2', className, children }: HeadingProps) {
   const Tag = as
-  const hasTextColor = Boolean(className?.split(/\s+/).some((item) => /^text-(?!xs|sm|base|lg|xl|\[)/.test(item)))
+  const hasTextColor = Boolean(
+    className?.split(/\s+/).some((item) => /^text-(?!xs|sm|base|lg|xl|\[)/.test(item)),
+  )
   return (
-    <Tag className={cn(!hasTextColor && 'text-ink', sizeClass[as], className)}>
+    <Tag className={cn(!hasTextColor && 'text-ink', 'text-pretty', sizeClass[as], className)}>
       {children}
     </Tag>
   )

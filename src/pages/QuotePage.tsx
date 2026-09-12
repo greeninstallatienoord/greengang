@@ -20,7 +20,7 @@ export function QuotePage() {
         ]}
         eyebrow="Offerte"
         title="Offerte aanvragen"
-        intro="Vier korte stappen. Begin met de dienst; contactgegevens komen pas later. Foto’s zijn optioneel. Zonder serverkoppeling is een verzending nog geen ontvangstbevestiging."
+        intro="Vier stappen: wat u wilt laten doen, de situatie, uw gegevens, en een controle voordat u verstuurt. Een aanvraag is een verzoek om contact, geen opdracht."
         narrow
       >
         <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm">
@@ -35,7 +35,7 @@ export function QuotePage() {
       </PageHero>
       <Section>
         <Container className="max-w-3xl">
-          <div className="mb-8 rounded-lg border border-line bg-paper p-5 shadow-card">
+          <div className="mb-8 border border-line bg-paper p-6">
             <h2 className="font-semibold">Hoe we met uw aanvraag omgaan</h2>
             <p className="mt-2 text-sm text-ink-muted">
               Een offerteaanvraag is een verzoek om contact, geen opdracht. We

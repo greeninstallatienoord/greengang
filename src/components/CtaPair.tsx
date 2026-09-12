@@ -1,3 +1,4 @@
+import { CalendarDays, Phone } from 'lucide-react'
 import { site } from '../data/site'
 import { cn } from '../lib/cn'
 import type { ButtonSize } from '../types'
@@ -26,12 +27,13 @@ export function CtaPair({
   const resolvedSize = size ?? (compact ? 'sm' : 'md')
 
   return (
-    <div className={cn('flex flex-wrap gap-3', className)}>
-      <ButtonLink
-        to={quoteTo}
-        size={resolvedSize}
-        className={onDark ? 'bg-white text-brand-deep hover:bg-brand-soft' : undefined}
-      >
+    <div
+      className={cn(
+        'flex flex-col items-stretch gap-2.5 min-[400px]:flex-row min-[400px]:flex-wrap min-[400px]:items-center',
+        className,
+      )}
+    >
+      <ButtonLink to={quoteTo} size={resolvedSize}>
         {site.copy.ctaQuote}
       </ButtonLink>
       <ButtonLink
@@ -40,10 +42,11 @@ export function CtaPair({
         size={resolvedSize}
         className={
           onDark
-            ? 'border-white/50 bg-transparent text-white hover:bg-white/10'
+            ? 'border-white/45 bg-transparent text-white hover:border-white/70 hover:bg-white/10'
             : undefined
         }
       >
+        <CalendarDays size={16} strokeWidth={1.75} aria-hidden="true" />
         {site.copy.ctaAppointment}
       </ButtonLink>
       {showCall ? (
@@ -52,9 +55,10 @@ export function CtaPair({
           variant="ghost"
           size={resolvedSize}
           external={Boolean(phoneHref)}
-          className={onDark ? 'text-white hover:bg-white/10' : undefined}
+          className={onDark ? 'justify-center text-white hover:bg-white/10' : undefined}
         >
-          {site.copy.ctaCall}
+          <Phone size={16} strokeWidth={1.75} aria-hidden="true" />
+          {site.contact.phone}
         </ButtonLink>
       ) : null}
     </div>

@@ -16,9 +16,9 @@ export const guidePosts: BlogPost[] = [
     slug: 'gids-cv-ketel',
     title: 'Gids: cv-ketel in huis begrijpen, beoordelen en vervangen',
     excerpt:
-      'Wat een cv-ketel doet, welke signalen een beoordeling zinvol maken, en hoe u een gesprek over vervanging voorbereidt — zonder standaardleeftijd of prijs.',
+      'Wat een cv-ketel doet, welke signalen een beoordeling zinvol maken, en hoe u een gesprek over vervanging voorbereidt, zonder standaardleeftijd of prijs.',
     intro:
-      'Een cv-ketel verwarmt het huis en levert vaak ook warm tapwater. Of onderhoud, reparatie of vervanging logisch is, hangt af van de staat van het toestel en de woning — niet van een vast jaartal op internet. Deze gids helpt u de situatie te ordenen voordat u een installateur belt.',
+      'Een cv-ketel verwarmt het huis en levert vaak ook warm tapwater. Of onderhoud, reparatie of vervanging logisch is, hangt af van de staat van het toestel en de woning, niet van een vast jaartal op internet. Deze gids helpt u de situatie te ordenen voordat u een installateur belt.',
     category: 'cv-ketel',
     tags: ['cv-ketel', 'gids', 'veiligheid', 'vervanging'],
     publishedAt: '2026-09-12',
@@ -91,7 +91,7 @@ export const guidePosts: BlogPost[] = [
     excerpt:
       'Wat u zelf kunt bijhouden aan filters en vrije ruimte, wat bij een vakman hoort, en waarom koudemiddelwerk geen doe-het-zelfklus is.',
     intro:
-      'Airconditioning blijft schoner en rustiger werken als filters en de buitenunit niet verstopt raken. Dat is geen garantie op “nooit meer storing”. Deze gids scheidt huishoudelijk onderhoud van werk dat bij een vakman hoort — vooral als het om koudemiddel gaat.',
+      'Airconditioning blijft schoner en rustiger werken als filters en de buitenunit niet verstopt raken. Dat is geen garantie op “nooit meer storing”. Deze gids scheidt huishoudelijk onderhoud van werk dat bij een vakman hoort, vooral als het om koudemiddel gaat.',
     category: 'onderhoud',
     tags: ['airco', 'onderhoud', 'filters', 'koudemiddel'],
     publishedAt: '2026-09-12',
@@ -148,7 +148,7 @@ export const guidePosts: BlogPost[] = [
     excerpt:
       'Welke woningvragen eerst komen, wat hybride versus volledig elektrisch betekent in grote lijnen, en waar u officiële informatie over subsidies vindt.',
     intro:
-      'Een warmtepomp is geen catalogusproduct dat “altijd past”. Isolatie, afgifte, buitenruimte en wat u met de bestaande ketel wilt, bepalen de route. Deze gids helpt u die vragen te verzamelen. Geschiktheid volgt pas na beoordeling — niet vanaf deze pagina.',
+      'Een warmtepomp is geen catalogusproduct dat “altijd past”. Isolatie, afgifte, buitenruimte en wat u met de bestaande ketel wilt, bepalen de route. Deze gids helpt u die vragen te verzamelen. Geschiktheid volgt pas na beoordeling, niet vanaf deze pagina.',
     category: 'warmtepomp',
     tags: ['warmtepomp', 'gids', 'isolatie', 'subsidie'],
     publishedAt: '2026-09-12',
@@ -243,7 +243,7 @@ export const guidePosts: BlogPost[] = [
         id: 'toegang',
         heading: 'Toegang en werkruimte',
         paragraphs: [
-          'Zorg dat de technische ruimte, zolder of de plek van de buitenunit bereikbaar is. Haal spullen weg die in de weg staan. Bespreek parkeren en of er een steiger, ladder of extra handen nodig zijn — dat hoort in het voorstel, niet als verrassing.',
+          'Zorg dat de technische ruimte, zolder of de plek van de buitenunit bereikbaar is. Haal spullen weg die in de weg staan. Bespreek parkeren en of er een steiger, ladder of extra handen nodig zijn. Dat hoort in het voorstel, niet als verrassing.',
           'Is er een huisdier of werkt u thuis? Zeg dat van tevoren. Installatie vraagt soms om water of stroom even uit, of om de ketel een dagdeel niet te gebruiken.',
         ],
       },
@@ -317,7 +317,7 @@ export const guidePosts: BlogPost[] = [
         id: 'na-afloop',
         heading: 'Na het bezoek',
         paragraphs: [
-          'Vraag wat er is nagekeken en of er onderdelen aandacht vragen. Als vervanging logischer is dan nog een ronde onderhoud, hoort u dat in gewone taal — niet als druk om dezelfde dag te tekenen.',
+          'Vraag wat er is nagekeken en of er onderdelen aandacht vragen. Als vervanging logischer is dan nog een ronde onderhoud, hoort u dat in gewone taal, niet als druk om dezelfde dag te tekenen.',
           'Plan daarna eventueel een vervolg via de onderhoudsdienst of, bij vervanging, via de cv-ketel- of warmtepomppagina.',
         ],
         links: [

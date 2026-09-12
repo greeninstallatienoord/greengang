@@ -85,7 +85,7 @@ export const services: ServiceRecord[] = [
       'Green Installatie Noord installeert airconditioning. We kijken naar de ruimte, het gebruik en een nette plaatsing binnen en buiten.',
     explanation: [
       'Airconditioning kan een woning of werkruimte koelen en, afhankelijk van het systeem, ook verwarmen. Belangrijk is dat het toestel past bij de ruimte en dat binnen- en buitenunit zorgvuldig worden geplaatst.',
-      'Wij helpen met advies en installatie. Welk type het beste past, hangt af van de situatie — dat bespreken we in het voortraject, zonder merken of beloftes die we hier niet kunnen onderbouwen.',
+      'Wij helpen met advies en installatie. Welk type het beste past, hangt af van de situatie. Dat bespreken we in het voortraject, zonder merken of beloftes die we hier niet kunnen onderbouwen.',
     ],
     benefits: [
       {
@@ -151,7 +151,7 @@ export const services: ServiceRecord[] = [
     heroEyebrow: 'Duurzame verwarming',
     heroTitle: 'Warmtepomp installatie',
     heroText:
-      'Een warmtepomp vraagt om een goede beoordeling van de woning. Green Installatie Noord helpt met advies en installatie — zonder overhaaste beloftes.',
+      'Een warmtepomp vraagt om een goede beoordeling van de woning. Green Installatie Noord helpt met advies en installatie, zonder overhaaste beloftes.',
     explanation: [
       'Een warmtepomp haalt warmte uit lucht, bodem of water en kan een woning (deels) verwarmen. Of een warmtepomp past, hangt af van de woning, de afgifte en de wensen. Dat is maatwerk.',
       'Op deze pagina vindt u wat wij kunnen betekenen. Concrete geschiktheid, type systeem en investering volgen pas na een persoonlijke beoordeling.',

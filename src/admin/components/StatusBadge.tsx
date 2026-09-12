@@ -1,20 +1,21 @@
 import { cn } from '../../lib/cn'
 
 const tone: Record<string, string> = {
-  pending: 'bg-brand-soft text-brand-dark',
-  requested: 'bg-brand-soft text-brand-dark',
-  new: 'bg-brand-soft text-brand-dark',
-  confirmed: 'bg-brand-soft text-brand-deep',
-  contacted: 'bg-surface text-ink',
-  read: 'bg-surface text-ink',
-  in_progress: 'bg-surface text-ink',
-  completed: 'bg-surface text-ink-muted',
-  archived: 'bg-surface text-ink-muted',
-  cancelled: 'bg-paper text-danger border-danger/30',
-  declined: 'bg-paper text-danger border-danger/30',
-  sent: 'bg-brand-soft text-brand-dark',
-  failed: 'bg-paper text-danger border-danger/30',
-  skipped: 'bg-surface text-ink-muted',
+  pending: 'bg-[#eef5ea] text-[#14692a]',
+  requested: 'bg-[#eef5ea] text-[#14692a]',
+  new: 'bg-[#eef5ea] text-[#14692a]',
+  confirmed: 'bg-[#e8f0ea] text-[#102418]',
+  contacted: 'bg-[#f3f4f1] text-[#3d4540]',
+  read: 'bg-[#f3f4f1] text-[#3d4540]',
+  in_progress: 'bg-[#f3f4f1] text-[#3d4540]',
+  completed: 'bg-[#f3f4f1] text-[#6a716c]',
+  archived: 'bg-[#f3f4f1] text-[#6a716c]',
+  cancelled: 'bg-[#f8eeee] text-[#9b2c2c]',
+  declined: 'bg-[#f8eeee] text-[#9b2c2c]',
+  quoted: 'bg-[#eef5ea] text-[#14692a]',
+  sent: 'bg-[#eef5ea] text-[#14692a]',
+  failed: 'bg-[#f8eeee] text-[#9b2c2c]',
+  skipped: 'bg-[#f3f4f1] text-[#6a716c]',
 }
 
 type StatusBadgeProps = {
@@ -26,8 +27,8 @@ export function StatusBadge({ value, label }: StatusBadgeProps) {
   return (
     <span
       className={cn(
-        'inline-flex rounded-sm border border-transparent px-2 py-0.5 text-xs font-semibold',
-        tone[value] ?? 'bg-surface text-ink-muted',
+        'inline-flex shrink-0 items-center rounded-[3px] px-1.5 py-0.5 text-[11px] font-semibold tracking-[0.01em]',
+        tone[value] ?? 'bg-[#f3f4f1] text-[#6a716c]',
       )}
     >
       {label ?? value}

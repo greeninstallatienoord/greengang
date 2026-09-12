@@ -1,7 +1,11 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useFocusTrap } from '../../hooks/useFocusTrap'
-import { consentCopy } from '../../lib/consentManager'
+import {
+  consentCopy,
+  hasOptionalScripts,
+  visibleConsentCategories,
+} from '../../lib/consentManager'
 import type { ConsentPreferences } from '../../types'
 import { Button } from '../Button'
 
@@ -9,20 +13,17 @@ type CookiePreferencesProps = {
   value: ConsentPreferences
   onClose: () => void
   onSave: (next: ConsentPreferences) => void
-  onAcceptAll: () => void
-  onRejectOptional: () => void
 }
 
 export function CookiePreferences({
   value,
   onClose,
   onSave,
-  onAcceptAll,
-  onRejectOptional,
 }: CookiePreferencesProps) {
   const [draft, setDraft] = useState(value)
   const dialogRef = useRef<HTMLDivElement>(null)
   const titleId = useId()
+  const categories = visibleConsentCategories()
   useFocusTrap(true, dialogRef)
 
   useEffect(() => {
@@ -40,7 +41,7 @@ export function CookiePreferences({
 
   return (
     <div
-      className="fixed inset-0 z-[60] flex items-end justify-center bg-ink/40 p-4 sm:items-center"
+      className="fixed inset-0 z-[60] flex items-end justify-center bg-ink/35 p-3 sm:items-center sm:p-4"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) onClose()
       }}
@@ -51,40 +52,41 @@ export function CookiePreferences({
         aria-modal="true"
         aria-labelledby={titleId}
         tabIndex={-1}
-        className="max-h-[90dvh] w-full max-w-lg overflow-auto rounded-lg bg-paper p-5 shadow-card outline-none"
+        className="max-h-[min(90dvh,36rem)] w-full max-w-md overflow-auto border border-line bg-paper p-5 shadow-lift outline-none sm:p-6"
       >
-        <h2 id={titleId} className="text-xl font-semibold">
-          Cookie-instellingen
+        <h2 id={titleId} className="text-lg font-semibold">
+          Cookievoorkeuren
         </h2>
         <p className="mt-2 text-sm text-ink-muted">
-          Zet alleen aan wat u wilt. Noodzakelijk blijft altijd aan. U kunt dit
-          later wijzigen via “Cookie-instellingen” onderaan de pagina.
+          {hasOptionalScripts()
+            ? 'Zet alleen aan wat u wilt. Noodzakelijk blijft altijd aan.'
+            : 'Op dit moment is alleen de noodzakelijke categorie actief. Analytisch en marketing zijn niet aangesloten.'}
         </p>
-        <div className="mt-5 grid gap-4">
-          {(Object.keys(consentCopy) as Array<keyof ConsentPreferences>).map(
-            (key) => (
-              <label
+        <div className="mt-5 grid gap-3">
+          {categories.map((key) => {
+            const title = `cookie-cat-${key}-title`
+            const help = `cookie-cat-${key}-help`
+            return (
+              <div
                 key={key}
-                className="flex items-start justify-between gap-4 rounded-md border border-line p-3"
+                className="flex items-start justify-between gap-4 border border-line px-3.5 py-3"
               >
-                <span>
-                  <span className="block font-semibold" id={`cookie-cat-${key}-title`}>
+                <div>
+                  <p className="font-semibold" id={title}>
                     {consentCopy[key].title}
-                  </span>
-                  <span
-                    id={`cookie-cat-${key}-help`}
-                    className="mt-1 block text-sm text-ink-muted"
-                  >
+                  </p>
+                  <p id={help} className="mt-1 text-sm text-ink-muted">
                     {consentCopy[key].description}
-                  </span>
-                </span>
+                  </p>
+                </div>
                 <input
                   id={`cookie-cat-${key}`}
                   type="checkbox"
-                  className="mt-1 size-5 accent-brand"
+                  className="mt-1 size-5 shrink-0 accent-brand"
                   checked={draft[key]}
                   disabled={key === 'necessary'}
-                  aria-describedby={`cookie-cat-${key}-help`}
+                  aria-labelledby={title}
+                  aria-describedby={help}
                   onChange={(event) =>
                     setDraft((current) => ({
                       ...current,
@@ -92,28 +94,18 @@ export function CookiePreferences({
                     }))
                   }
                 />
-              </label>
-            ),
-          )}
+              </div>
+            )
+          })}
         </div>
         <p className="mt-4 text-sm">
-          <Link to="/cookies" className="underline" onClick={onClose}>
-            Uitleg over cookies
+          <Link to="/cookies" className="underline underline-offset-2" onClick={onClose}>
+            Cookiebeleid
           </Link>
         </p>
-        <div className="mt-5 flex flex-wrap justify-end gap-2">
+        <div className="mt-5 flex flex-col-reverse gap-2 min-[400px]:flex-row min-[400px]:justify-end">
           <Button variant="ghost" onClick={onClose}>
             Sluiten
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={onRejectOptional}
-            aria-label="Optionele cookies weigeren. Alleen noodzakelijke blijven aan."
-          >
-            Optionele weigeren
-          </Button>
-          <Button variant="secondary" onClick={onAcceptAll}>
-            Alles accepteren
           </Button>
           <Button onClick={() => onSave({ ...draft, necessary: true })}>
             Voorkeuren opslaan

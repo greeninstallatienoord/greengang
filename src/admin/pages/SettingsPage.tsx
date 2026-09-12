@@ -3,8 +3,14 @@ import { Button } from '../../components/Button'
 import { Field, TextInput } from '../../components/forms/Field'
 import { business } from '../../data/business'
 import { api } from '../../lib/api'
+import { Notice } from '../components/Notice'
 import { PageHeader } from '../components/PageHeader'
+import { Skeleton } from '../components/Skeleton'
 import { useAdminAuth } from '../AdminAuth'
+
+function presence(ok: boolean): string {
+  return ok ? 'Ingesteld' : 'Niet ingesteld'
+}
 
 export function SettingsPage() {
   const { email } = useAdminAuth()
@@ -15,11 +21,19 @@ export function SettingsPage() {
   const [buffer, setBuffer] = useState('0')
   const [blocked, setBlocked] = useState('')
   const [fromEmail, setFromEmail] = useState<string>(business.email)
+  const [emailConfigured, setEmailConfigured] = useState<boolean | null>(null)
+  const [sessionConfigured, setSessionConfigured] = useState<boolean | null>(null)
+  const [environment, setEnvironment] = useState('')
+  const [siteUrl, setSiteUrl] = useState('')
+  const [adminPath, setAdminPath] = useState('')
   const [error, setError] = useState('')
   const [saved, setSaved] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [busy, setBusy] = useState(false)
 
   useEffect(() => {
     void api.admin.settings().then((result) => {
+      setLoading(false)
       if (!result.ok) {
         setError(result.message)
         return
@@ -33,10 +47,16 @@ export function SettingsPage() {
       setBuffer(result.data.appointments.buffer_minutes ?? '0')
       setBlocked(result.data.appointments.blocked_dates ?? '')
       setFromEmail(result.data.email.from_email ?? business.email)
+      setEmailConfigured(result.data.email.configured)
+      setSessionConfigured(result.data.system?.sessionConfigured ?? null)
+      setEnvironment(result.data.system?.environment ?? '')
+      setSiteUrl(result.data.system?.siteUrl ?? '')
+      setAdminPath(result.data.system?.adminPath ?? '')
     })
   }, [])
 
   async function save() {
+    setBusy(true)
     const result = await api.admin.updateSettings({
       slot_horizon_days: horizon,
       working_days: workingDays,
@@ -46,6 +66,7 @@ export function SettingsPage() {
       blocked_dates: blocked,
       from_email: fromEmail,
     })
+    setBusy(false)
     if (result.ok) {
       setSaved('Instellingen opgeslagen.')
       setError('')
@@ -54,41 +75,31 @@ export function SettingsPage() {
     }
   }
 
+  if (loading) return <Skeleton rows={6} />
+
   return (
     <div>
-      <PageHeader title="Instellingen" />
+      <PageHeader title="Instellingen" description="Alleen bestaande configuratie. Geheimen worden niet getoond." />
 
-      <section className="mb-8 rounded-md border border-line bg-paper p-4">
+      <section className="mb-6 border border-[var(--admin-line)] bg-[var(--admin-panel)] p-5">
         <h2 className="font-semibold">Bedrijfsgegevens</h2>
-        <p className="mt-1 text-sm text-ink-muted">
-          Komt uit de centrale configuratie. Wijzig deze niet hier als de publieke site moet
-          wijzigen.
+        <p className="mt-1 text-sm text-[var(--admin-muted)]">
+          Komt uit de centrale configuratie. Wijzig deze niet hier als de publieke site moet wijzigen.
         </p>
-        <dl className="mt-4 grid gap-2 text-sm">
-          <div>
-            <dt className="text-ink-muted">Naam</dt>
-            <dd className="font-medium">{business.businessName}</dd>
-          </div>
-          <div>
-            <dt className="text-ink-muted">Adres</dt>
-            <dd className="font-medium">
-              {business.address.street}, {business.address.postalCode} {business.address.city}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-ink-muted">Telefoon</dt>
-            <dd className="font-medium">{business.phone}</dd>
-          </div>
-          <div>
-            <dt className="text-ink-muted">E-mail</dt>
-            <dd className="font-medium">{business.email}</dd>
-          </div>
+        <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+          <Info label="Naam" value={business.businessName} />
+          <Info label="Telefoon" value={business.phone} />
+          <Info
+            label="Adres"
+            value={`${business.address.street}, ${business.address.postalCode} ${business.address.city}`}
+          />
+          <Info label="E-mail" value={business.email} />
         </dl>
       </section>
 
-      <section className="mb-8 rounded-md border border-line bg-paper p-4">
+      <section className="mb-6 border border-[var(--admin-line)] bg-[var(--admin-panel)] p-5">
         <h2 className="font-semibold">Afspraakinstellingen</h2>
-        <p className="mt-1 text-sm text-ink-muted">
+        <p className="mt-1 text-sm text-[var(--admin-muted)]">
           Deze tijden zijn instelbaar. Ze zijn geen bewijs van vaste openingstijden op de website.
         </p>
         <div className="mt-4 grid max-w-xl gap-4">
@@ -113,8 +124,14 @@ export function SettingsPage() {
         </div>
       </section>
 
-      <section className="mb-8 rounded-md border border-line bg-paper p-4">
-        <h2 className="font-semibold">E-mailinstellingen</h2>
+      <section className="mb-6 border border-[var(--admin-line)] bg-[var(--admin-panel)] p-5">
+        <h2 className="font-semibold">E-mail</h2>
+        <p className="mt-1 text-sm text-[var(--admin-muted)]">
+          De API-sleutel zelf wordt niet getoond.
+        </p>
+        <dl className="mt-4 grid gap-3 text-sm">
+          <Info label="Verzenden via Resend" value={emailConfigured === null ? '-' : presence(emailConfigured)} />
+        </dl>
         <div className="mt-4 max-w-sm">
           <Field id="from" label="Afzender" hint="Moet in Resend geverifieerd zijn.">
             <TextInput id="from" type="email" value={fromEmail} onChange={(e) => setFromEmail(e.target.value)} />
@@ -122,19 +139,39 @@ export function SettingsPage() {
         </div>
       </section>
 
-      <section className="mb-8 rounded-md border border-line bg-paper p-4">
-        <h2 className="font-semibold">Beheerder</h2>
-        <p className="mt-2 text-sm">Ingelogd als {email}.</p>
-        <p className="mt-2 text-sm text-ink-muted">
+      <section className="mb-6 border border-[var(--admin-line)] bg-[var(--admin-panel)] p-5">
+        <h2 className="font-semibold">Systeem</h2>
+        <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+          <Info label="Omgeving" value={environment || '-'} />
+          <Info label="Website-URL" value={siteUrl || '-'} />
+          <Info label="Beheerpad" value={adminPath || '-'} />
+          <Info
+            label="Sessiebeveiliging"
+            value={sessionConfigured === null ? '-' : presence(sessionConfigured)}
+          />
+          <Info label="Ingelogd als" value={email} />
+        </dl>
+        <p className="mt-4 text-sm text-[var(--admin-muted)]">
           Wachtwoorden staan gehashed in D1. Er is geen wachtwoord in de frontendbron.
         </p>
       </section>
 
-      {error ? <p className="mb-3 text-sm text-danger">{error}</p> : null}
-      {saved ? <p className="mb-3 text-sm text-brand-dark">{saved}</p> : null}
-      <Button type="button" onClick={() => void save()}>
-        Opslaan
+      {error ? <div className="mb-3"><Notice tone="error">{error}</Notice></div> : null}
+      {saved ? <div className="mb-3"><Notice tone="success">{saved}</Notice></div> : null}
+      <Button type="button" disabled={busy} onClick={() => void save()}>
+        {busy ? 'Bezig…' : 'Opslaan'}
       </Button>
+    </div>
+  )
+}
+
+function Info({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <dt className="text-[11px] font-semibold tracking-[0.06em] text-[var(--admin-muted)] uppercase">
+        {label}
+      </dt>
+      <dd className="mt-1 font-medium break-words">{value}</dd>
     </div>
   )
 }

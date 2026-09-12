@@ -23,7 +23,7 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
     .filter((item) => item.path)
 
   return (
-    <nav aria-label="Broodkruimelpad" className="text-sm text-ink-muted">
+    <nav aria-label="Broodkruimelpad" className="text-[0.8rem] text-ink-muted">
       <ol className="flex flex-wrap items-center gap-1">
         {items.map((item, index) => (
           <li key={`${item.label}-${index}`} className="flex items-center gap-1">

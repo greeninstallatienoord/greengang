@@ -42,13 +42,15 @@ async function handle(request: Request, env: WorkerEnv): Promise<Response> {
   if (request.method === 'POST' && path === '/api/contact') {
     limit(request, 'contact', 8)
     const body = await readJson<Record<string, unknown>>(request, MAX_BODY_BYTES)
-    return json(env, request, { ok: true, ...(await pub.createContact(env, body)) }, 201)
+    const result = await pub.createContact(env, body)
+    return json(env, request, { ok: true, ...result }, result.replayed ? 200 : 201)
   }
 
   if (request.method === 'POST' && path === '/api/quotes') {
     limit(request, 'quotes', 8)
     const body = await readJson<Record<string, unknown>>(request, MAX_BODY_BYTES)
-    return json(env, request, { ok: true, ...(await pub.createQuote(env, body)) }, 201)
+    const result = await pub.createQuote(env, body)
+    return json(env, request, { ok: true, ...result }, result.replayed ? 200 : 201)
   }
 
   if (request.method === 'POST' && path === '/api/appointments') {
@@ -57,8 +59,9 @@ async function handle(request: Request, env: WorkerEnv): Promise<Response> {
     const result = await pub.createAppointment(env, body)
     logSafe(env, 'appointment.requested', {
       emailWarning: Boolean(result.emailWarning),
+      replayed: Boolean(result.replayed),
     })
-    return json(env, request, { ok: true, ...result }, 201)
+    return json(env, request, { ok: true, ...result }, result.replayed ? 200 : 201)
   }
 
   if (request.method === 'POST' && path === '/api/admin/login') {
@@ -78,7 +81,11 @@ async function handle(request: Request, env: WorkerEnv): Promise<Response> {
     return handleAdmin(request, env, path)
   }
 
-  throw new HttpError(404, 'Niet gevonden.')
+  if (path.startsWith('/api')) {
+    throw new HttpError(404, 'Niet gevonden.')
+  }
+
+  return env.ASSETS.fetch(request)
 }
 
 async function handleAdmin(request: Request, env: WorkerEnv, path: string): Promise<Response> {
@@ -132,14 +139,22 @@ async function handleAdmin(request: Request, env: WorkerEnv, path: string): Prom
 
   if (resource === 'emails') {
     if (request.method === 'GET' && !id) return json(env, request, await admin.listEmails(env))
+    if (request.method === 'GET' && id) return json(env, request, await admin.getEmail(env, id))
     if (request.method === 'POST' && id === 'preview') {
       const body = await readJson<Record<string, unknown>>(request, MAX_BODY_BYTES)
-      return json(env, request, await admin.previewEmail(body))
+      return json(env, request, await admin.previewEmail(env, body))
     }
     if (request.method === 'POST' && !id) {
       limit(request, 'admin-email', 20)
       const body = await readJson<Record<string, unknown>>(request, MAX_BODY_BYTES)
       return json(env, request, await admin.sendAdminEmail(env, body))
+    }
+  }
+
+  if (resource === 'recipients') {
+    if (request.method === 'GET') {
+      const query = new URL(request.url).searchParams.get('q') ?? ''
+      return json(env, request, await admin.listRecipients(env, query))
     }
   }
 

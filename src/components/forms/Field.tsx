@@ -12,7 +12,7 @@ type FieldProps = {
 export function Field({ id, label, error, hint, children }: FieldProps) {
   return (
     <div>
-      <label htmlFor={id} className="mb-1.5 block text-sm font-semibold">
+      <label htmlFor={id} className="mb-2 block text-[0.95rem] font-semibold tracking-[-0.01em]">
         {label}
       </label>
       {children}
@@ -32,14 +32,19 @@ type TextInputProps = InputHTMLAttributes<HTMLInputElement> & {
   error?: string
 }
 
-export function TextInput({ error, className, id, ...props }: TextInputProps) {
+export function TextInput({ error, className, id, type, inputMode, ...props }: TextInputProps) {
+  const resolvedInputMode =
+    inputMode ?? (type === 'tel' ? 'tel' : type === 'email' ? 'email' : undefined)
+
   return (
     <input
       id={id}
+      type={type}
+      inputMode={resolvedInputMode}
       aria-invalid={Boolean(error)}
       aria-describedby={error && id ? `${id}-error` : undefined}
       className={cn(
-        'min-h-11 w-full rounded-md border border-line bg-paper px-3 text-base outline-none focus:border-brand',
+        'min-h-12 w-full rounded-sm border border-line bg-paper px-3.5 text-base outline-none transition-colors focus:border-brand',
         error && 'border-danger',
         className,
       )}
@@ -59,7 +64,7 @@ export function TextArea({ error, className, id, ...props }: TextAreaProps) {
       aria-invalid={Boolean(error)}
       aria-describedby={error && id ? `${id}-error` : undefined}
       className={cn(
-        'min-h-28 w-full rounded-md border border-line bg-paper px-3 py-2 text-base outline-none focus:border-brand',
+        'min-h-32 w-full rounded-sm border border-line bg-paper px-3.5 py-3 text-base outline-none transition-colors focus:border-brand',
         error && 'border-danger',
         className,
       )}

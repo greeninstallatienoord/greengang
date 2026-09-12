@@ -1,15 +1,28 @@
 import { services } from './services'
 
-export const mainNav = [
-  { label: 'Home', href: '/' },
-  ...services.map((service) => ({
-    label: service.navLabel,
-    href: service.href,
-  })),
+export const serviceNav = services.map((service) => ({
+  label: service.navLabel,
+  href: service.href,
+  summary: service.summary,
+}))
+
+export const headerNav = [
+  { label: 'Werk', href: '/werk' },
   { label: 'Over ons', href: '/over-ons' },
-  { label: 'Werkgebied', href: '/werkgebied' },
   { label: 'Kennisbank', href: '/blog' },
   { label: 'Contact', href: '/contact' },
+] as const
+
+export const mobileExtraNav = [
+  { label: 'Werkgebied', href: '/werkgebied' },
+  { label: 'Veelgestelde vragen', href: '/veelgestelde-vragen' },
+] as const
+
+export const mainNav = [
+  { label: 'Home', href: '/' },
+  ...serviceNav,
+  ...headerNav,
+  ...mobileExtraNav,
 ] as const
 
 const formPaths = ['/offerte-aanvragen', '/afspraak-maken', '/contact'] as const
@@ -25,16 +38,15 @@ export const footerNav = {
   })),
   company: [
     { label: 'Over ons', href: '/over-ons' },
-    { label: 'Werkgebied', href: '/werkgebied' },
+    { label: 'Werk', href: '/werk' },
     { label: 'Kennisbank', href: '/blog' },
-    { label: 'Veelgestelde vragen', href: '/veelgestelde-vragen' },
     { label: 'Contact', href: '/contact' },
-    { label: 'Offerte aanvragen', href: '/offerte-aanvragen' },
     { label: 'Afspraak maken', href: '/afspraak-maken' },
+    { label: 'Offerte aanvragen', href: '/offerte-aanvragen' },
   ],
   legal: [
-    { label: 'Privacy', href: '/privacy' },
-    { label: 'Cookies', href: '/cookies' },
+    { label: 'Privacyverklaring', href: '/privacy' },
+    { label: 'Cookiebeleid', href: '/cookies' },
     { label: 'Algemene voorwaarden', href: '/algemene-voorwaarden' },
     { label: 'Disclaimer', href: '/disclaimer' },
   ],

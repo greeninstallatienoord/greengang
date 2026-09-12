@@ -1,67 +1,190 @@
 import { findOrCreateCustomer } from '../customers'
+import { adminRecordUrl, emailOutcome, sendEmail, type EmailStatus } from '../email'
 import type { WorkerEnv } from '../env'
-import { sendEmail } from '../email'
 import { HttpError } from '../http'
+import { readIdempotencyKey, releaseSubmission, reserveSubmission } from '../idempotency'
 import { assertSlotFree, listSlots, publicSlotConfig } from '../slots'
 import * as v from '../validation'
 
 export { listSlots, publicSlotConfig }
 
 const SERVICE_LABEL: Record<string, string> = {
-  'cv-ketel': 'CV-ketel',
-  airco: 'Airco',
-  warmtepomp: 'Warmtepomp',
-  'service-onderhoud': 'CV-ketel service en onderhoud',
+  'cv-ketel': 'CV-ketel installatie',
+  airco: 'Airconditioning installatie',
+  warmtepomp: 'Warmtepomp installatie',
+  'service-onderhoud': 'Service en onderhoud',
+  overig: 'Overig',
+}
+
+const SITUATION_LABEL: Record<string, string> = {
+  'nieuwe-installatie': 'Nieuwe installatie',
+  vervanging: 'Vervanging',
+  onderhoud: 'Onderhoud',
+  'storing-reparatie': 'Storing of reparatie',
+  'weet-ik-niet': 'Weet ik nog niet',
 }
 
 function nowIso(): string {
   return new Date().toISOString()
 }
 
-export async function createContact(env: WorkerEnv, body: Record<string, unknown>) {
+function formatStamp(iso: string): string {
+  return new Intl.DateTimeFormat('nl-NL', {
+    timeZone: 'Europe/Amsterdam',
+    dateStyle: 'short',
+    timeStyle: 'short',
+  }).format(new Date(iso))
+}
+
+function firstNameOf(name: string): string {
+  return name.trim().split(/\s+/).find(Boolean) ?? name
+}
+
+function rejectBots(body: Record<string, unknown>) {
+  v.rejectHoneypot(body.website)
+  v.rejectHoneypot(body.company)
+}
+
+type PublicSubmission = {
+  id: string
+  status: string
+  replayed?: boolean
+  emails: { admin: EmailStatus; customer: EmailStatus }
+  emailWarning?: string
+}
+
+async function replayContact(env: WorkerEnv, id: string) {
+  const row = await env.DB.prepare('SELECT id, status FROM contact_submissions WHERE id = ?')
+    .bind(id)
+    .first<{ id: string; status: string }>()
+  if (!row) throw new HttpError(409, 'Deze aanvraag kon niet opnieuw worden verwerkt. Probeer het opnieuw.')
+  return {
+    id: row.id,
+    status: row.status,
+    replayed: true,
+    emails: { admin: 'skipped' as const, customer: 'skipped' as const },
+  }
+}
+
+async function replayQuote(env: WorkerEnv, id: string) {
+  const row = await env.DB.prepare('SELECT id, status FROM quote_requests WHERE id = ?')
+    .bind(id)
+    .first<{ id: string; status: string }>()
+  if (!row) throw new HttpError(409, 'Deze aanvraag kon niet opnieuw worden verwerkt. Probeer het opnieuw.')
+  return {
+    id: row.id,
+    status: row.status,
+    replayed: true,
+    emails: { admin: 'skipped' as const, customer: 'skipped' as const },
+  }
+}
+
+async function replayAppointment(env: WorkerEnv, id: string) {
+  const row = await env.DB.prepare('SELECT id, status FROM appointments WHERE id = ?')
+    .bind(id)
+    .first<{ id: string; status: string }>()
+  if (!row) throw new HttpError(409, 'Deze aanvraag kon niet opnieuw worden verwerkt. Probeer het opnieuw.')
+  return {
+    id: row.id,
+    status: row.status,
+    replayed: true,
+    emails: { admin: 'skipped' as const, customer: 'skipped' as const },
+  }
+}
+
+export async function createContact(env: WorkerEnv, body: Record<string, unknown>): Promise<PublicSubmission> {
+  rejectBots(body)
   v.privacyAccepted(body.privacyAccepted)
   const name = v.text(body.name, 'Naam', 80)
   const email = v.email(body.email)
   const phone = v.phone(body.phone, false)
   const message = v.text(body.message, 'Bericht', 4000)
+  const subject = v.text(body.subject, 'Onderwerp', 120, false)
+  const now = nowIso()
   const id = crypto.randomUUID()
-  await findOrCreateCustomer(env, { name, email, phone })
-  await env.DB.prepare(
-    `INSERT INTO contact_submissions (id, name, email, phone, message, status, created_at)
-     VALUES (?, ?, ?, ?, ?, 'new', ?)`,
-  )
-    .bind(id, name, email, phone || null, message, nowIso())
-    .run()
+  const key = readIdempotencyKey(body.idempotencyKey)
+  const reserved = await reserveSubmission(env, 'contact', key, id, now)
+  if ('replayId' in reserved) return replayContact(env, reserved.replayId)
 
-  const mail = await sendEmail(env, {
+  await findOrCreateCustomer(env, { name, email, phone })
+  try {
+    try {
+      await env.DB.prepare(
+        `INSERT INTO contact_submissions (id, name, email, phone, message, subject, status, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, 'new', ?)`,
+      )
+        .bind(id, name, email, phone || null, message, subject || null, now)
+        .run()
+    } catch {
+      const storedMessage = subject ? `Onderwerp: ${subject}\n\n${message}` : message
+      await env.DB.prepare(
+        `INSERT INTO contact_submissions (id, name, email, phone, message, status, created_at)
+         VALUES (?, ?, ?, ?, ?, 'new', ?)`,
+      )
+        .bind(id, name, email, phone || null, storedMessage, now)
+        .run()
+    }
+  } catch (error) {
+    await releaseSubmission(env, key)
+    throw error
+  }
+
+  const adminMail = await sendEmail(env, {
     to: 'info@greeninstallatienoord.nl',
     templateId: 'tpl-contact-admin',
-    subject: `Nieuw contactbericht – ${name}`,
+    relatedType: 'contact',
+    relatedId: id,
+    subject: `Nieuw contactbericht - ${name}`,
     text: [
       'Er is een bericht via het contactformulier binnengekomen.',
+      `Ontvangen: ${formatStamp(now)}`,
       `Naam: ${name}`,
       `E-mail: ${email}`,
       phone ? `Telefoon: ${phone}` : '',
+      subject ? `Onderwerp: ${subject}` : '',
       '',
       message,
+      '',
+      `Beheer: ${adminRecordUrl(env, `/contact/${id}`)}`,
     ]
       .filter(Boolean)
       .join('\n'),
   })
 
-  return { id, status: 'new', emails: { admin: mail.status } }
+  const customerMail = await sendEmail(env, {
+    to: email,
+    templateId: 'tpl-thank-you',
+    relatedType: 'contact',
+    relatedId: id,
+    subject: 'We hebben uw bericht ontvangen',
+    recipientName: name,
+    text: [
+      `Beste ${firstNameOf(name)},`,
+      '',
+      'Bedankt voor uw bericht bij Green Installatie Noord.',
+      '',
+      'We hebben uw bericht ontvangen en nemen het in behandeling. Dit is een ontvangstbevestiging.',
+      '',
+      'U kunt ons bereiken via 06 28 73 91 34 of info@greeninstallatienoord.nl.',
+      '',
+      'Met vriendelijke groet,',
+      'Green Installatie Noord',
+    ].join('\n'),
+  })
+
+  return { id, status: 'new', ...emailOutcome(adminMail, customerMail) }
 }
 
-export async function createQuote(env: WorkerEnv, body: Record<string, unknown>) {
+export async function createQuote(env: WorkerEnv, body: Record<string, unknown>): Promise<PublicSubmission> {
+  rejectBots(body)
   v.privacyAccepted(body.privacyAccepted)
   const firstName = v.text(body.firstName, 'Voornaam', 80)
   const lastName = v.text(body.lastName, 'Achternaam', 80)
   const name = `${firstName} ${lastName}`.trim()
   const email = v.email(body.email)
   const phone = v.phone(body.phone)
-  const service = typeof body.service === 'string' && body.service === 'overig'
-    ? 'overig'
-    : v.service(body.service)
+  const service =
+    typeof body.service === 'string' && body.service === 'overig' ? 'overig' : v.service(body.service)
   const address = [
     v.text(body.street, 'Straat', 80, false),
     v.text(body.houseNumber, 'Huisnummer', 20, false),
@@ -71,37 +194,103 @@ export async function createQuote(env: WorkerEnv, body: Record<string, unknown>)
     .filter(Boolean)
     .join(' ')
   const message = v.text(body.message, 'Toelichting', 4000, false)
+  const situation = v.text(body.situation, 'Situatie', 80, false)
+  const preferredContact = v.text(body.preferredContact, 'Contactvoorkeur', 40, false)
+  const storedMessage = [
+    situation ? `Situatie: ${SITUATION_LABEL[situation] ?? situation}` : '',
+    preferredContact && preferredContact !== 'geen-voorkeur'
+      ? `Contactvoorkeur: ${preferredContact}`
+      : '',
+    message,
+  ]
+    .filter(Boolean)
+    .join('\n')
+  const now = nowIso()
   const id = crypto.randomUUID()
-  await findOrCreateCustomer(env, { name, email, phone, address })
-  await env.DB.prepare(
-    `INSERT INTO quote_requests (id, name, email, phone, address, service, message, status, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, 'new', ?)`,
-  )
-    .bind(id, name, email, phone, address || null, service, message || null, nowIso())
-    .run()
+  const key = readIdempotencyKey(body.idempotencyKey)
+  const reserved = await reserveSubmission(env, 'quote', key, id, now)
+  if ('replayId' in reserved) return replayQuote(env, reserved.replayId)
 
-  const mail = await sendEmail(env, {
+  await findOrCreateCustomer(env, { name, email, phone, address })
+  try {
+    try {
+      await env.DB.prepare(
+        `INSERT INTO quote_requests (id, name, email, phone, address, service, situation, message, status, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'new', ?)`,
+      )
+        .bind(id, name, email, phone, address || null, service, situation || null, storedMessage || null, now)
+        .run()
+    } catch {
+      await env.DB.prepare(
+        `INSERT INTO quote_requests (id, name, email, phone, address, service, message, status, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, 'new', ?)`,
+      )
+        .bind(id, name, email, phone, address || null, service, storedMessage || null, now)
+        .run()
+    }
+  } catch (error) {
+    await releaseSubmission(env, key)
+    throw error
+  }
+
+  const serviceName = SERVICE_LABEL[service] ?? service
+  const situationName = situation ? (SITUATION_LABEL[situation] ?? situation) : ''
+  const adminMail = await sendEmail(env, {
     to: 'info@greeninstallatienoord.nl',
     templateId: 'tpl-quote-admin',
-    subject: `Nieuwe offerteaanvraag – ${name}`,
+    relatedType: 'quote',
+    relatedId: id,
+    subject: `Nieuwe offerteaanvraag - ${serviceName}`,
     text: [
-      'Er is een offerteaanvraag binnengekomen.',
-      `Naam: ${name}`,
+      'Er is een offerteaanvraag binnengekomen. Dit is geen bestelling.',
+      `Ontvangen: ${formatStamp(now)}`,
+      `Klant: ${name}`,
+      `Dienst: ${serviceName}`,
+      situationName ? `Situatie: ${situationName}` : '',
       `E-mail: ${email}`,
       `Telefoon: ${phone}`,
-      `Dienst: ${service}`,
       address ? `Adres: ${address}` : '',
-      message ? `Toelichting: ${message}` : '',
+      preferredContact ? `Contactvoorkeur: ${preferredContact}` : '',
+      message ? `Opmerking: ${message}` : '',
+      '',
+      `Beheer: ${adminRecordUrl(env, `/quotes/${id}`)}`,
     ]
       .filter(Boolean)
       .join('\n'),
   })
 
-  return { id, status: 'new', emails: { admin: mail.status } }
+  const customerMail = await sendEmail(env, {
+    to: email,
+    templateId: 'tpl-quote-received-customer',
+    relatedType: 'quote',
+    relatedId: id,
+    subject: 'Uw offerteaanvraag is ontvangen',
+    recipientName: name,
+    text: [
+      `Beste ${firstName},`,
+      '',
+      'Bedankt voor uw aanvraag bij Green Installatie Noord.',
+      '',
+      'We hebben uw offerteaanvraag ontvangen. Dit is een ontvangstbevestiging, nog geen offerte en geen opdracht.',
+      `Dienst: ${serviceName}`,
+      situationName ? `Situatie: ${situationName}` : '',
+      '',
+      'We bekijken uw aanvraag en nemen contact met u op.',
+      '',
+      'U kunt ons bereiken via 06 28 73 91 34 of info@greeninstallatienoord.nl.',
+      '',
+      'Met vriendelijke groet,',
+      'Green Installatie Noord',
+    ]
+      .filter(Boolean)
+      .join('\n'),
+  })
+
+  return { id, status: 'new', ...emailOutcome(adminMail, customerMail) }
 }
 
-export async function createAppointment(env: WorkerEnv, body: Record<string, unknown>) {
-  v.rejectHoneypot(body.website)
+export async function createAppointment(env: WorkerEnv, body: Record<string, unknown>): Promise<PublicSubmission> {
+  rejectBots(body)
   v.privacyAccepted(body.privacyAccepted)
   const firstName = v.text(body.firstName, 'Voornaam', 80)
   const lastName = v.text(body.lastName, 'Achternaam', 80)
@@ -115,10 +304,18 @@ export async function createAppointment(env: WorkerEnv, body: Record<string, unk
   const address = v.text(body.address, 'Adres', 200)
   const now = nowIso()
   const serviceName = SERVICE_LABEL[service] ?? service
-
-  await assertSlotFree(env, date, time)
-
   const appointmentId = crypto.randomUUID()
+  const key = readIdempotencyKey(body.idempotencyKey)
+  const reserved = await reserveSubmission(env, 'appointment', key, appointmentId, now)
+  if ('replayId' in reserved) return replayAppointment(env, reserved.replayId)
+
+  try {
+    await assertSlotFree(env, date, time)
+  } catch (error) {
+    await releaseSubmission(env, key)
+    throw error
+  }
+
   const customerId = await findOrCreateCustomer(env, { name, email, phone, address })
 
   try {
@@ -129,16 +326,19 @@ export async function createAppointment(env: WorkerEnv, body: Record<string, unk
       .bind(appointmentId, customerId, service, date, time, notes || null, now, now)
       .run()
   } catch {
+    await releaseSubmission(env, key)
     throw new HttpError(409, 'Dit tijdstip is helaas net bezet. Kies een ander tijdstip.')
   }
 
-  const adminPath = env.ADMIN_BASE_PATH.replace(/\/$/, '')
   const adminMail = await sendEmail(env, {
     to: 'info@greeninstallatienoord.nl',
     templateId: 'tpl-appointment-admin',
-    subject: `Nieuwe afspraakaanvraag – ${name} – ${date}`,
+    relatedType: 'appointment',
+    relatedId: appointmentId,
+    subject: `Nieuwe afspraakaanvraag - ${serviceName} - ${date}`,
     text: [
       'Er is een afspraakaanvraag binnengekomen. Dit is nog geen bevestigde afspraak.',
+      `Ontvangen: ${formatStamp(now)}`,
       `Klant: ${name}`,
       `Dienst: ${serviceName}`,
       `Datum: ${date}`,
@@ -146,8 +346,9 @@ export async function createAppointment(env: WorkerEnv, body: Record<string, unk
       `Telefoon: ${phone}`,
       `E-mail: ${email}`,
       `Adres: ${address}`,
-      notes ? `Bericht: ${notes}` : '',
-      `Beheer: ${env.PUBLIC_SITE_URL}${adminPath}/appointments/${appointmentId}`,
+      notes ? `Opmerking: ${notes}` : '',
+      '',
+      `Beheer: ${adminRecordUrl(env, `/appointments/${appointmentId}`)}`,
     ]
       .filter(Boolean)
       .join('\n'),
@@ -156,81 +357,36 @@ export async function createAppointment(env: WorkerEnv, body: Record<string, unk
   const customerMail = await sendEmail(env, {
     to: email,
     templateId: 'tpl-appointment-customer',
+    relatedType: 'appointment',
+    relatedId: appointmentId,
     subject: 'Uw afspraakaanvraag bij Green Installatie Noord',
-    html: customerAppointmentHtml({
-      firstName,
-      serviceName,
-      date,
-      time,
-    }),
+    recipientName: name,
     text: [
       `Beste ${firstName},`,
       '',
-      'Uw afspraakaanvraag is ontvangen. Dit is nog geen definitieve afspraak.',
+      'Bedankt voor uw aanvraag bij Green Installatie Noord.',
+      '',
+      'Uw afspraakaanvraag is ontvangen. Dit is nog geen bevestigde afspraak.',
       `Dienst: ${serviceName}`,
       `Gewenste datum: ${date}`,
       `Gewenste tijd: ${time}`,
+      address ? `Adres: ${address}` : '',
+      notes ? `Opmerking: ${notes}` : '',
       '',
-      'We nemen uw aanvraag zo snel mogelijk in behandeling.',
+      'We bekijken uw aanvraag en nemen contact met u op.',
       '',
+      'U kunt ons bereiken via 06 28 73 91 34 of info@greeninstallatienoord.nl.',
+      '',
+      'Met vriendelijke groet,',
       'Green Installatie Noord',
-      'Burgemeester van Weringstraat 23, 9665 GN Oude Pekela',
-      '06 28 73 91 34',
-      'info@greeninstallatienoord.nl',
-    ].join('\n'),
+    ]
+      .filter(Boolean)
+      .join('\n'),
   })
 
-  const emails = { admin: adminMail.status, customer: customerMail.status }
-  const emailFailed = adminMail.status === 'failed' || customerMail.status === 'failed'
-  const emailSkipped = adminMail.status === 'skipped' || customerMail.status === 'skipped'
   return {
     id: appointmentId,
     status: 'pending',
-    emails,
-    emailWarning: emailFailed
-      ? 'De aanvraag is opgeslagen, maar de e-mail kon niet worden verstuurd.'
-      : emailSkipped
-        ? 'De aanvraag is opgeslagen. E-mail is nog niet geconfigureerd, dus er is geen bevestiging verstuurd.'
-        : undefined,
+    ...emailOutcome(adminMail, customerMail),
   }
-}
-
-function customerAppointmentHtml(input: {
-  firstName: string
-  serviceName: string
-  date: string
-  time: string
-}): string {
-  const escape = (value: string) =>
-    value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
-  return `<!doctype html>
-<html lang="nl">
-  <body style="margin:0;background:#f3f5f2;font-family:Arial,sans-serif;color:#121417;">
-    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f3f5f2;padding:24px 12px;">
-      <tr>
-        <td align="center">
-          <table role="presentation" width="100%" style="max-width:560px;background:#ffffff;border:1px solid #d7ddd6;padding:24px;">
-            <tr>
-              <td>
-                <p style="margin:0 0 16px;font-size:18px;font-weight:700;">Green Installatie Noord</p>
-                <p style="margin:0 0 12px;">Beste ${escape(input.firstName)},</p>
-                <p style="margin:0 0 12px;">Uw afspraakaanvraag is ontvangen. Dit is nog geen definitieve afspraak.</p>
-                <p style="margin:0 0 8px;"><strong>Dienst:</strong> ${escape(input.serviceName)}</p>
-                <p style="margin:0 0 8px;"><strong>Gewenste datum:</strong> ${escape(input.date)}</p>
-                <p style="margin:0 0 16px;"><strong>Gewenste tijd:</strong> ${escape(input.time)}</p>
-                <p style="margin:0 0 16px;">We nemen uw aanvraag zo snel mogelijk in behandeling.</p>
-                <p style="margin:0;font-size:14px;line-height:1.5;">
-                  Green Installatie Noord<br>
-                  Burgemeester van Weringstraat 23, 9665 GN Oude Pekela<br>
-                  06 28 73 91 34<br>
-                  info@greeninstallatienoord.nl
-                </p>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
-  </body>
-</html>`
 }

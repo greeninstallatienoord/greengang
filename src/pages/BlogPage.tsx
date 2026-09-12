@@ -32,7 +32,7 @@ export function BlogPage() {
             <Link
               key={slug}
               to={`/blog/categorie/${slug}`}
-              className="min-h-10 rounded-md border border-line bg-paper px-3 py-2 text-sm font-semibold hover:border-brand"
+              className="inline-flex min-h-11 items-center border border-line bg-paper px-3.5 text-sm font-semibold hover:border-ink/40"
             >
               {blogCategoryLabels[slug]}
             </Link>

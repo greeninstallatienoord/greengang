@@ -1,4 +1,5 @@
 import { business } from './business'
+import { serviceArea } from './region'
 import { tokens } from './tokens'
 
 export const site = {
@@ -10,9 +11,10 @@ export const site = {
   language: 'nl',
   themeColor: '#1A8A34',
   description:
-    'Green Installatie Noord in Oude Pekela installeert en onderhoudt cv-ketels, airconditioning en warmtepompen. Vraag een offerte aan of plan een afspraak.',
+    'Installatiebedrijf voor Noord-Nederland. Green Installatie Noord installeert en onderhoudt cv-ketels, airconditioning en warmtepompen in Groningen, Drenthe en Friesland. Gevestigd in Oude Pekela.',
   shortDescription:
-    'Installatie, service en onderhoud van cv-ketels, airconditioning en warmtepompen in Oude Pekela.',
+    'Installatie, service en onderhoud van cv-ketels, airconditioning en warmtepompen in Noord-Nederland.',
+  baseLine: serviceArea.baseLine,
   contact: {
     phone: business.phone,
     phoneHref: business.phoneHref,
@@ -26,20 +28,36 @@ export const site = {
     region: business.address.region,
     country: business.address.country,
     countryCode: business.address.countryCode,
-    openingHours: business.openingHours || null,
-    serviceAreaSummary: null as string | null,
+    openingHours: business.openingHours.summary,
+    serviceAreaSummary: serviceArea.regionName,
   },
   social: {
     facebook: business.facebook || null,
     instagram: business.instagram || null,
     linkedin: business.linkedin || null,
+    tiktok: business.tiktok || null,
     googleBusinessProfile: business.googleBusinessProfile || null,
   },
   copy: {
-    eyebrow: 'Installatie, service & onderhoud',
-    heroTitle: 'Comfort en techniek, vakkundig geregeld.',
+    eyebrow: serviceArea.eyebrow,
+    heroTitle: 'CV-ketel, airco en warmtepomp.',
+    heroTitleLead: 'CV-ketel, airco',
+    heroTitleLeadRest: 'en warmtepomp.',
+    heroTitleSupport: '',
+    heroTitleSupportRest: '',
     heroText:
-      'Green Installatie Noord helpt met professionele oplossingen voor cv-ketels, airconditioning en warmtepompen — van installatie tot service en onderhoud.',
+      'Een passende installatie voor uw woning, vakkundig uitgevoerd. Actief in Noord-Nederland, gevestigd in Oude Pekela.',
+    heroTrust: 'Ervaring met cv-ketels, airco en warmtepompen.',
+    introTitle: 'Ervaring uit de praktijk',
+    introText:
+      'Verschillende woningtypen, nette technische uitvoering. Eerst de woning, daarna een voorstel.',
+    workTitle: 'Werk uit de praktijk',
+    workText: 'Een selectie van recente plaatsingen. Meer foto’s staan op de werkpagina.',
+    localTitle: 'Actief in Noord-Nederland',
+    localText: serviceArea.intro,
+    ctaTitle: 'Een installatievraag?',
+    ctaText:
+      'Vraag een offerte aan of plan een afspraak. We denken mee over cv-ketel, airco, warmtepomp of onderhoud.',
     ctaQuote: tokens.cta.primary,
     ctaAppointment: tokens.cta.secondary,
     ctaCall: tokens.cta.tertiary,
@@ -66,28 +84,28 @@ export const site = {
     process: [
       {
         step: '01',
-        title: 'Aanvraag',
-        text: 'Geef aan wat u nodig heeft: een offerte, een afspraak of een gerichte vraag.',
+        title: 'Situatie begrijpen',
+        text: 'U vertelt wat er speelt. Wij luisteren eerst, voordat er een voorstel komt.',
       },
       {
         step: '02',
-        title: 'Persoonlijk advies',
-        text: 'We bekijken de situatie en denken mee over de passende aanpak.',
+        title: 'Duidelijk advies',
+        text: 'We kijken naar de woning en de wens, en zeggen wat wel en niet zinvol is.',
       },
       {
         step: '03',
-        title: 'Duidelijke offerte',
-        text: 'U ontvangt een overzichtelijk voorstel, zodat u kunt vergelijken en beslissen.',
+        title: 'Voorstel',
+        text: 'U krijgt een overzichtelijk voorstel. Dat is nog geen opdracht.',
       },
       {
         step: '04',
-        title: 'Installatie',
-        text: 'Na akkoord plannen we de werkzaamheden en voeren we de installatie uit.',
+        title: 'Nette installatie',
+        text: 'Na akkoord plannen we het werk en ronden we het netjes af, met uitleg.',
       },
       {
         step: '05',
-        title: 'Service & nazorg',
-        text: 'Daarna blijven we beschikbaar voor onderhoud, service en vragen.',
+        title: 'Service wanneer nodig',
+        text: 'Voor onderhoud of een vraag blijft u ons gewoon bellen of mailen.',
       },
     ],
   },

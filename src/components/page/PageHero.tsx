@@ -37,14 +37,14 @@ export function PageHero({
   className,
 }: PageHeroProps) {
   return (
-    <section className={cn('bg-paper py-10 sm:py-12', className)}>
+    <section className={cn('border-b border-line bg-paper py-8 sm:py-12 lg:py-16', className)}>
       <Container className={narrow ? 'max-w-3xl' : undefined}>
         <Breadcrumbs items={crumbs} />
         <div
           className={
             image
-              ? 'mt-6 grid items-center gap-8 lg:grid-cols-2'
-              : 'mt-6 max-w-3xl'
+              ? 'mt-6 grid items-center gap-6 sm:mt-8 sm:gap-10 lg:grid-cols-[1fr_0.95fr]'
+              : 'mt-6 max-w-3xl sm:mt-8'
           }
         >
           <div>
@@ -52,15 +52,18 @@ export function PageHero({
             <Heading as="h1" className={eyebrow ? 'mt-3' : 'mt-0'}>
               {title}
             </Heading>
-            {intro ? <p className="mt-4 text-lg text-ink-muted">{intro}</p> : null}
-            {actions ? <div className="mt-6">{actions}</div> : null}
+            {intro ? <p className="lead mt-4">{intro}</p> : null}
+            {actions ? <div className="mt-5">{actions}</div> : null}
             {children}
           </div>
           {image ? (
             <MediaImage
               asset={image}
               alt={imageAlt}
-              sizes="(min-width: 1024px) 40vw, 100vw"
+              className="rounded-none max-h-[18rem] sm:max-h-[24rem] lg:max-h-none"
+              ratio="4 / 5"
+              sizes="(min-width: 1024px) 42vw, 100vw"
+              priority
             />
           ) : null}
         </div>

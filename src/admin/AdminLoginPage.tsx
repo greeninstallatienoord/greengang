@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../components/Button'
 import { Field, TextInput } from '../components/forms/Field'
+import logo from '../assets/images/branding/logo.png'
+import { business } from '../data/business'
 import { api } from '../lib/api'
+import { Notice } from './components/Notice'
 import { adminUrl } from './adminPath'
 
 export function AdminLoginPage() {
@@ -36,18 +39,21 @@ export function AdminLoginPage() {
   }
 
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-surface p-4">
+    <div className="admin-app flex min-h-dvh items-center justify-center px-4 py-10">
       <form
-        className="w-full max-w-md rounded-lg border border-line bg-paper p-6 shadow-card"
+        className="w-full max-w-[26rem] border border-[var(--admin-line)] bg-[var(--admin-panel)] p-7 shadow-[0_10px_36px_rgb(16_36_24_/_0.08)]"
         onSubmit={(event) => {
           event.preventDefault()
           void onSubmit()
         }}
       >
-        <h1 className="text-2xl font-semibold">Beheer inloggen</h1>
-        <p className="mt-2 text-sm text-ink-muted">
-          Alleen voor Green Installatie Noord. Deze pagina staat niet in het
-          publieke menu.
+        <img src={logo} alt="" className="h-10 w-auto" />
+        <p className="mt-5 text-[11px] font-semibold tracking-[0.08em] text-[var(--admin-muted)] uppercase">
+          Intern beheer
+        </p>
+        <h1 className="mt-1.5 text-2xl font-semibold tracking-[-0.03em]">Inloggen</h1>
+        <p className="mt-2 text-sm leading-relaxed text-[var(--admin-muted)]">
+          Alleen voor {business.businessName}. Deze pagina staat niet in het publieke menu.
         </p>
         <div className="mt-6 grid gap-4">
           <Field id="admin-email" label="E-mail">
@@ -68,7 +74,7 @@ export function AdminLoginPage() {
               onChange={(event) => setPassword(event.target.value)}
             />
           </Field>
-          {error ? <p className="text-sm text-danger">{error}</p> : null}
+          {error ? <Notice tone="error">{error}</Notice> : null}
           <Button type="submit" disabled={busy}>
             {busy ? 'Bezig…' : 'Inloggen'}
           </Button>

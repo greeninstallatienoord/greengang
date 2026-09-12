@@ -60,4 +60,4 @@ Only set it if the API is on another origin (then CORS + cookie `Domain` need ex
 
 ## Pages vs Worker
 
-`public/_redirects` sends unknown paths to `index.html`. `public/_routes.json` excludes `/api/*` from Pages Functions so HTML is less likely to mask the API. You still must attach the Worker to `/api/*` in the Cloudflare dashboard or Wrangler routes. That attachment is a **manual** step.
+SPA fallback is Wrangler `[assets] not_found_handling = "single-page-application"`. `run_worker_first = ["/api/*"]` sends API traffic to the Worker. Do not add `public/_redirects` to `/index.html` or a Pages `_routes.json` (Cloudflare error 100324).

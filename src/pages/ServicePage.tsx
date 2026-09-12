@@ -6,13 +6,16 @@ import { PageHero } from '../components/page/PageHero'
 import { CrossLinks } from '../components/page/CrossLinks'
 import { RelatedArticles } from '../components/page/RelatedArticles'
 import { RelatedServices } from '../components/page/RelatedServices'
-import { serviceImage } from '../data/media'
+import { ButtonLink } from '../components/ButtonLink'
+import { MediaImage } from '../components/media/MediaImage'
+import { pageImages, serviceImage, type MediaAsset } from '../data/media'
 import { CTASection } from '../components/sections/CTASection'
 import { Section } from '../components/Section'
 import { PageMeta } from '../components/seo/PageMeta'
 import { TrustSection } from '../components/trust/TrustSection'
 import { blogPosts } from '../data/blog'
 import { getFaqsByIds } from '../data/faq'
+import { serviceArea } from '../data/region'
 import { getService, getServicesBySlug } from '../data/services'
 import { serviceSeo } from '../data/seo'
 import { faqJsonLd, serviceJsonLd } from '../lib/jsonld'
@@ -25,6 +28,50 @@ const serviceBlogCategory: Record<ServiceSlug, BlogCategorySlug> = {
   'service-onderhoud': 'onderhoud',
 }
 
+type ServiceShot = {
+  asset: MediaAsset
+  caption: string
+}
+
+const serviceStory: Record<
+  ServiceSlug,
+  {
+    contextTitle: string
+    context: string
+    photos: ServiceShot[]
+  }
+> = {
+  'cv-ketel': {
+    contextTitle: 'Wanneer een cv-ketel aan de beurt is',
+    context:
+      'Vervanging speelt als de ketel storingen geeft, het einde van de levensduur nadert, of de woning een andere opstelling vraagt. We kijken eerst naar de bestaande situatie, niet naar een standaardtoestel.',
+    photos: [],
+  },
+  airco: {
+    contextTitle: 'Koelen begint bij de ruimte',
+    context:
+      'Een airco werkt alleen goed als binnenunit, buitenunit en leidingweg bij de woning passen. Daarom kijken we naar de ruimte en de gevel voordat er een voorstel komt.',
+    photos: [
+      {
+        asset: pageImages.aircoOutdoor,
+        caption: 'Buitenunit aan de gevel, leidingen weggewerkt. Foto uit eigen werk.',
+      },
+    ],
+  },
+  warmtepomp: {
+    contextTitle: 'Eerst toetsen of het past',
+    context:
+      'Een warmtepomp is geen automatische vervanger van elke cv-ketel. Isolatie, afgifte en beschikbare ruimte bepalen of het zinvol is. Op deze pagina geen algemene geschiktheidsclaim.',
+    photos: [],
+  },
+  'service-onderhoud': {
+    contextTitle: 'Onderhoud, storing of twijfel',
+    context:
+      'Soms is een controle genoeg. Soms is er een storing. En soms is vervanging logischer dan nog een reparatie. U hoort wat we zien, zonder een vaste onderhoudstermijn als algemene belofte.',
+    photos: [],
+  },
+}
+
 type ServicePageProps = {
   slug: ServiceSlug
 }
@@ -32,6 +79,7 @@ type ServicePageProps = {
 export function ServicePage({ slug }: ServicePageProps) {
   const service = getService(slug)
   const seo = serviceSeo[slug]
+  const story = serviceStory[slug]
   const related = getServicesBySlug(service.relatedSlugs)
   const faqItems = getFaqsByIds(service.faqIds)
   const articles = blogPosts.filter((post) => service.blogSlugs.includes(post.slug))
@@ -63,46 +111,82 @@ export function ServicePage({ slug }: ServicePageProps) {
         }
       />
 
-      <Section>
-        <Container className="grid gap-10 lg:grid-cols-2">
-          <div>
-            <Heading as="h2">Wat houdt deze dienst in?</Heading>
+      {slug === 'airco' ? (
+        <Section className="bg-paper py-10 sm:py-12">
+          <Container className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+            <p className="max-w-xl text-ink-muted">
+              Binnenunits, buitenunits en omkastingen uit eigen werk staan op de
+              werkpagina.
+            </p>
+            <ButtonLink to="/werk" variant="secondary" size="sm">
+              Bekijk al het werk
+            </ButtonLink>
+          </Container>
+        </Section>
+      ) : null}
+
+      <Section className={slug === 'service-onderhoud' ? 'bg-paper' : undefined}>
+        <Container
+          className={
+            story.photos.length > 0
+              ? 'grid items-end gap-10 lg:grid-cols-12'
+              : 'max-w-3xl'
+          }
+        >
+          <div className={story.photos.length > 0 ? 'lg:col-span-6' : undefined}>
+            <p className="eyebrow">Context</p>
+            <Heading as="h2" className="mt-3">
+              {story.contextTitle}
+            </Heading>
+            <p className="lead mt-4">{story.context}</p>
             {service.explanation.map((paragraph) => (
               <p key={paragraph} className="mt-4 text-ink-muted">
                 {paragraph}
               </p>
             ))}
           </div>
-          <div>
-            <Heading as="h2">Voordelen</Heading>
-            <ul className="mt-4 grid gap-4">
-              {service.benefits.map((item) => (
-                <li key={item.title} className="rounded-lg border border-line bg-paper p-4">
-                  <h3 className="font-semibold">{item.title}</h3>
-                  <p className="mt-1 text-sm text-ink-muted">{item.text}</p>
-                </li>
+          {story.photos.length > 0 ? (
+            <div className="grid gap-8 lg:col-span-6">
+              {story.photos.map((shot) => (
+                <figure key={shot.caption}>
+                  <MediaImage
+                    asset={shot.asset}
+                    className="rounded-none"
+                    ratio="4 / 5"
+                    sizes="(min-width: 1024px) 42vw, 100vw"
+                  />
+                  <figcaption className="mt-3 text-sm text-ink-muted">
+                    {shot.caption}
+                  </figcaption>
+                </figure>
               ))}
-            </ul>
-          </div>
+            </div>
+          ) : null}
         </Container>
       </Section>
 
-      <Section className="bg-paper">
-        <Container className="grid gap-10 lg:grid-cols-2">
-          <div>
-            <Heading as="h2">Wat de dienst omvat</Heading>
-            <ul className="mt-4 grid gap-2">
+      <Section className={slug === 'warmtepomp' || slug === 'cv-ketel' ? 'bg-paper' : undefined}>
+        <Container className="grid gap-12 lg:grid-cols-12">
+          <div className="lg:col-span-6">
+            <Heading as="h2">Wat Green Installatie Noord doet</Heading>
+            <ul className="mt-6 grid gap-3">
               {service.helpItems.map((item) => (
-                <li key={item} className="rounded-md bg-surface px-4 py-3">
+                <li key={item} className="border-b border-line py-3">
                   {item}
                 </li>
               ))}
             </ul>
           </div>
-          <div>
-            <Heading as="h2">Voor wie</Heading>
-            <ul className="mt-4 list-disc space-y-2 pl-5 text-ink-muted">
+          <div className="lg:col-span-6">
+            <Heading as="h2">Wanneer het zinvol is</Heading>
+            <ul className="mt-6 list-disc space-y-2 pl-5 text-ink-muted">
               {service.suitableFor.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+            <h3 className="mt-10 font-semibold tracking-[-0.015em]">Aandachtspunten</h3>
+            <ul className="mt-4 list-disc space-y-2 pl-5 text-ink-muted">
+              {service.technicalNotes.map((item) => (
                 <li key={item}>{item}</li>
               ))}
             </ul>
@@ -111,27 +195,50 @@ export function ServicePage({ slug }: ServicePageProps) {
       </Section>
 
       <Section>
-        <Container className="grid gap-10 lg:grid-cols-2">
-          <div>
-            <Heading as="h2">Hoe het werkt</Heading>
-            <ol className="mt-4 grid gap-3">
-              {service.process.map((item, index) => (
-                <li key={item.title} className="rounded-md border border-line bg-paper p-4">
-                  <p className="eyebrow">{String(index + 1).padStart(2, '0')}</p>
-                  <h3 className="mt-1 font-semibold">{item.title}</h3>
-                  <p className="mt-1 text-sm text-ink-muted">{item.text}</p>
-                </li>
-              ))}
-            </ol>
+        <Container className="grid gap-12 lg:grid-cols-12">
+          <div className="lg:col-span-5">
+            <p className="eyebrow">Aanpak</p>
+            <Heading as="h2" className="mt-3">
+              Hoe het werkt
+            </Heading>
+            <p className="lead mt-4">
+              Van eerste vraag tot afronding. Planning en prijs volgen in het
+              persoonlijke voorstel, niet als vaste belofte op deze pagina.
+            </p>
           </div>
-          <div>
-            <Heading as="h2">Technische aandachtspunten</Heading>
-            <ul className="mt-4 list-disc space-y-2 pl-5 text-ink-muted">
-              {service.technicalNotes.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
+          <ol className="grid gap-6 lg:col-span-7">
+            {service.process.map((item, index) => (
+              <li key={item.title} className="grid grid-cols-[2.75rem_1fr] gap-4 border-b border-line pb-6">
+                <p className="font-display text-2xl text-brand-dark">
+                  {String(index + 1).padStart(2, '0')}
+                </p>
+                <div>
+                  <h3 className="font-semibold tracking-[-0.015em]">{item.title}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-ink-muted">{item.text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </Container>
+      </Section>
+
+      <Section className="bg-paper">
+        <Container className="grid gap-8 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-7">
+            <p className="eyebrow">Werkgebied</p>
+            <Heading as="h2" className="mt-3">
+              {service.shortName} in Noord-Nederland
+            </Heading>
+            <p className="lead mt-4">
+              {serviceArea.statement} Groningen is de thuisprovincie; daarnaast
+              Drenthe en Friesland.
+            </p>
           </div>
+          <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold lg:col-span-5 lg:justify-end">
+            {serviceArea.provinces.map((province) => (
+              <li key={province.name}>{province.name}</li>
+            ))}
+          </ul>
         </Container>
       </Section>
 

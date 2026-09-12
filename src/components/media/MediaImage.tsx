@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { cn } from '../../lib/cn'
-import type { MediaAsset } from '../../data/media'
+import { mediaPositionStyle, type MediaAsset } from '../../data/media'
 import { ImagePlaceholder } from './ImagePlaceholder'
 
 type MediaImageProps = {
@@ -10,6 +10,7 @@ type MediaImageProps = {
   imgClassName?: string
   priority?: boolean
   sizes?: string
+  ratio?: string
 }
 
 export function MediaImage({
@@ -19,6 +20,7 @@ export function MediaImage({
   imgClassName,
   priority = false,
   sizes = '(min-width: 1024px) 560px, 100vw',
+  ratio,
 }: MediaImageProps) {
   const [failed, setFailed] = useState(false)
   const label = alt ?? asset.alt
@@ -29,8 +31,8 @@ export function MediaImage({
 
   return (
     <div
-      className={cn('relative overflow-hidden rounded-lg bg-brand-soft', className)}
-      style={{ aspectRatio: `${asset.width} / ${asset.height}` }}
+      className={cn('relative overflow-hidden bg-stone', className)}
+      style={{ aspectRatio: ratio ?? `${asset.width} / ${asset.height}` }}
     >
       <img
         src={asset.src}
@@ -41,7 +43,8 @@ export function MediaImage({
         loading={priority ? 'eager' : 'lazy'}
         fetchPriority={priority ? 'high' : 'auto'}
         decoding="async"
-        className={cn('absolute inset-0 h-full w-full object-cover', imgClassName)}
+        className={cn('media-photo absolute inset-0 h-full w-full object-cover', imgClassName)}
+        style={mediaPositionStyle(asset)}
         onError={() => setFailed(true)}
       />
     </div>

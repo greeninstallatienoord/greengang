@@ -51,7 +51,7 @@ export function FaqPage() {
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Zoek op trefwoord"
-              className="min-h-11 rounded-md border border-line px-3"
+              className="min-h-12 rounded-md border border-line px-3.5 text-base"
             />
           </div>
           <div className="mt-4 flex flex-wrap gap-2">
@@ -61,7 +61,7 @@ export function FaqPage() {
                 type="button"
                 aria-pressed={category === item}
                 className={cn(
-                  'min-h-10 rounded-md border px-3 text-sm font-semibold',
+                  'min-h-11 rounded-md border px-3 text-sm font-semibold',
                   category === item
                     ? 'border-brand bg-brand-soft text-brand-dark'
                     : 'border-line bg-paper',

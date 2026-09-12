@@ -28,7 +28,7 @@ const corePosts: BlogPost[] = [
     excerpt:
       'Geen harde levensduurclaim, wel signalen die aangeven dat een gesprek over vervanging zinvol kan zijn.',
     intro:
-      'Een vast aantal jaren als “einde levensduur” is te grof. De staat van de ketel, storingen en wat u van de woning verwacht zeggen meer. Dit artikel helpt om te bepalen of een beoordeling zinvol is — niet om zelf een vervanging te forceren.',
+      'Een vast aantal jaren als “einde levensduur” is te grof. De staat van de ketel, storingen en wat u van de woning verwacht zeggen meer. Dit artikel helpt om te bepalen of een beoordeling zinvol is, niet om zelf een vervanging te forceren.',
     category: 'cv-ketel',
     tags: ['cv-ketel', 'vervanging', 'beoordeling'],
     publishedAt: '2026-09-01',

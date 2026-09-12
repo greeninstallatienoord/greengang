@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
-import { Menu, X } from 'lucide-react'
+import { Menu } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
-import { mainNav } from '../../data/navigation'
+import { headerNav } from '../../data/navigation'
 import { site } from '../../data/site'
 import { cn } from '../../lib/cn'
 import { ButtonLink } from '../ButtonLink'
 import { Container } from '../Container'
 import { BrandLogo } from '../media/BrandLogo'
 import { MobileMenu } from './MobileMenu'
+import { ServicesMenu } from './ServicesMenu'
 import { TopBar } from './TopBar'
 
 export function Header() {
@@ -27,8 +28,10 @@ export function Header() {
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : ''
+    document.documentElement.dataset.navOpen = menuOpen ? 'on' : ''
     return () => {
       document.body.style.overflow = ''
+      delete document.documentElement.dataset.navOpen
     }
   }, [menuOpen])
 
@@ -37,83 +40,74 @@ export function Header() {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setMenuOpen(false)
     }
+    const onResize = () => {
+      if (window.matchMedia('(min-width: 64rem)').matches) setMenuOpen(false)
+    }
     document.addEventListener('keydown', onKeyDown)
-    return () => document.removeEventListener('keydown', onKeyDown)
+    window.addEventListener('resize', onResize)
+    return () => {
+      document.removeEventListener('keydown', onKeyDown)
+      window.removeEventListener('resize', onResize)
+    }
   }, [menuOpen])
 
   return (
-    <header className="sticky top-0 z-40">
-      <TopBar />
-      <div
-        className={cn(
-          'relative border-b border-line bg-paper/95 backdrop-blur-sm transition-shadow',
-          compact && 'shadow-header',
-        )}
-      >
-        <Container
+    <>
+      <header className="sticky top-0 z-40">
+        <TopBar />
+        <div
           className={cn(
-            'flex items-center justify-between gap-4 transition-[min-height] duration-200',
-            compact ? 'min-h-14' : 'min-h-16 sm:min-h-[4.25rem]',
+            'relative border-b border-line bg-paper/94 backdrop-blur-md',
+            compact && 'shadow-header',
           )}
         >
-          <BrandLogo compact={compact} />
+          <Container
+            className={cn(
+              'flex items-center justify-between gap-4 transition-[min-height] duration-200 sm:gap-6',
+              compact ? 'min-h-14' : 'min-h-16 sm:min-h-[4.35rem]',
+            )}
+          >
+            <BrandLogo compact={compact} />
 
-          <nav className="hidden xl:block" aria-label="Hoofdnavigatie">
-            <ul className="flex items-center gap-1">
-              {mainNav.map((item) => (
-                <li key={item.href}>
-                  <NavLink
-                    to={item.href}
-                    end={item.href === '/'}
-                    className={({ isActive }) =>
-                      cn(
-                        'rounded-md px-2.5 py-2 text-[0.92rem] font-medium text-ink-muted hover:bg-brand-soft hover:text-ink',
-                        isActive && 'bg-brand-soft text-brand-dark',
-                      )
-                    }
-                  >
-                    {item.label}
-                  </NavLink>
-                </li>
+            <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Hoofdnavigatie">
+              <ServicesMenu />
+              {headerNav.map((item) => (
+                <NavLink
+                  key={item.href}
+                  to={item.href}
+                  className={({ isActive }) =>
+                    cn('nav-link', isActive && 'nav-link-active')
+                  }
+                >
+                  {item.label}
+                </NavLink>
               ))}
-            </ul>
-          </nav>
+            </nav>
 
-          <div className="hidden items-center gap-2 lg:flex">
-            <ButtonLink to="/afspraak-maken" variant="secondary" size="sm">
-              {site.copy.ctaAppointment}
-            </ButtonLink>
-            <ButtonLink to="/offerte-aanvragen" size="sm">
-              {site.copy.ctaQuote}
-            </ButtonLink>
-          </div>
+            <div className="hidden items-center gap-2 lg:flex">
+              <ButtonLink to="/afspraak-maken" variant="secondary" size="sm">
+                {site.copy.ctaAppointment}
+              </ButtonLink>
+              <ButtonLink to="/offerte-aanvragen" size="sm">
+                {site.copy.ctaQuote}
+              </ButtonLink>
+            </div>
 
-          <div className="flex min-w-0 items-center gap-2 xl:hidden">
-            <ButtonLink
-              to="/offerte-aanvragen"
-              size="sm"
-              className="max-w-[42vw] truncate px-3 lg:hidden"
-            >
-              <span className="sm:hidden">Offerte</span>
-              <span className="hidden sm:inline">{site.copy.ctaQuote}</span>
-            </ButtonLink>
             <button
               type="button"
-              className="inline-flex size-11 items-center justify-center rounded-md border border-line"
+              className="inline-flex size-11 touch-manipulation items-center justify-center border border-line lg:hidden"
               aria-expanded={menuOpen}
               aria-controls="mobile-navigatie"
-              aria-haspopup="true"
-              onClick={() => setMenuOpen((value) => !value)}
+              aria-haspopup="dialog"
+              onClick={() => setMenuOpen(true)}
             >
-              {menuOpen ? <X size={22} /> : <Menu size={22} />}
-              <span className="sr-only">
-                {menuOpen ? 'Menu sluiten' : 'Menu openen'}
-              </span>
+              <Menu size={20} strokeWidth={1.75} aria-hidden="true" />
+              <span className="sr-only">Menu openen</span>
             </button>
-          </div>
-        </Container>
-        <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
-      </div>
-    </header>
+          </Container>
+        </div>
+      </header>
+      <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
+    </>
   )
 }

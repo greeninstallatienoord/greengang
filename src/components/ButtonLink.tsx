@@ -4,16 +4,15 @@ import { cn } from '../lib/cn'
 import type { ButtonSize, ButtonVariant } from '../types'
 
 const variantClass: Record<ButtonVariant, string> = {
-  primary: 'bg-brand text-white hover:bg-brand-dark shadow-sm',
-  secondary:
-    'border border-line bg-paper text-ink hover:border-brand/40 hover:bg-brand-soft/50',
-  ghost: 'text-ink hover:bg-brand-soft/70',
+  primary: 'bg-brand text-white hover:bg-brand-dark',
+  secondary: 'border border-ink/15 bg-paper text-ink hover:border-ink/35 hover:bg-stone',
+  ghost: 'text-ink hover:bg-stone',
   whatsapp: 'bg-whatsapp text-white hover:opacity-90',
 }
 
 const sizeClass: Record<ButtonSize, string> = {
-  sm: 'min-h-10 px-3.5 text-sm',
-  md: 'min-h-11 px-4 text-sm',
+  sm: 'min-h-11 px-3.5 text-[0.875rem]',
+  md: 'min-h-11 px-4 text-[0.9375rem]',
   lg: 'min-h-12 px-5 text-base',
 }
 
@@ -24,6 +23,7 @@ type ButtonLinkProps = {
   className?: string
   children: ReactNode
   external?: boolean
+  tabIndex?: number
   onClick?: MouseEventHandler<HTMLAnchorElement>
 }
 
@@ -34,11 +34,12 @@ export function ButtonLink({
   className,
   children,
   external,
+  tabIndex,
   onClick,
 }: ButtonLinkProps) {
   const overrideColor = Boolean(className?.includes('text-'))
   const classes = cn(
-    'inline-flex items-center justify-center gap-2 rounded-md font-semibold transition-colors duration-[var(--duration-base)]',
+    'inline-flex touch-manipulation items-center justify-center gap-2 rounded-sm font-semibold tracking-[-0.01em] transition-[color,background-color,border-color,transform] duration-[var(--duration-base)] motion-safe:hover:-translate-y-px',
     overrideColor
       ? variantClass[variant].replace(/\btext-\S+/g, '').trim()
       : variantClass[variant],
@@ -54,6 +55,7 @@ export function ButtonLink({
         className={classes}
         rel={isHttp ? 'noopener noreferrer' : undefined}
         target={isHttp ? '_blank' : undefined}
+        tabIndex={tabIndex}
         onClick={onClick}
       >
         {children}
@@ -62,7 +64,7 @@ export function ButtonLink({
   }
 
   return (
-    <Link to={to} className={classes} onClick={onClick}>
+    <Link to={to} className={classes} tabIndex={tabIndex} onClick={onClick}>
       {children}
     </Link>
   )

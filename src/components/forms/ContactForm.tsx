@@ -1,6 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { site } from '../../data/site'
 import { useSessionDraft } from '../../hooks/useSessionDraft'
 import { submitContact } from '../../lib/contactService'
 import { focusFirstError } from '../../lib/focusError'
@@ -12,6 +11,10 @@ import { Field, TextArea, TextInput } from './Field'
 import { FormPrivacyNote } from './FormPrivacyNote'
 import { FormSuccess } from './FormSuccess'
 
+function newKey(): string {
+  return crypto.randomUUID()
+}
+
 const empty: ContactRequest = {
   name: '',
   email: '',
@@ -19,20 +22,35 @@ const empty: ContactRequest = {
   subject: '',
   message: '',
   privacyAccepted: false,
+  website: '',
+  idempotencyKey: '',
+}
+
+function freshContact(): ContactRequest {
+  return { ...empty, idempotencyKey: newKey() }
 }
 
 export function ContactForm() {
-  const [form, setForm, clearDraft] = useSessionDraft('gin-contact-draft', empty)
+  const [form, setForm, clearDraft] = useSessionDraft('gin-contact-draft', freshContact())
   const [status, setStatus] = useState<FormStatus>('idle')
-  const [confirmedByServer, setConfirmedByServer] = useState(false)
+  const [emailWarning, setEmailWarning] = useState('')
+  const [submitError, setSubmitError] = useState('')
   const [errors, setErrors] = useState<Record<string, string | undefined>>({})
   const [honeypot, setHoneypot] = useState('')
+  const lock = useRef(false)
+
+  useEffect(() => {
+    setForm((current) =>
+      current.idempotencyKey ? current : { ...current, idempotencyKey: newKey() },
+    )
+  }, [setForm])
 
   function update<K extends keyof ContactRequest>(key: K, value: ContactRequest[K]) {
     setForm((current) => ({ ...current, [key]: value }))
   }
 
   async function onSubmit() {
+    if (lock.current || status === 'submitting') return
     const next = {
       name: required(form.name, 'Naam'),
       email: validateEmail(form.email),
@@ -53,24 +71,33 @@ export function ContactForm() {
       })
       return
     }
+    lock.current = true
     setStatus('submitting')
-    const result = await submitContact(form)
+    setSubmitError('')
+    const result = await submitContact({
+      ...form,
+      website: honeypot,
+      idempotencyKey: form.idempotencyKey || newKey(),
+    })
     if (result.ok) {
       clearDraft()
-      setConfirmedByServer(result.confirmedByServer)
+      setEmailWarning(result.emailWarning ?? '')
       setStatus('success')
       return
     }
+    lock.current = false
+    setSubmitError(result.message)
     setStatus('error')
   }
 
   if (status === 'success') {
     return (
       <FormSuccess
-        title="Bericht voorbereid"
-        confirmedByServer={confirmedByServer}
-        previewText={`De velden zijn gecontroleerd. ${site.name} heeft dit bericht nog niet ontvangen, omdat de serverkoppeling nog ontbreekt.`}
-        confirmedText="We hebben uw bericht ontvangen en nemen contact met u op."
+        title="Bericht ontvangen"
+        confirmedByServer
+        previewText=""
+        confirmedText="Bedankt voor uw bericht bij Green Installatie Noord. We hebben het ontvangen en nemen contact met u op."
+        warning={emailWarning || undefined}
       />
     )
   }
@@ -159,17 +186,18 @@ export function ContactForm() {
       >
         <TextArea
           id="message"
+          className="min-h-40"
           value={form.message}
           error={errors.message}
           maxLength={FIELD_MAX.message}
           onChange={(event) => update('message', event.target.value)}
         />
       </Field>
-      <label className="flex items-start gap-3 text-sm">
+      <label className="flex min-h-11 items-start gap-3 text-sm">
         <input
           id="privacy"
           type="checkbox"
-          className="mt-1 accent-brand"
+          className="mt-1 size-5 shrink-0 accent-brand"
           checked={form.privacyAccepted}
           aria-invalid={Boolean(errors.privacy)}
           aria-describedby={errors.privacy ? 'privacy-error' : undefined}
@@ -184,8 +212,10 @@ export function ContactForm() {
           {errors.privacy}
         </p>
       ) : null}
-      {status === 'error' ? (
-        <p className="text-sm text-danger">Versturen is niet gelukt. Probeer het opnieuw.</p>
+      {submitError ? (
+        <p className="text-sm text-danger" role="alert">
+          {submitError}
+        </p>
       ) : null}
       <Button type="submit" disabled={status === 'submitting'}>
         {status === 'submitting' ? 'Verwerken…' : 'Bericht versturen'}

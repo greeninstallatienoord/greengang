@@ -12,22 +12,22 @@ export const quoteServiceOptions: {
 }[] = [
   {
     value: 'cv-ketel',
-    label: 'CV-ketel',
+    label: 'CV-ketel installatie',
     hint: 'Installatie of vervanging',
   },
   {
     value: 'airco',
-    label: 'Airconditioning',
+    label: 'Airconditioning installatie',
     hint: 'Koelen en/of verwarmen per ruimte',
   },
   {
     value: 'warmtepomp',
-    label: 'Warmtepomp',
+    label: 'Warmtepomp installatie',
     hint: 'Advies en installatie',
   },
   {
     value: 'service-onderhoud',
-    label: 'Service & onderhoud',
+    label: 'Service en onderhoud',
     hint: 'Onderhoud of storing',
   },
   {

@@ -58,6 +58,9 @@ const QuotePage = lazy(() =>
 const ServicePage = lazy(() =>
   import('./pages/ServicePage').then((module) => ({ default: module.ServicePage })),
 )
+const WorkPage = lazy(() =>
+  import('./pages/WorkPage').then((module) => ({ default: module.WorkPage })),
+)
 const AdminApp = lazy(() =>
   import('./admin/AdminApp').then((module) => ({ default: module.AdminApp })),
 )
@@ -79,6 +82,7 @@ function App() {
               element={<ServicePage slug="service-onderhoud" />}
             />
             <Route path="over-ons" element={<AboutPage />} />
+            <Route path="werk" element={<WorkPage />} />
             <Route path="werkgebied" element={<AreaIndexPage />} />
             <Route path="werkgebied/:plaats" element={<AreaDetailPage />} />
             <Route

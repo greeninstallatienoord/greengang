@@ -20,12 +20,17 @@ const staticIndexable: SitemapEntry[] = [
   { path: '/warmtepomp', lastmod: today, changefreq: 'monthly', priority: '0.9' },
   { path: '/service-onderhoud', lastmod: today, changefreq: 'monthly', priority: '0.9' },
   { path: '/over-ons', lastmod: today, changefreq: 'monthly', priority: '0.6' },
+  { path: '/werk', lastmod: today, changefreq: 'monthly', priority: '0.7' },
   { path: '/werkgebied', lastmod: today, changefreq: 'monthly', priority: '0.6' },
   { path: '/blog', lastmod: today, changefreq: 'weekly', priority: '0.7' },
   { path: '/contact', lastmod: today, changefreq: 'monthly', priority: '0.7' },
   { path: '/offerte-aanvragen', lastmod: today, changefreq: 'monthly', priority: '0.8' },
   { path: '/afspraak-maken', lastmod: today, changefreq: 'monthly', priority: '0.7' },
   { path: '/veelgestelde-vragen', lastmod: today, changefreq: 'monthly', priority: '0.6' },
+  { path: '/privacy', lastmod: today, changefreq: 'monthly', priority: '0.3' },
+  { path: '/cookies', lastmod: today, changefreq: 'monthly', priority: '0.3' },
+  { path: '/algemene-voorwaarden', lastmod: today, changefreq: 'monthly', priority: '0.3' },
+  { path: '/disclaimer', lastmod: today, changefreq: 'monthly', priority: '0.3' },
 ]
 
 export function getIndexableEntries(): SitemapEntry[] {

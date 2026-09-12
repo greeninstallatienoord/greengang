@@ -24,18 +24,31 @@ export const business = {
     country: 'Netherlands',
     countryCode: 'NL',
   },
+  kvk: '86277391',
   website: 'https://greeninstallatienoord.nl',
   domain: 'greeninstallatienoord.nl',
   facebook: 'https://www.facebook.com/p/Green-installatie-Noord-61565091255871/',
-  /**
-   * Leave empty until a stable Google Business Profile URL is verified.
-   * Do not publish a share.google short link as the permanent public URL.
-   */
-  googleBusinessProfile: '',
-  instagram: '',
+  googleBusinessProfile: 'https://share.google/J8R5hnJqhHtfqzINQ',
+  instagram: 'https://www.instagram.com/greeninstallatie/',
+  tiktok: 'https://www.tiktok.com/@greeninstallatie',
   linkedin: '',
   whatsapp: '',
-  openingHours: '',
+  /**
+   * Supplied for the website: weekdays 07:00–17:00, weekend closed.
+   * Keep identical to the public listing until a new written confirmation.
+   */
+  openingHours: {
+    summary: 'Ma-vr 07:00-17:00',
+    days: [
+      { day: 'monday', label: 'Maandag', closed: false, opens: '07:00', closes: '17:00' },
+      { day: 'tuesday', label: 'Dinsdag', closed: false, opens: '07:00', closes: '17:00' },
+      { day: 'wednesday', label: 'Woensdag', closed: false, opens: '07:00', closes: '17:00' },
+      { day: 'thursday', label: 'Donderdag', closed: false, opens: '07:00', closes: '17:00' },
+      { day: 'friday', label: 'Vrijdag', closed: false, opens: '07:00', closes: '17:00' },
+      { day: 'saturday', label: 'Zaterdag', closed: true, opens: null, closes: null },
+      { day: 'sunday', label: 'Zondag', closed: true, opens: null, closes: null },
+    ],
+  },
   services: [
     'cv-ketel',
     'airco',
@@ -49,6 +62,7 @@ export type Business = typeof business
 export type SocialEntityKey =
   | 'facebook'
   | 'instagram'
+  | 'tiktok'
   | 'linkedin'
   | 'googleBusinessProfile'
 
@@ -71,7 +85,13 @@ export const socialEntities: SocialEntity[] = [
     key: 'instagram',
     name: 'Instagram',
     url: business.instagram,
-    verified: false,
+    verified: Boolean(business.instagram),
+  },
+  {
+    key: 'tiktok',
+    name: 'TikTok',
+    url: business.tiktok,
+    verified: Boolean(business.tiktok),
   },
   {
     key: 'linkedin',
@@ -83,7 +103,7 @@ export const socialEntities: SocialEntity[] = [
     key: 'googleBusinessProfile',
     name: 'Google Business Profile',
     url: business.googleBusinessProfile,
-    verified: false,
+    verified: Boolean(business.googleBusinessProfile),
   },
 ]
 
@@ -109,6 +129,7 @@ export const gbpAlignment = {
   phoneInternational: business.phoneInternational,
   website: business.website,
   email: business.email,
+  openingHours: business.openingHours.summary,
   primaryCategorySuggestion: 'Installatiebedrijf (HVAC)',
   additionalCategorySuggestions: [
     'CV-ketel installatie',
@@ -117,7 +138,7 @@ export const gbpAlignment = {
     'Onderhoud installaties',
   ],
   description:
-    'Green Installatie Noord installeert en onderhoudt cv-ketels, airconditioning en warmtepompen. Gevestigd in Oude Pekela.',
+    'Green Installatie Noord installeert en onderhoudt cv-ketels, airconditioning en warmtepompen in Noord-Nederland. Gevestigd in Oude Pekela.',
   profileUrl: business.googleBusinessProfile,
   profileStatus: business.googleBusinessProfile
     ? 'url-present'
@@ -131,4 +152,20 @@ export function formatAddress(separator = ', '): string {
 
 export function formatNap(): string {
   return `${business.businessName}, ${formatAddress()}, ${business.phone}`
+}
+
+export function formatDayHours(day: (typeof business.openingHours.days)[number]): string {
+  if (day.closed || !day.opens || !day.closes) return 'Gesloten'
+  return `${day.opens}–${day.closes}`
+}
+
+export function schemaOpeningHoursSpecification(): Array<Record<string, unknown>> {
+  return [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '07:00',
+      closes: '17:00',
+    },
+  ]
 }

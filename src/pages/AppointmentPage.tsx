@@ -27,8 +27,8 @@ export function AppointmentPage() {
           { label: 'Afspraak maken', href: '/afspraak-maken' },
         ]}
         eyebrow="Planning"
-        title="Afspraak aanvragen"
-        intro="Kies een dienst, een datum en een vrij tijdstip. Er worden geen voorbeeldtijden getoond. Een afspraak is pas definitief na onze bevestiging."
+        title="Afspraak maken"
+        intro="Kies een dienst, een datum en een vrij tijdstip. Daarna uw gegevens en een korte controle. Een gekozen moment is pas definitief na onze bevestiging."
         narrow
       />
       <Section>

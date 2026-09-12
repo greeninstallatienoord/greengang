@@ -4,44 +4,50 @@ import type { SeoRecord, ServiceSlug } from '../types'
 
 export const pageSeo = {
   home: {
-    title: site.name,
+    title: 'Green Installatie Noord | CV-ketel, airco en warmtepomp in Noord-Nederland',
     description: site.description,
     path: '/',
   },
   cvKetel: {
     title: 'CV-ketel installeren of vervangen',
     description:
-      'Installatie of vervanging van een cv-ketel door Green Installatie Noord in Oude Pekela. Advies, offerte en onderhoud zonder standaardprijzen op de site.',
+      'CV-ketel installatie of vervanging in Groningen en de rest van Noord-Nederland. Advies en offerte door Green Installatie Noord, zonder standaardprijzen op de site.',
     path: '/cv-ketel',
   },
   airco: {
     title: 'Airconditioning laten installeren',
     description:
-      'Airconditioning-installatie in Oude Pekela voor koelen en, waar passend, verwarmen. Green Installatie Noord bekijkt de ruimte voordat er een voorstel komt.',
+      'Airco laten installeren in Groningen, Drenthe of Friesland. Green Installatie Noord bekijkt de ruimte voordat er een voorstel komt.',
     path: '/airco',
   },
   warmtepomp: {
     title: 'Warmtepomp advies en installatie',
     description:
-      'Advies en installatie van een warmtepomp vanuit Oude Pekela, afgestemd op de woning. Geen algemene geschiktheidsclaim; wel een duidelijk voortraject.',
+      'Warmtepomp advies en installatie in Noord-Nederland, afgestemd op de woning. Geen algemene geschiktheidsclaim; wel een duidelijk voortraject.',
     path: '/warmtepomp',
   },
   onderhoud: {
     title: 'CV-ketel onderhoud en service',
     description:
-      'Onderhoud en service van cv-ketels en klimaatinstallaties vanuit Oude Pekela. Plan een controle of meld een storing bij Green Installatie Noord.',
+      'Onderhoud en service van cv-ketels en klimaatinstallaties in Noord-Nederland. Plan een controle of meld een storing bij Green Installatie Noord.',
     path: '/service-onderhoud',
   },
   about: {
     title: 'Over Green Installatie Noord',
     description:
-      'Wie Green Installatie Noord is en hoe we werken bij cv-ketel, airco, warmtepomp en onderhoud. Bedrijfsfeiten volgen zodra ze bevestigd zijn.',
+      'Green Installatie Noord is een installatiebedrijf voor Noord-Nederland, gevestigd in Oude Pekela. Cv-ketel, airco, warmtepomp en onderhoud.',
     path: '/over-ons',
   },
-  areas: {
-    title: 'Werkgebied',
+  work: {
+    title: 'Werk uit de praktijk',
     description:
-      'Het werkgebied van Green Installatie Noord wordt per plaats gepubliceerd. Geen verzonnen gemeenten; wel een structuur voor lokale pagina’s.',
+      'Werk uit de praktijk: foto’s van cv-ketel-, airco- en warmtepompinstallaties door Green Installatie Noord. Gevestigd in Oude Pekela, actief in Noord-Nederland.',
+    path: '/werk',
+  },
+  areas: {
+    title: 'Werkgebied Noord-Nederland',
+    description:
+      'Green Installatie Noord werkt in Noord-Nederland: Groningen, Drenthe en Friesland. Gevestigd in Oude Pekela. Geen verzonnen plaatsnamen.',
     path: '/werkgebied',
   },
   blog: {
@@ -53,7 +59,7 @@ export const pageSeo = {
   contact: {
     title: 'Contact met Green Installatie Noord',
     description:
-      `Neem contact op met ${business.businessName} in ${business.address.city}. Bel ${business.phone}, mail ${business.email} of stuur een bericht.`,
+      `Neem contact op met ${business.businessName}. Gevestigd in ${business.address.city}, werkzaam in Noord-Nederland. Bel ${business.phone} of mail ${business.email}.`,
     path: '/contact',
   },
   quote: {

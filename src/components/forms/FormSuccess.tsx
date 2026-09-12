@@ -19,7 +19,7 @@ export function FormSuccess({
   onReset,
 }: FormSuccessProps) {
   return (
-    <div className="rounded-lg border border-line bg-paper p-6 shadow-card">
+    <div className="border border-line bg-paper p-7">
       <p className="text-sm font-semibold text-brand">
         {confirmedByServer ? 'Bevestigd' : 'Gegevens gecontroleerd'}
       </p>

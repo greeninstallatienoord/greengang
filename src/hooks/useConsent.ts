@@ -31,6 +31,14 @@ export function useConsent() {
     }
   }, [])
 
+  useEffect(() => {
+    const showBanner = preferences === null && !panelOpen
+    document.documentElement.dataset.cookieBanner = showBanner ? 'on' : 'off'
+    return () => {
+      document.documentElement.dataset.cookieBanner = 'off'
+    }
+  }, [preferences, panelOpen])
+
   return {
     preferences: preferences ?? defaultConsent,
     decided: preferences !== null,

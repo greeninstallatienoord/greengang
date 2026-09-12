@@ -20,7 +20,7 @@ export function FAQItem({ question, answer }: FAQItemProps) {
           type="button"
           aria-expanded={open}
           aria-controls={panelId}
-          className="flex w-full items-center justify-between gap-4 py-4 text-left font-semibold"
+          className="flex min-h-12 w-full items-center justify-between gap-4 py-4 text-left font-semibold tracking-[-0.015em]"
           onClick={() => setOpen((value) => !value)}
         >
           {question}

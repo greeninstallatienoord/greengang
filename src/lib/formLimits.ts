@@ -7,5 +7,5 @@ export const FIELD_MAX = {
   houseNumber: 16,
   postalCode: 8,
   city: 60,
-  message: 2000,
+  message: 4000,
 } as const

@@ -41,6 +41,12 @@ const ContactDetailPage = lazy(() =>
 const EmailsPage = lazy(() =>
   import('./pages/EmailsPage').then((module) => ({ default: module.EmailsPage })),
 )
+const EmailLogsPage = lazy(() =>
+  import('./pages/EmailLogsPage').then((module) => ({ default: module.EmailLogsPage })),
+)
+const EmailLogDetailPage = lazy(() =>
+  import('./pages/EmailLogDetailPage').then((module) => ({ default: module.EmailLogDetailPage })),
+)
 const TemplatesPage = lazy(() =>
   import('./pages/TemplatesPage').then((module) => ({ default: module.TemplatesPage })),
 )
@@ -52,7 +58,11 @@ const SettingsPage = lazy(() =>
 )
 
 function Fallback() {
-  return <p className="p-4 text-sm text-ink-muted">Beheerpagina wordt geladen…</p>
+  return (
+    <div className="admin-app flex min-h-dvh items-center justify-center px-6">
+      <p className="text-sm text-[var(--admin-muted)]">Beheerpagina wordt geladen…</p>
+    </div>
+  )
 }
 
 function LoginGate() {
@@ -95,6 +105,8 @@ export function AdminApp() {
           <Route path="contact" element={<ContactListPage />} />
           <Route path="contact/:id" element={<ContactDetailPage />} />
           <Route path="emails" element={<EmailsPage />} />
+          <Route path="emails/logs" element={<EmailLogsPage />} />
+          <Route path="emails/logs/:id" element={<EmailLogDetailPage />} />
           <Route path="templates" element={<TemplatesPage />} />
           <Route path="templates/:id" element={<TemplateDetailPage />} />
           <Route path="settings" element={<SettingsPage />} />

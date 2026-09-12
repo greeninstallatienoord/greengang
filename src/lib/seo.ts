@@ -28,8 +28,7 @@ export function applySeo({
   publishedTime,
   modifiedTime,
 }: SeoInput): void {
-  const fullTitle =
-    title === site.name ? site.name : `${title} | ${site.name}`
+  const fullTitle = title.includes('|') ? title : `${title} | ${site.name}`
   const url = absoluteUrl(path)
   const imageUrl = absoluteUrl(image)
 

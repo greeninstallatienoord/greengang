@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '../../components/Button'
 import { Field, TextArea, TextInput } from '../../components/forms/Field'
 import { api } from '../../lib/api'
+import { BackLink } from '../components/BackLink'
+import { Notice } from '../components/Notice'
 import { PageHeader } from '../components/PageHeader'
 import { serviceLabel } from '../labels'
 import { adminUrl } from '../adminPath'
 
 const services = ['cv-ketel', 'airco', 'warmtepomp', 'service-onderhoud'] as const
+const selectClass =
+  'min-h-11 w-full border border-[var(--admin-line)] bg-[var(--admin-panel)] px-3 text-sm'
 
 export function AppointmentNewPage() {
   const navigate = useNavigate()
@@ -51,14 +55,13 @@ export function AppointmentNewPage() {
 
   return (
     <div>
-      <p className="mb-3 text-sm">
-        <Link to={adminUrl('appointments')} className="underline">
-          Terug
-        </Link>
-      </p>
-      <PageHeader title="Nieuwe afspraak" description="Wordt opgeslagen als aanvraag tot u bevestigt." />
+      <BackLink to={adminUrl('appointments')}>Terug naar afspraken</BackLink>
+      <PageHeader
+        title="Nieuwe afspraak"
+        description="Wordt opgeslagen als aanvraag tot u bevestigt."
+      />
       <form
-        className="grid max-w-xl gap-4"
+        className="grid max-w-xl gap-4 border border-[var(--admin-line)] bg-[var(--admin-panel)] p-5"
         onSubmit={(event) => {
           event.preventDefault()
           void onSubmit()
@@ -79,7 +82,7 @@ export function AppointmentNewPage() {
         <Field id="service" label="Dienst">
           <select
             id="service"
-            className="min-h-11 w-full rounded-md border border-line bg-paper px-3"
+            className={selectClass}
             value={form.service}
             onChange={(e) => setForm({ ...form, service: e.target.value })}
           >
@@ -106,11 +109,11 @@ export function AppointmentNewPage() {
           <select
             id="time"
             required
-            className="min-h-11 w-full rounded-md border border-line bg-paper px-3"
+            className={selectClass}
             value={form.appointment_time}
             onChange={(e) => setForm({ ...form, appointment_time: e.target.value })}
           >
-            <option value="">Kies een tijd</option>
+            <option value="">{form.appointment_date ? 'Kies een tijd' : 'Kies eerst een datum'}</option>
             {slots.map((slot) => (
               <option key={slot} value={slot}>
                 {slot}
@@ -121,7 +124,7 @@ export function AppointmentNewPage() {
         <Field id="notes" label="Toelichting">
           <TextArea id="notes" value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} />
         </Field>
-        {error ? <p className="text-sm text-danger">{error}</p> : null}
+        {error ? <Notice tone="error">{error}</Notice> : null}
         <Button type="submit" disabled={busy}>
           {busy ? 'Bezig…' : 'Opslaan'}
         </Button>

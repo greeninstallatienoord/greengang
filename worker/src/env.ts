@@ -1,4 +1,5 @@
 export type WorkerEnv = {
+  ASSETS: Fetcher
   DB: D1Database
   ENVIRONMENT: string
   PUBLIC_SITE_URL: string
@@ -16,6 +17,10 @@ export function isProduction(env: WorkerEnv): boolean {
 }
 
 export function allowedOrigins(env: WorkerEnv): string[] {
-  const extras = ['http://localhost:5173', 'http://127.0.0.1:5173']
+  const extras = [
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+    'https://development.greeninstallatienoord.nl',
+  ]
   return Array.from(new Set([env.PUBLIC_SITE_URL.replace(/\/$/, ''), ...extras]))
 }

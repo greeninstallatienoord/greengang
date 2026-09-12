@@ -1,6 +1,18 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
-import { Menu, X } from 'lucide-react'
+import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
+import {
+  CalendarDays,
+  FileText,
+  Inbox,
+  LayoutDashboard,
+  LogOut,
+  Mail,
+  Menu,
+  NotebookPen,
+  Settings,
+  Users,
+  X,
+} from 'lucide-react'
 import logo from '../assets/images/branding/logo.png'
 import { business } from '../data/business'
 import { api } from '../lib/api'
@@ -8,26 +20,34 @@ import { useAdminAuth } from './AdminAuth'
 import { adminUrl } from './adminPath'
 
 const links = [
-  { to: 'dashboard', label: 'Dashboard' },
-  { to: 'appointments', label: 'Afspraken' },
-  { to: 'customers', label: 'Klanten' },
-  { to: 'quotes', label: 'Offertes' },
-  { to: 'contact', label: 'Contact' },
-  { to: 'emails', label: 'E-mails' },
-  { to: 'templates', label: 'Templates' },
-  { to: 'settings', label: 'Instellingen' },
+  { to: 'dashboard', label: 'Overzicht', icon: LayoutDashboard },
+  { to: 'appointments', label: 'Afspraken', icon: CalendarDays },
+  { to: 'quotes', label: 'Offertes', icon: FileText },
+  { to: 'customers', label: 'Klanten', icon: Users },
+  { to: 'contact', label: 'Contactaanvragen', icon: Inbox },
+  { to: 'emails', label: 'E-mails', icon: Mail },
+  { to: 'templates', label: 'Templates', icon: NotebookPen },
+  { to: 'settings', label: 'Instellingen', icon: Settings },
 ]
+
+function pageTitle(pathname: string): string {
+  if (pathname.includes('/emails/logs')) return 'Verzonden'
+  if (pathname.includes('/templates')) return 'Templates'
+  const match = links.find((item) => pathname.includes(`/${item.to}`))
+  return match?.label ?? 'Beheer'
+}
 
 export function AdminLayout() {
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
+  const location = useLocation()
   const { email } = useAdminAuth()
   const drawerRef = useRef<HTMLElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
   const titleId = useId()
 
   useEffect(() => {
-    document.title = 'Beheer – Green Installatie Noord'
+    document.title = 'Beheer - Green Installatie Noord'
     let robots = document.querySelector('meta[name="robots"]')
     if (!robots) {
       robots = document.createElement('meta')
@@ -83,42 +103,55 @@ export function AdminLayout() {
   }
 
   const nav = (
-    <nav aria-label="Beheer" className="grid gap-1">
-      {links.map((item) => (
-        <NavLink
-          key={item.to}
-          to={adminUrl(item.to)}
-          onClick={() => setOpen(false)}
-          className={({ isActive }) =>
-            `min-h-11 rounded-md px-3 py-2 text-sm font-medium ${
-              isActive ? 'bg-brand-soft text-brand-dark' : 'hover:bg-brand-soft/60'
-            }`
-          }
-        >
-          {item.label}
-        </NavLink>
-      ))}
-      <button
-        type="button"
-        className="mt-3 min-h-11 rounded-md px-3 text-left text-sm font-semibold text-danger hover:bg-brand-soft/40"
-        onClick={() => void logout()}
-      >
-        Uitloggen
-      </button>
+    <nav aria-label="Beheer" className="grid gap-0.5">
+      {links.map((item) => {
+        const Icon = item.icon
+        return (
+          <NavLink
+            key={item.to}
+            to={adminUrl(item.to)}
+            onClick={() => setOpen(false)}
+            className={({ isActive }) =>
+              `relative flex min-h-11 items-center gap-3 px-3 text-sm font-medium transition-colors duration-150 ${
+                isActive
+                  ? 'bg-white/12 text-white before:absolute before:inset-y-1.5 before:left-0 before:w-0.5 before:bg-[#7cbc86]'
+                  : 'text-[var(--admin-sidebar-text)]/80 hover:bg-white/6 hover:text-white'
+              }`
+            }
+          >
+            <Icon size={17} aria-hidden="true" />
+            {item.label}
+          </NavLink>
+        )
+      })}
     </nav>
   )
 
+  const account = (
+    <div className="mt-auto border-t border-white/10 pt-4">
+      <p className="truncate px-3 text-xs text-[var(--admin-sidebar-muted)]">{email}</p>
+      <button
+        type="button"
+        className="mt-2 flex min-h-11 w-full items-center gap-3 px-3 text-left text-sm font-medium text-[var(--admin-sidebar-text)]/85 transition-colors duration-150 hover:bg-white/6 hover:text-white"
+        onClick={() => void logout()}
+      >
+        <LogOut size={17} aria-hidden="true" />
+        Uitloggen
+      </button>
+    </div>
+  )
+
   return (
-    <div className="min-h-dvh bg-surface text-ink">
-      <header className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-line bg-paper px-4 py-2.5 lg:hidden">
-        <Link to={adminUrl('dashboard')} className="inline-flex min-w-0 items-center gap-2">
+    <div className="admin-app">
+      <header className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-[var(--admin-line)] bg-[var(--admin-panel)] px-4 py-2.5 lg:hidden">
+        <Link to={adminUrl('dashboard')} className="inline-flex min-w-0 items-center gap-2.5">
           <img src={logo} alt="" className="h-8 w-auto" />
-          <span className="truncate text-sm font-semibold">{business.businessName}</span>
+          <span className="truncate text-sm font-semibold">{pageTitle(location.pathname)}</span>
         </Link>
         <button
           ref={buttonRef}
           type="button"
-          className="inline-flex size-11 items-center justify-center rounded-md border border-line"
+          className="inline-flex size-11 items-center justify-center border border-[var(--admin-line)]"
           aria-expanded={open}
           aria-controls="admin-menu"
           onClick={() => setOpen((value) => !value)}
@@ -132,38 +165,50 @@ export function AdminLayout() {
         <div className="fixed inset-0 z-40 lg:hidden">
           <button
             type="button"
-            className="absolute inset-0 bg-ink/40"
+            className="admin-dialog-backdrop absolute inset-0 bg-[#102418]/50"
             aria-label="Menu sluiten"
             onClick={() => setOpen(false)}
           />
           <aside
             id="admin-menu"
             ref={drawerRef}
-            className="absolute inset-y-0 left-0 w-[min(20rem,88vw)] overflow-y-auto border-r border-line bg-paper p-4 motion-safe:animate-[adminDrawer_180ms_ease-out]"
+            className="absolute inset-y-0 left-0 flex w-[min(19.5rem,88vw)] flex-col bg-[var(--admin-sidebar)] p-4 text-white motion-safe:animate-[adminDrawer_180ms_ease-out]"
           >
-            <p id={titleId} className="mb-3 text-sm font-semibold">
+            <p id={titleId} className="mb-4 px-3 text-xs font-semibold tracking-[0.08em] uppercase text-[var(--admin-sidebar-muted)]">
               Menu
             </p>
             {nav}
+            {account}
           </aside>
         </div>
       ) : null}
 
-      <div className="lg:grid lg:grid-cols-[15.5rem_1fr]">
-        <aside className="hidden min-h-dvh border-r border-line bg-paper p-4 lg:block">
-          <Link to={adminUrl('dashboard')} className="mb-6 flex items-center gap-2">
-            <img src={logo} alt="" className="h-8 w-auto" />
-            <span className="text-sm font-semibold leading-tight">{business.businessName}</span>
+      <div className="lg:grid lg:grid-cols-[16.5rem_1fr]">
+        <aside className="sticky top-0 hidden h-dvh flex-col bg-[var(--admin-sidebar)] p-4 text-white lg:flex">
+          <Link to={adminUrl('dashboard')} className="mb-7 flex items-center gap-2.5 px-2">
+            <img src={logo} alt="" className="h-9 w-auto" />
+            <span className="text-sm leading-tight font-semibold">
+              {business.businessName}
+              <span className="mt-0.5 block text-[11px] font-medium tracking-[0.06em] text-[var(--admin-sidebar-muted)] uppercase">
+                Intern beheer
+              </span>
+            </span>
           </Link>
           <p id={`${titleId}-desk`} className="sr-only">
             Beheer
           </p>
           {nav}
-          <p className="mt-8 truncate text-xs text-ink-muted">{email}</p>
+          {account}
         </aside>
-        <main className="p-4 sm:p-6">
-          <Outlet />
-        </main>
+        <div className="min-w-0">
+          <div className="hidden items-center justify-between border-b border-[var(--admin-line)] bg-[var(--admin-panel)] px-6 py-3 lg:flex">
+            <p className="text-sm text-[var(--admin-muted)]">{pageTitle(location.pathname)}</p>
+            <p className="truncate text-sm text-[var(--admin-ink)]">{email}</p>
+          </div>
+          <main className="mx-auto w-full max-w-[72rem] px-4 py-5 sm:px-6 sm:py-7">
+            <Outlet />
+          </main>
+        </div>
       </div>
     </div>
   )

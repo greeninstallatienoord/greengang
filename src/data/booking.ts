@@ -2,10 +2,10 @@ import type { ServiceSlug } from '../types'
 
 /** Confirmed services only. Labels for the booking flow. */
 export const bookingServices: { slug: ServiceSlug; label: string }[] = [
-  { slug: 'cv-ketel', label: 'CV-ketel' },
-  { slug: 'airco', label: 'Airco' },
-  { slug: 'warmtepomp', label: 'Warmtepomp' },
-  { slug: 'service-onderhoud', label: 'CV-ketel service en onderhoud' },
+  { slug: 'cv-ketel', label: 'CV-ketel installatie' },
+  { slug: 'airco', label: 'Airconditioning installatie' },
+  { slug: 'warmtepomp', label: 'Warmtepomp installatie' },
+  { slug: 'service-onderhoud', label: 'Service en onderhoud' },
 ]
 
 export function bookingServiceLabel(slug: string): string {

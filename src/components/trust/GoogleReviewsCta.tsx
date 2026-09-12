@@ -1,5 +1,6 @@
 import { business } from '../../data/business'
 import { Card } from '../Card'
+import { GoogleIcon } from '../icons/BrandIcons'
 
 /**
  * Neutral Google profile CTA. No stars, no review counts.
@@ -11,7 +12,10 @@ export function GoogleReviewsCta() {
 
   return (
     <Card>
-      <h3 className="font-semibold">Google</h3>
+      <h3 className="flex items-center gap-2.5 font-semibold">
+        <GoogleIcon size={18} />
+        Google
+      </h3>
       <p className="mt-2 text-sm text-ink-muted">
         We zetten hier geen sterren of aantallen. Bekijk ervaringen op het
         officiële profiel.

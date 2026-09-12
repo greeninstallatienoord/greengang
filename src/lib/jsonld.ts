@@ -1,4 +1,5 @@
-import { business, verifiedSameAs } from '../data/business'
+import { business, schemaOpeningHoursSpecification, verifiedSameAs } from '../data/business'
+import { serviceArea } from '../data/region'
 import { site } from '../data/site'
 import { services } from '../data/services'
 import type { BlogPost, ContentLink, FaqItem } from '../types'
@@ -20,6 +21,11 @@ function knownContact(): Record<string, unknown> {
       addressRegion: business.address.region,
       addressCountry: business.address.countryCode,
     },
+    openingHoursSpecification: schemaOpeningHoursSpecification(),
+    areaServed: serviceArea.provinces.map((province) => ({
+      '@type': 'AdministrativeArea',
+      name: province.name,
+    })),
   }
   const sameAs = verifiedSameAs()
   if (sameAs.length > 0) extra.sameAs = sameAs
@@ -36,6 +42,11 @@ export function organizationJsonLd(): Record<string, unknown> {
     logo: absoluteUrl('/logo.png'),
     image: absoluteUrl('/og-image.jpg'),
     description: site.shortDescription,
+    identifier: {
+      '@type': 'PropertyValue',
+      name: 'KVK',
+      value: business.kvk,
+    },
     ...knownContact(),
   }
 }

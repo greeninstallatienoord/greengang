@@ -31,7 +31,7 @@ export const faqs: FaqItem[] = [
     relatedServiceSlug: 'cv-ketel',
     question: 'Wanneer is het verstandig om een cv-ketel te laten bekijken?',
     answer:
-      'Laat de ketel beoordelen bij herhaalde storingen, zichtbare slijtage, twijfel over veiligheid of als u vervanging overweegt. Of vervanging nodig is, hangt af van de staat van het toestel — dat beoordelen we ter plaatse of in overleg.',
+      'Laat de ketel beoordelen bij herhaalde storingen, zichtbare slijtage, twijfel over veiligheid of als u vervanging overweegt. Of vervanging nodig is, hangt af van de staat van het toestel. Dat beoordelen we ter plaatse of in overleg.',
   },
   {
     id: 'cv-offerte',

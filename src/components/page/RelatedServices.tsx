@@ -25,7 +25,7 @@ export function RelatedServices({
           {services.map((item) => (
             <article
               key={item.slug}
-              className="rounded-lg border border-line bg-paper p-5 shadow-card"
+              className="border border-line bg-paper p-6"
             >
               <h3 className="font-semibold">
                 <Link to={item.href} className="hover:text-brand-dark">

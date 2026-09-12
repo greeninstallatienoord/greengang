@@ -33,7 +33,7 @@ export type ConsentPreferences = Record<ConsentCategory, boolean>
 export type FormStatus = 'idle' | 'submitting' | 'success' | 'error'
 
 export type SubmissionResult =
-  | { ok: true; id: string; confirmedByServer: boolean }
+  | { ok: true; id: string; confirmedByServer: boolean; emailWarning?: string }
   | { ok: false; message: string }
 
 export type PhotoAttachment = {
@@ -57,6 +57,8 @@ export type LeadRequest = {
   preferredContact: ContactMethod
   photos: PhotoAttachment[]
   privacyAccepted: boolean
+  website?: string
+  idempotencyKey?: string
 }
 
 export type BookingRequest = {
@@ -72,6 +74,7 @@ export type BookingRequest = {
   message: string
   privacyAccepted: boolean
   website?: string
+  idempotencyKey?: string
 }
 
 export type ContactRequest = {
@@ -81,6 +84,8 @@ export type ContactRequest = {
   subject: string
   message: string
   privacyAccepted: boolean
+  website?: string
+  idempotencyKey?: string
 }
 
 export type ServiceRecord = {

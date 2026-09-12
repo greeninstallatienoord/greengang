@@ -34,8 +34,11 @@ export function TrustSection() {
   return (
     <Section className="bg-paper">
       <Container>
-        <Heading as="h2">Vakmanschap &amp; kwaliteit</Heading>
-        <p className="mt-3 max-w-2xl text-ink-muted">
+        <p className="eyebrow">Vertrouwen</p>
+        <Heading as="h2" className="mt-3">
+          Vakmanschap en kwaliteit
+        </Heading>
+        <p className="lead mt-4">
           Alleen wat we kunnen onderbouwen. Certificaten, garanties, merken en
           recensies verschijnen hier pas na controle. Geen verzonnen scores.
         </p>
