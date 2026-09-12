@@ -21,6 +21,8 @@ export function allowedOrigins(env: WorkerEnv): string[] {
     'http://localhost:5173',
     'http://127.0.0.1:5173',
     'https://development.greeninstallatienoord.nl',
+    'https://developers.greeninstallatienoord.nl',
+    'https://greeninstallatienoord.nl',
   ]
   return Array.from(new Set([env.PUBLIC_SITE_URL.replace(/\/$/, ''), ...extras]))
 }

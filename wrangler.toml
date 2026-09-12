@@ -11,7 +11,7 @@ run_worker_first = ["/api/*"]
 
 [vars]
 ENVIRONMENT = "development"
-PUBLIC_SITE_URL = "https://development.greeninstallatienoord.nl"
+PUBLIC_SITE_URL = "https://greeninstallatienoord.nl"
 ADMIN_BASE_PATH = "/blackberry97"
 
 [[d1_databases]]
