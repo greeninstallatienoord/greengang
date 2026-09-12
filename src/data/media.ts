@@ -191,7 +191,7 @@ export const workPhotos = {
 } as const satisfies Record<string, MediaAsset>
 
 export const pageImages = {
-  homeHero: workPhotos.aircoOmkastingDubbel,
+  homeHero: workPhotos.aircoTerras,
   homeProjectFeatured: workPhotos.aircoPlatdak,
   homeProjectCv: workPhotos.cvIntergas,
   homeProjectWp: workPhotos.warmtepompIntergas,

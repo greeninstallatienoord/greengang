@@ -1,6 +1,7 @@
 import { ExperienceSection } from '../components/home/ExperienceSection'
 import { HomeHero } from '../components/home/HomeHero'
 import { HomeProjects } from '../components/home/HomeProjects'
+import { HomeQuickStart } from '../components/home/HomeQuickStart'
 import { KnowledgePreview } from '../components/home/KnowledgePreview'
 import { LocalSection } from '../components/home/LocalSection'
 import { ServiceList } from '../components/home/ServiceList'
@@ -20,6 +21,7 @@ export function HomePage() {
         jsonLd={[websiteJsonLd(), localBusinessJsonLd()]}
       />
       <HomeHero />
+      <HomeQuickStart />
       <ExperienceSection />
       <ServiceList />
       <WhyHome />

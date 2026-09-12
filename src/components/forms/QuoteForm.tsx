@@ -64,6 +64,10 @@ function isServiceOption(value: string): value is QuoteServiceOption {
   return quoteServiceOptions.some((option) => option.value === value)
 }
 
+function isSituationOption(value: string): value is QuoteSituation {
+  return situationsFor('overig').some((option) => option.value === value)
+}
+
 function ReviewRow({
   label,
   value,
@@ -89,9 +93,12 @@ function ReviewRow({
 export function QuoteForm() {
   const [params] = useSearchParams()
   const preset = params.get('dienst')
+  const situationPreset = params.get('situatie')
   const initialService =
     preset && isServiceOption(preset) && preset !== 'overig' ? preset : null
-  const [step, setStep] = useState(initialService ? 1 : 0)
+  const initialSituation =
+    situationPreset && isSituationOption(situationPreset) ? situationPreset : null
+  const [step, setStep] = useState(initialService && initialSituation ? 2 : initialService ? 1 : 0)
   const [status, setStatus] = useState<FormStatus>('idle')
   const [emailWarning, setEmailWarning] = useState('')
   const [submitError, setSubmitError] = useState('')
@@ -101,6 +108,7 @@ export function QuoteForm() {
   const lock = useRef(false)
   const [form, setForm, clearDraft] = useSessionDraft<LeadRequest>('gin-quote-draft', {
     ...freshLead(initialService ?? 'cv-ketel'),
+    situation: initialSituation ?? 'weet-ik-niet',
   })
 
   useEffect(() => {
