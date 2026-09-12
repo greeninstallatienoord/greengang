@@ -44,7 +44,7 @@ export function TextInput({ error, className, id, type, inputMode, ...props }: T
       aria-invalid={Boolean(error)}
       aria-describedby={error && id ? `${id}-error` : undefined}
       className={cn(
-        'min-h-12 w-full rounded-sm border border-line bg-paper px-3.5 text-base outline-none transition-colors focus:border-brand',
+        'min-h-12 w-full rounded-sm border border-line bg-surface px-3.5 text-base outline-none transition-colors focus:border-brand',
         error && 'border-danger',
         className,
       )}
@@ -64,7 +64,7 @@ export function TextArea({ error, className, id, ...props }: TextAreaProps) {
       aria-invalid={Boolean(error)}
       aria-describedby={error && id ? `${id}-error` : undefined}
       className={cn(
-        'min-h-32 w-full rounded-sm border border-line bg-paper px-3.5 py-3 text-base outline-none transition-colors focus:border-brand',
+        'min-h-32 w-full rounded-sm border border-line bg-surface px-3.5 py-3 text-base outline-none transition-colors focus:border-brand',
         error && 'border-danger',
         className,
       )}

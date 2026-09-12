@@ -1,6 +1,7 @@
-import { Clock3, Mail, MapPin, Phone } from 'lucide-react'
-import { business, formatAddress, formatDayHours } from '../data/business'
+import { Mail, MapPin, Phone } from 'lucide-react'
+import { business, formatAddress } from '../data/business'
 import { site } from '../data/site'
+import { OpeningHours } from './OpeningHours'
 
 type ContactDetailsProps = {
   showHours?: boolean
@@ -10,54 +11,62 @@ export function ContactDetails({ showHours = true }: ContactDetailsProps) {
   const { phone, phoneHref, email, emailHref } = site.contact
 
   return (
-    <dl className="grid gap-3.5 text-sm">
-      <div className="flex items-start gap-2.5">
-        <Phone size={16} strokeWidth={1.7} className="mt-0.5 shrink-0 text-brand-dark" aria-hidden="true" />
-        <div>
-          <dt className="text-ink-muted">Telefoon</dt>
-          <dd>
-            <a href={phoneHref} className="font-medium underline underline-offset-2">
-              {phone}
-            </a>
-          </dd>
-        </div>
-      </div>
-      <div className="flex items-start gap-2.5">
-        <Mail size={16} strokeWidth={1.7} className="mt-0.5 shrink-0 text-brand-dark" aria-hidden="true" />
-        <div>
-          <dt className="text-ink-muted">E-mail</dt>
-          <dd>
-            <a href={emailHref} className="font-medium underline underline-offset-2">
-              {email}
-            </a>
-          </dd>
-        </div>
-      </div>
-      <div className="flex items-start gap-2.5">
-        <MapPin size={16} strokeWidth={1.7} className="mt-0.5 shrink-0 text-brand-dark" aria-hidden="true" />
-        <div>
-          <dt className="text-ink-muted">Adres</dt>
-          <dd>{formatAddress()}</dd>
-        </div>
-      </div>
-      {showHours ? (
+    <div className="grid gap-5">
+      <dl className="grid gap-3.5 text-sm">
         <div className="flex items-start gap-2.5">
-          <Clock3 size={16} strokeWidth={1.7} className="mt-0.5 shrink-0 text-brand-dark" aria-hidden="true" />
-          <div className="min-w-0 flex-1">
-            <dt className="text-ink-muted">Openingstijden</dt>
+          <Phone size={16} strokeWidth={1.7} className="mt-0.5 shrink-0 text-brand-dark" aria-hidden="true" />
+          <div>
+            <dt className="text-ink-muted">Telefoon</dt>
             <dd>
-              <ul className="mt-1 grid gap-1">
-                {business.openingHours.days.map((day) => (
-                  <li key={day.day} className="flex justify-between gap-4">
-                    <span>{day.label}</span>
-                    <span>{formatDayHours(day)}</span>
-                  </li>
-                ))}
-              </ul>
+              <a href={phoneHref} className="font-medium underline underline-offset-2">
+                {phone}
+              </a>
             </dd>
           </div>
         </div>
+        <div className="flex items-start gap-2.5">
+          <Mail size={16} strokeWidth={1.7} className="mt-0.5 shrink-0 text-brand-dark" aria-hidden="true" />
+          <div>
+            <dt className="text-ink-muted">E-mail</dt>
+            <dd>
+              <a href={emailHref} className="font-medium underline underline-offset-2">
+                {email}
+              </a>
+            </dd>
+          </div>
+        </div>
+        <div className="flex items-start gap-2.5">
+          <MapPin size={16} strokeWidth={1.7} className="mt-0.5 shrink-0 text-brand-dark" aria-hidden="true" />
+          <div>
+            <dt className="text-ink-muted">Adres</dt>
+            <dd>
+              <p>{formatAddress()}</p>
+              {business.googleBusinessProfile ? (
+                <p className="mt-1">
+                  <a
+                    href={business.googleBusinessProfile}
+                    className="font-medium underline underline-offset-2"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Locatie op Google
+                  </a>
+                </p>
+              ) : null}
+            </dd>
+          </div>
+        </div>
+        <div>
+          <dt className="text-ink-muted">KVK</dt>
+          <dd className="font-medium">{business.kvk}</dd>
+        </div>
+      </dl>
+      {showHours ? (
+        <div>
+          <p className="text-sm text-ink-muted">Openingstijden</p>
+          <OpeningHours className="mt-1" />
+        </div>
       ) : null}
-    </dl>
+    </div>
   )
 }

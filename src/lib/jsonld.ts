@@ -71,6 +71,22 @@ export function localBusinessJsonLd(): Record<string, unknown> {
   }
 }
 
+export function contactPageJsonLd(): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    name: 'Contact met Green Installatie Noord',
+    url: absoluteUrl('/contact'),
+    inLanguage: 'nl-NL',
+    about: {
+      '@id': businessEntityId(),
+    },
+    mainEntity: {
+      '@id': businessEntityId(),
+    },
+  }
+}
+
 export function websiteJsonLd(): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
