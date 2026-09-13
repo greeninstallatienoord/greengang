@@ -77,7 +77,8 @@ const key = await crypto.subtle.importKey(
   ['deriveBits'],
 )
 const bits = await crypto.subtle.deriveBits(
-  { name: 'PBKDF2', hash: 'SHA-256', salt, iterations: 210_000 },
+  // Must match worker/src/auth.ts (Workers Web Crypto max is 100_000).
+  { name: 'PBKDF2', hash: 'SHA-256', salt, iterations: 100_000 },
   key,
   256,
 )

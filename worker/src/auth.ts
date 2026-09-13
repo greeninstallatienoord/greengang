@@ -15,7 +15,8 @@ export async function hashPassword(password: string, saltHex: string): Promise<s
     ['deriveBits'],
   )
   const bits = await crypto.subtle.deriveBits(
-    { name: 'PBKDF2', hash: 'SHA-256', salt, iterations: 210_000 },
+    // Cloudflare Workers Web Crypto rejects PBKDF2 above 100_000 iterations.
+    { name: 'PBKDF2', hash: 'SHA-256', salt, iterations: 100_000 },
     key,
     256,
   )

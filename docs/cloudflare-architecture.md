@@ -98,7 +98,7 @@ See `docs/environment-variables.md`.
 - Public site and sitemap must never link to `/blackberry97`
 - Hidden URL is not authentication
 - Admin sessions: HttpOnly cookie, HMAC with `ADMIN_SESSION_SECRET`, Secure in production, SameSite=Lax, 12 hour expiry
-- Passwords: PBKDF2-SHA-256, 210000 iterations, random salt
+- Passwords: PBKDF2-SHA-256, 100000 iterations (Workers Web Crypto max), random salt
 - SQL via bound parameters only
 - Email HTML escaped
 - Request body cap: 80 KB
