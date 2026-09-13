@@ -159,29 +159,8 @@ export const trustContent = {
       approved: false,
     },
   ] as TrustCertification[],
-  reviews: [
-    {
-      id: 'solvari-2025-03-26',
-      source: 'Solvari',
-      sourceUrl:
-        'https://www.solvari.nl/airco/groningen/pekela/green-installatie-noord-oude-pekela',
-      rating: 5,
-      scale: 5,
-      quote: '',
-      author: '',
-      date: '2025-03-26',
-      republicationAllowed: false,
-      approved: false,
-    },
-  ] as TrustReview[],
-  reviewPlatforms: [
-    {
-      id: 'solvari',
-      name: 'Solvari',
-      url: 'https://www.solvari.nl/airco/groningen/pekela/green-installatie-noord-oude-pekela',
-      approvedLink: true,
-    },
-  ] as TrustReviewPlatform[],
+  reviews: [] as TrustReview[],
+  reviewPlatforms: [] as TrustReviewPlatform[],
   brands: [] as TrustBrand[],
   projects: [] as TrustProject[],
 }

@@ -11,7 +11,6 @@ Related NAP facts: `docs/business-verification.md`.
 | Claim | Evidence | Approved | How it is shown |
 | --- | --- | --- | --- |
 | Vestiging: Burgemeester van Weringstraat 23, 9665 GN Oude Pekela | Supplied company address | YES | Fact card in Vakmanschap & kwaliteit |
-| Solvari-profiel bestaat | Live page `https://www.solvari.nl/airco/groningen/pekela/green-installatie-noord-oude-pekela` | YES (link only) | “Bekijk ervaringen op Solvari” — no stars, no quote |
 | Facebook-profiel | Official page URL | YES | Footer / contact `sameAs`, not a keurmerk |
 | Diensten cv-ketel, airco, warmtepomp, onderhoud | Known service offer | YES | Service pages, not as certificates |
 | Werkwijze (advies, nette installatie, service) | Process copy | YES as method only | Homepage TrustStrip — not a certificate or score |
@@ -24,16 +23,15 @@ Related NAP facts: `docs/business-verification.md`.
 | STEK | Unverified | Mentioned on older web copy only | Registration / certificate |
 | BRL 100 | Unverified | Not confirmed | Recognition document |
 | Kiwa | Unverified | Mentioned on older web copy only | Which scheme, number, expiry |
-| “Gecertificeerde installateurs” | Unverified | Solvari profile text — not used | Named scheme and persons |
-| A-merken | Unverified | Solvari / older copy | Brand list the company actually installs, plus logo licence |
+| “Gecertificeerde installateurs” | Unverified | Older marketing copy — not used | Named scheme and persons |
+| A-merken | Unverified | Older copy | Brand list the company actually installs, plus logo licence |
 | 6+ jaar ervaring | Unverified | Third-party sites / marketing | Start date or KvK history, then a number |
 | Aantal projecten | Not supplied | — | Count with a definition |
 | 2 jaar garantie op werk | Unverified | Older web copy | Written warranty terms |
 | 24-uurs installatie | Unverified | Older web copy | What the promise means in practice |
 | Techniek Nederland-lidmaatschap | Not confirmed | Official site cited as a source, not as membership | Membership confirmation |
 | OOP-lidmaatschap | Not requested | Local org exists | Membership / ledenlijst |
-| Solvari-partner als keurmerk | Not treated as a certificate | Marketplace listing ≠ quality mark | Do not badge |
-| Solvari-review (1×, 5/5, 26 maart 2025) | Profile seen; republication not cleared | Platform/reviewer reuse terms unknown; quote not copied | Written permission, then set `republicationAllowed` and `approved` |
+| Solvari (profiel / reviews / partnerbadge) | Removed from website | Owner request: no Solvari links or ervaringen | Do not re-add unless explicitly requested |
 | Google-beoordeling / “5.0” / “100+ reviews” | No verified GBP URL | Would be invented | Stable Maps URL in `business.googleBusinessProfile`; still no fake totals |
 | KvK 86277391 | Third-party scrapers only | Not supplied as a website claim | Extract / written confirmation |
 
