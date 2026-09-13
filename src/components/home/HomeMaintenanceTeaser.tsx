@@ -1,5 +1,4 @@
 import { ArrowRight, Check } from 'lucide-react'
-import { Link } from 'react-router-dom'
 import { business } from '../../data/business'
 import {
   formatEuroFromCents,
@@ -26,9 +25,9 @@ export function HomeMaintenanceTeaser() {
             <div className="lg:col-span-6">
               <MediaImage
                 asset={pageImages.serviceHero}
-                className="rounded-none"
+                className="max-h-[17.5rem] overflow-hidden rounded-none sm:max-h-[22rem] lg:max-h-none"
                 imgClassName="opacity-95"
-                ratio="4 / 5"
+                ratio="16 / 10"
                 sizes="(min-width: 1024px) 48vw, 100vw"
               />
             </div>
@@ -87,12 +86,13 @@ export function HomeMaintenanceTeaser() {
                 {business.emergencyService.available ? (
                   <p className="mt-3 text-sm text-white/65">
                     Storing?{' '}
-                    <Link
-                      to={maintenanceConfig.packagesHref}
-                      className="font-semibold text-white/85 underline-offset-2 hover:underline"
+                    <a
+                      href={business.emergencyService.phoneHref}
+                      className="font-semibold text-white/90 underline-offset-2 hover:underline"
+                      aria-label={`${business.emergencyService.label}: bel ${business.emergencyService.phone}`}
                     >
-                      Meer over service & onderhoud
-                    </Link>
+                      Bel de 24/7 storingsdienst — {business.emergencyService.phone}
+                    </a>
                   </p>
                 ) : null}
               </div>

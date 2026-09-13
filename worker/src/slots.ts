@@ -154,9 +154,24 @@ export async function listSlots(env: WorkerEnv, date: string) {
   return { date: day, slots }
 }
 
-export async function assertSlotFree(env: WorkerEnv, date: string, time: string): Promise<void> {
+export async function assertSlotFree(
+  env: WorkerEnv,
+  date: string,
+  time: string,
+  excludeAppointmentId?: string,
+): Promise<void> {
   const available = await listSlots(env, date)
-  if (!available.slots.includes(time)) {
-    throw new HttpError(409, SLOT_TAKEN)
+  if (available.slots.includes(time)) return
+
+  if (excludeAppointmentId) {
+    const current = await env.DB.prepare(
+      `SELECT appointment_date AS date, appointment_time AS time
+       FROM appointments WHERE id = ?`,
+    )
+      .bind(excludeAppointmentId)
+      .first<{ date: string; time: string }>()
+    if (current?.date === date && current.time === time) return
   }
+
+  throw new HttpError(409, SLOT_TAKEN)
 }

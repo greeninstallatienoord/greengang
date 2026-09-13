@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { api } from '../../lib/api'
 import { EmptyState } from '../components/EmptyState'
 import { FilterTabs } from '../components/FilterTabs'
@@ -8,12 +8,22 @@ import { PageHeader } from '../components/PageHeader'
 import { SearchField } from '../components/SearchField'
 import { Skeleton } from '../components/Skeleton'
 import { StatusBadge } from '../components/StatusBadge'
-import { formatDateTime, matchesQuery, quoteStatusLabel, serviceLabel } from '../labels'
+import { formatDateTime, formatDayMonth, matchesQuery, quoteStatusLabel, serviceLabel } from '../labels'
 import { adminUrl } from '../adminPath'
 
-const filters = ['all', 'new', 'in_progress', 'contacted', 'quoted', 'completed', 'cancelled', 'archived'] as const
+const filters = [
+  'all',
+  'new',
+  'in_progress',
+  'contacted',
+  'quoted',
+  'completed',
+  'cancelled',
+  'archived',
+] as const
 
 export function QuotesPage() {
+  const navigate = useNavigate()
   const [items, setItems] = useState<Array<Record<string, string>>>([])
   const [filter, setFilter] = useState<(typeof filters)[number]>('all')
   const [query, setQuery] = useState('')
@@ -33,10 +43,19 @@ export function QuotesPage() {
       items.filter(
         (item) =>
           (filter === 'all' || item.status === filter) &&
-          matchesQuery(query, item.name, item.email, item.phone, serviceLabel[item.service ?? ''], item.service),
+          matchesQuery(
+            query,
+            item.name,
+            item.email,
+            item.phone,
+            serviceLabel[item.service ?? ''],
+            item.service,
+          ),
       ),
     [items, filter, query],
   )
+
+  const filtered = filter !== 'all' || query.trim().length > 0
 
   return (
     <div>
@@ -44,22 +63,69 @@ export function QuotesPage() {
         title="Offertes"
         description="Aanvragen van de website. Bedragen worden alleen getoond als ze in de database staan."
       />
-      <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center">
-        <FilterTabs
-          value={filter}
-          onChange={setFilter}
-          options={filters.map((value) => ({
-            value,
-            label: value === 'all' ? 'Alles' : quoteStatusLabel[value] ?? value,
-            count: value === 'all' ? items.length : items.filter((item) => item.status === value).length,
-          }))}
-        />
+      <div className="mb-3 hidden gap-2 overflow-x-auto pb-1 lg:flex">
+        {filters
+          .filter((value) => value !== 'all')
+          .map((value) => {
+            const count = items.filter((item) => item.status === value).length
+            const active = filter === value
+            return (
+              <button
+                key={value}
+                type="button"
+                className={`inline-flex min-h-10 shrink-0 items-center gap-2 border px-3 text-sm font-semibold ${
+                  active
+                    ? 'border-[var(--admin-accent)] bg-[var(--admin-accent-soft)] text-[#14692a]'
+                    : 'border-[var(--admin-line)]'
+                }`}
+                onClick={() => setFilter(value)}
+              >
+                <span>{quoteStatusLabel[value]}</span>
+                <span className="text-[var(--admin-muted)]">{count}</span>
+              </button>
+            )
+          })}
+      </div>
+      <div className="mb-3 flex flex-col gap-2.5 lg:mb-4 lg:flex-row lg:items-center">
+        <div className="min-w-0 flex-1">
+          <FilterTabs
+            value={filter}
+            onChange={setFilter}
+            label="Offertefilter"
+            options={filters.map((value) => ({
+              value,
+              label: value === 'all' ? 'Alles' : quoteStatusLabel[value] ?? value,
+              count:
+                value === 'all'
+                  ? items.length
+                  : items.filter((item) => item.status === value).length,
+            }))}
+          />
+        </div>
         <SearchField
           id="quote-search"
           value={query}
           onChange={setQuery}
           placeholder="Zoek op naam, e-mail of dienst"
         />
+      </div>
+      <div className="mb-3 flex items-center justify-between gap-3 text-sm text-[var(--admin-muted)]">
+        <p>
+          {visible.length} resultaat{visible.length === 1 ? '' : 'en'}
+          {filtered ? ' (gefilterd)' : ''}
+        </p>
+        {filtered ? (
+          <button
+            type="button"
+            className="font-semibold underline-offset-2 hover:underline"
+            onClick={() => {
+              setFilter('all')
+              setQuery('')
+            }}
+          >
+            Filters wissen
+          </button>
+        ) : null}
       </div>
       {error ? <Notice tone="error">{error}</Notice> : null}
       {loading ? <Skeleton /> : null}
@@ -74,57 +140,78 @@ export function QuotesPage() {
         />
       ) : null}
 
-      <ul className="grid gap-2 lg:hidden">
+      <ul className="grid gap-2.5 lg:hidden">
         {visible.map((item) => (
-          <li key={item.id}>
-            <Link
-              to={adminUrl(`quotes/${item.id}`)}
-              className="admin-card block p-4"
-            >
+          <li key={item.id} className="admin-card overflow-hidden">
+            <Link to={adminUrl(`quotes/${item.id}`)} className="block p-3.5 sm:p-4">
               <div className="flex items-start justify-between gap-3">
-                <p className="font-semibold">{item.name}</p>
+                <div className="min-w-0">
+                  <p className="font-semibold">{item.name}</p>
+                  <p className="mt-1 text-sm text-[var(--admin-muted)]">
+                    {serviceLabel[item.service ?? ''] ?? item.service}
+                  </p>
+                  <p className="mt-1 text-sm text-[var(--admin-muted)]">
+                    {formatDayMonth(item.created_at)}
+                    {item.phone ? ` · ${item.phone}` : ''}
+                  </p>
+                </div>
                 <StatusBadge value={item.status ?? ''} label={quoteStatusLabel[item.status ?? '']} />
               </div>
-              <p className="mt-2 text-sm text-[var(--admin-muted)]">
-                {serviceLabel[item.service ?? ''] ?? item.service}
-              </p>
-              <p className="mt-1 text-sm text-[var(--admin-muted)]">
-                {item.phone || '-'}
-                {item.email ? ` · ${item.email}` : ''}
-              </p>
-              <p className="mt-1 text-xs text-[var(--admin-muted)]">{formatDateTime(item.created_at)}</p>
             </Link>
+            <div className="flex flex-wrap gap-2 border-t border-[var(--admin-line)] px-3.5 py-2.5">
+              <Link
+                to={adminUrl(`quotes/${item.id}`)}
+                className="inline-flex min-h-10 items-center bg-[var(--admin-sidebar)] px-3 text-sm font-semibold text-white"
+              >
+                Behandel offerte
+              </Link>
+              {item.phone ? (
+                <a
+                  href={`tel:${item.phone}`}
+                  className="inline-flex min-h-10 items-center px-2 text-sm font-semibold"
+                >
+                  Bellen
+                </a>
+              ) : null}
+            </div>
           </li>
         ))}
       </ul>
 
       {visible.length > 0 ? (
-        <div className="hidden border border-[var(--admin-line)] bg-[var(--admin-panel)] lg:block">
-          <table className="w-full text-left text-sm">
+        <div className="admin-table-wrap hidden lg:block">
+          <table>
             <thead>
-              <tr className="border-b border-[var(--admin-line)] text-[11px] font-semibold tracking-[0.06em] text-[var(--admin-muted)] uppercase">
-                <th className="px-4 py-3 font-semibold">Klant</th>
-                <th className="px-4 py-3 font-semibold">Dienst</th>
-                <th className="px-4 py-3 font-semibold">Telefoon</th>
-                <th className="px-4 py-3 font-semibold">E-mail</th>
-                <th className="px-4 py-3 font-semibold">Ontvangen</th>
-                <th className="px-4 py-3 font-semibold">Status</th>
+              <tr>
+                <th>Klant</th>
+                <th>Dienst</th>
+                <th>Telefoon</th>
+                <th>E-mail</th>
+                <th>Ontvangen</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>
               {visible.map((item) => (
-                <tr key={item.id} className="border-b border-[var(--admin-line)] last:border-0 hover:bg-[var(--admin-hover)]">
-                  <td className="px-4 py-3">
-                    <Link className="font-medium underline decoration-[var(--admin-line)] underline-offset-2" to={adminUrl(`quotes/${item.id}`)}>
-                      {item.name}
-                    </Link>
-                  </td>
-                  <td className="px-4 py-3">{serviceLabel[item.service ?? ''] ?? item.service}</td>
-                  <td className="px-4 py-3">{item.phone || '-'}</td>
-                  <td className="px-4 py-3 break-all">{item.email || '-'}</td>
-                  <td className="px-4 py-3">{formatDateTime(item.created_at)}</td>
-                  <td className="px-4 py-3">
-                    <StatusBadge value={item.status ?? ''} label={quoteStatusLabel[item.status ?? '']} />
+                <tr
+                  key={item.id}
+                  onClick={() => navigate(adminUrl(`quotes/${item.id}`))}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') navigate(adminUrl(`quotes/${item.id}`))
+                  }}
+                  tabIndex={0}
+                  role="link"
+                >
+                  <td className="font-medium">{item.name}</td>
+                  <td>{serviceLabel[item.service ?? ''] ?? item.service}</td>
+                  <td>{item.phone || '-'}</td>
+                  <td className="break-all">{item.email || '-'}</td>
+                  <td>{formatDateTime(item.created_at)}</td>
+                  <td>
+                    <StatusBadge
+                      value={item.status ?? ''}
+                      label={quoteStatusLabel[item.status ?? '']}
+                    />
                   </td>
                 </tr>
               ))}

@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { AlertTriangle, Clock3, Phone } from 'lucide-react'
+import { Clock3, Headphones, Phone } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import { business } from '../../data/business'
 import { cn } from '../../lib/cn'
@@ -118,15 +118,19 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
                   href={business.emergencyService.phoneHref}
                   className="inline-flex min-h-11 items-center gap-2 font-semibold text-brand-dark"
                   tabIndex={open ? undefined : -1}
+                  aria-label={`${business.emergencyService.label}: bel ${business.emergencyService.phone}`}
                 >
-                  <AlertTriangle size={15} strokeWidth={1.75} aria-hidden="true" />
+                  <Headphones size={15} strokeWidth={1.75} aria-hidden="true" />
                   {business.emergencyService.label}
                 </a>
               </li>
             ) : null}
             <li className="inline-flex min-h-10 items-center gap-2">
               <Clock3 size={15} strokeWidth={1.75} aria-hidden="true" />
-              {site.contact.openingHours}
+              <span>
+                <span className="text-ink-muted">Regulier </span>
+                {site.contact.openingHours.replace(/-/g, '–')}
+              </span>
             </li>
           </ul>
         </div>

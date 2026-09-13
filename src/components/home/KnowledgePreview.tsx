@@ -19,7 +19,7 @@ export function KnowledgePreview() {
         <Reveal>
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div className="max-w-xl">
-              <p className="eyebrow">Kennisbank</p>
+              <p className="eyebrow">Advies & kennis</p>
               <Heading as="h2" className="mt-2.5 sm:mt-3">
                 Handig om te weten
               </Heading>

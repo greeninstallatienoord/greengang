@@ -59,7 +59,24 @@ Customer HTML/text includes name, service, date, time, and NAP contact details. 
 
 ## HTML
 
-`textToHtml` escapes `& < > "`. Do not concatenate raw user input into HTML.
+`renderBrandedEmail` builds a single table-based shell (logo, white content, green accent, NAP footer, optional CTA). Text is escaped; no external JS.
+
+Template variables use `{{customer.firstName}}` style tokens. Unknown or empty tokens become an empty string so customers never see placeholders.
+
+Admin compose flow: compose → controleren → versturen. Preview supports desktop/mobile widths. Local draft is sessionStorage only and cleared after a successful send.
+
+Structured template fields (heading, intro, closing, CTA) are optional; `body_text` remains the send-time plain-text body.
+
+## Variables (safe set)
+
+| Token | Meaning |
+| --- | --- |
+| `{{customer.firstName}}` | Voornaam |
+| `{{customer.fullName}}` / `{{customer.name}}` | Volledige naam |
+| `{{appointment.date}}` / `{{appointment.time}}` | Afspraak |
+| `{{service.name}}` | Dienst |
+| `{{quote.reference}}` | Offertereferentie |
+| `{{company.phone}}` / `{{company.email}}` | Bedrijfsgegevens |
 
 ## Local vs production
 

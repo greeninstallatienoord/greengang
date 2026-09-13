@@ -164,29 +164,29 @@ export const workPhotos = {
     '32% 58%',
     '28% 62%',
   ),
-  cvOpstelling: photo(
-    cvOpstelling,
-    1350,
-    1800,
-    'Hybride opstelling met Nefit-ketel, Remeha Elga Ace en leidingwerk',
-    '55% 42%',
-    '58% 40%',
-  ),
   cvIntergas: photo(
     cvIntergas,
     1350,
     1800,
-    'Hybride binnenopstelling met Intergas-ketel en warmtepompmodule',
-    '36% 40%',
-    '30% 38%',
+    'Intergas-ketel met nevenunit en leidingwerk in een technische ruimte',
+    '38% 38%',
+    '32% 36%',
   ),
   warmtepompIntergas: photo(
     warmtepompIntergas,
     1350,
     1800,
     'Intergas warmtepomp-buitenunit bij de woning',
-    '34% 68%',
-    '28% 74%',
+    '42% 72%',
+    '38% 76%',
+  ),
+  cvOpstelling: photo(
+    cvOpstelling,
+    1350,
+    1800,
+    'Hybride opstelling met Nefit-ketel, Remeha Elga Ace en leidingwerk',
+    '52% 40%',
+    '50% 38%',
   ),
 } as const satisfies Record<string, MediaAsset>
 
@@ -230,6 +230,17 @@ export function blogImage(category: BlogCategorySlug): MediaAsset {
   return blogImages[category]
 }
 
+/** Prefer the article’s own photo; fall back to the category default. */
+export function postImage(post: {
+  category: BlogCategorySlug
+  imageKey?: keyof typeof workPhotos
+}): MediaAsset {
+  if (post.imageKey && post.imageKey in workPhotos) {
+    return workPhotos[post.imageKey]
+  }
+  return blogImage(post.category)
+}
+
 export type WorkShot = {
   id: string
   asset: MediaAsset
@@ -250,7 +261,7 @@ export const homeProjectShots: WorkShot[] = [
   {
     id: 'gevel-mitsubishi',
     asset: pageImages.homeProjectFeatured,
-    title: 'Mitsubishi buitenunit',
+    title: 'Mitsubishi airco-buitenunit',
     caption: 'Mitsubishi Electric buitenunit met net leidingwerk langs de gevel.',
     category: 'airco',
     kind: 'buitenunit',
@@ -258,18 +269,18 @@ export const homeProjectShots: WorkShot[] = [
     featured: true,
   },
   {
-    id: 'zolder-binnenunit',
-    asset: pageImages.homeProjectSecondary,
-    title: 'Binnenunit op zolder',
-    caption: 'Mitsubishi Heavy Industries wandmodel met afgewerkte leidinggoot.',
-    category: 'airco',
+    id: 'cv-intergas',
+    asset: pageImages.cvHero,
+    title: 'Intergas cv-ketel',
+    caption: 'Intergas-ketel met nevenunit en leidingwerk in een technische ruimte.',
+    category: 'cv-ketel',
     kind: 'binnenunit',
-    href: '/airco',
+    href: '/cv-ketel',
   },
   {
     id: 'warmtepomp-intergas',
     asset: pageImages.homeProjectWp,
-    title: 'Intergas buitenunit',
+    title: 'Intergas warmtepomp-buitenunit',
     caption: 'Intergas warmtepomp-buitenunit op dempers bij de woning.',
     category: 'warmtepomp',
     kind: 'buitenunit',
@@ -284,32 +295,20 @@ export type SchemeMark = {
   width: number
   height: number
   alt: string
+  /** Extra class to balance apparent logo size inside equal containers. */
+  fitClass?: string
 }
 
+/** Homepage / trust strip order: Kiwa · STEK · BRL 100 · CO-vrij */
 export const schemeMarks: SchemeMark[] = [
-  {
-    id: 'brl-100',
-    name: 'BRL 100',
-    src: brl100Logo,
-    width: 96,
-    height: 93,
-    alt: 'Logo van BRL 100',
-  },
-  {
-    id: 'co-vrij',
-    name: 'CO-vrij',
-    src: covrijLogo,
-    width: 64,
-    height: 80,
-    alt: 'Logo van CO-vrij',
-  },
   {
     id: 'kiwa',
     name: 'Kiwa',
     src: kiwaLogo,
-    width: 96,
-    height: 32,
-    alt: 'Logo van Kiwa',
+    width: 64,
+    height: 23,
+    alt: 'Kiwa',
+    fitClass: 'max-h-7 w-auto max-w-[7.25rem] sm:max-h-8 sm:max-w-[8rem]',
   },
   {
     id: 'stek',
@@ -317,7 +316,26 @@ export const schemeMarks: SchemeMark[] = [
     src: stekLogo,
     width: 96,
     height: 46,
-    alt: 'Logo van STEK',
+    alt: 'STEK',
+    fitClass: 'max-h-9 w-auto max-w-[7.5rem] sm:max-h-10 sm:max-w-[8.25rem]',
+  },
+  {
+    id: 'brl-100',
+    name: 'BRL 100',
+    src: brl100Logo,
+    width: 96,
+    height: 93,
+    alt: 'BRL 100 / SGS',
+    fitClass: 'max-h-11 w-auto max-w-[4.75rem] sm:max-h-12 sm:max-w-[5.25rem]',
+  },
+  {
+    id: 'co-vrij',
+    name: 'CO-vrij',
+    src: covrijLogo,
+    width: 64,
+    height: 80,
+    alt: 'CO-vrij',
+    fitClass: 'max-h-11 w-auto max-w-[3.5rem] sm:max-h-12 sm:max-w-[3.75rem]',
   },
 ]
 

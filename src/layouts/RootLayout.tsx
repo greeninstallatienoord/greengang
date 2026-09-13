@@ -44,7 +44,6 @@ export function RootLayout() {
         <CookieBanner
           onAccept={consent.acceptAll}
           onReject={consent.rejectOptional}
-          onPreferences={consent.openPanel}
         />
       ) : null}
       {consent.panelOpen ? (
@@ -52,6 +51,9 @@ export function RootLayout() {
           value={consent.preferences}
           onClose={consent.closePanel}
           onSave={consent.save}
+          onAcceptAll={consent.acceptAllFromPanel}
+          onNecessaryOnly={consent.necessaryOnlyFromPanel}
+          onWithdraw={consent.withdraw}
         />
       ) : null}
     </div>

@@ -13,17 +13,21 @@ const sizeClass: Record<HeadingLevel, string> = {
 
 type HeadingProps = {
   as?: HeadingLevel
+  id?: string
   className?: string
   children: ReactNode
 }
 
-export function Heading({ as = 'h2', className, children }: HeadingProps) {
+export function Heading({ as = 'h2', id, className, children }: HeadingProps) {
   const Tag = as
   const hasTextColor = Boolean(
     className?.split(/\s+/).some((item) => /^text-(?!xs|sm|base|lg|xl|\[)/.test(item)),
   )
   return (
-    <Tag className={cn(!hasTextColor && 'text-ink', 'text-pretty', sizeClass[as], className)}>
+    <Tag
+      id={id}
+      className={cn(!hasTextColor && 'text-ink', 'text-pretty', sizeClass[as], className)}
+    >
       {children}
     </Tag>
   )

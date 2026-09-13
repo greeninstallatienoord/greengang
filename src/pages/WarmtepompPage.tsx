@@ -63,7 +63,7 @@ export function WarmtepompPage() {
       <Section>
         <Container className="max-w-3xl">
           <p className="eyebrow">Wat doet een warmtepomp?</p>
-          <Heading as="h2" className="mt-2.5 sm:mt-3">
+          <Heading as="h2" className="mt-3">
             Warmte uit de omgeving, in plaats van alleen gas
           </Heading>
           {service.explanation.map((paragraph) => (
@@ -77,7 +77,7 @@ export function WarmtepompPage() {
       <HeatPumpSystemCompare />
       <HeatPumpSuitability />
 
-      <div id="besparing">
+      <div id="besparing" className="scroll-mt-[calc(var(--header-offset)+0.75rem)]">
         <HeatPumpCalculator />
       </div>
 
@@ -88,7 +88,7 @@ export function WarmtepompPage() {
         <Container className="grid gap-10 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <p className="eyebrow">Aanpak</p>
-            <Heading as="h2" className="mt-2.5 sm:mt-3">
+            <Heading as="h2" className="mt-3">
               Hoe Green Installatie Noord te werk gaat
             </Heading>
             <p className="lead mt-3 sm:mt-4">
@@ -96,11 +96,11 @@ export function WarmtepompPage() {
               het persoonlijke voorstel.
             </p>
           </div>
-          <ol className="grid gap-5 lg:col-span-7">
+          <ol className="grid gap-6 lg:col-span-7">
             {service.process.map((item, index) => (
               <li
                 key={item.title}
-                className="grid grid-cols-[2.75rem_1fr] gap-4 border-b border-line pb-5"
+                className="grid grid-cols-[2.75rem_1fr] gap-4 border-b border-line pb-6"
               >
                 <p className="font-display text-2xl text-brand-dark">
                   {String(index + 1).padStart(2, '0')}
@@ -149,18 +149,8 @@ export function WarmtepompPage() {
       <EmergencyServiceBanner />
 
       <CrossLinks
-        title="Volgende stap"
+        title="Meer informatie"
         links={[
-          {
-            href: quoteTo,
-            label: 'Offerte aanvragen',
-            note: 'Voorstel voor warmtepomp of hybride.',
-          },
-          {
-            href: appointmentTo,
-            label: 'Afspraak maken',
-            note: 'Woning laten beoordelen.',
-          },
           {
             href: '/service-onderhoud',
             label: 'Service & onderhoud',
@@ -169,7 +159,12 @@ export function WarmtepompPage() {
           {
             href: '/blog/categorie/warmtepomp',
             label: 'Artikelen over warmtepompen',
-            note: 'Gidsen en checklists in de kennisbank.',
+            note: 'Gidsen en checklists bij Advies & kennis.',
+          },
+          {
+            href: '/werk',
+            label: 'Werk uit de praktijk',
+            note: 'Foto’s van vergelijkbare installaties.',
           },
         ]}
       />

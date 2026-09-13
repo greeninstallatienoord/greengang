@@ -1,6 +1,9 @@
 /**
  * Homepage hero photographic slideshow configuration.
  * Derivatives live in /public/images/hero/ (built from ./hero-afbeeldingen/).
+ *
+ * Only include photographs that remain readable when cropped as a hero.
+ * Bedroom/clutter shots belong on /werk, not in the rotator.
  */
 
 export type HeroSlideVariant = {
@@ -17,7 +20,11 @@ export type HeroSlide = {
   label: string
   mobile: HeroSlideVariant
   desktop: HeroSlideVariant | null
+  /** object-position for phones (portrait crop). */
   mobilePosition: string
+  /** object-position for tablets / laptops (~768–1279px). */
+  laptopPosition: string
+  /** object-position for wide desktop (≥1280px). */
   desktopPosition: string
   /** Extra overlay darkness 0–1 (subtle). */
   overlayStrength: number
@@ -43,7 +50,7 @@ function variant(
 
 /**
  * Deliberate order: strong outdoor LCP first, then alternate indoor/outdoor.
- * Mobile uses all 7. Desktop only when a wide crop preserves the installation.
+ * Mobile uses all listed slides. Desktop only when a wide crop preserves the unit.
  */
 export const heroSlides: HeroSlide[] = [
   {
@@ -51,8 +58,10 @@ export const heroSlides: HeroSlide[] = [
     label: 'Buitenunit aan bakstenen gevel',
     mobile: variant('hero-airco-exterior-gevel-01', 'mobile', 900, 1200),
     desktop: variant('hero-airco-exterior-gevel-01', 'desktop', 1273, 716),
-    mobilePosition: '58% 62%',
-    desktopPosition: '68% 70%',
+    // Unit + conduit sit low-right; keep ground unit in frame under text.
+    mobilePosition: '78% 82%',
+    laptopPosition: '72% 78%',
+    desktopPosition: '70% 80%',
     overlayStrength: 0.08,
   },
   {
@@ -60,8 +69,10 @@ export const heroSlides: HeroSlide[] = [
     label: 'Binnenunit op zolder',
     mobile: variant('hero-airco-indoor-attic-01', 'mobile', 900, 1200),
     desktop: variant('hero-airco-indoor-attic-01', 'desktop', 1273, 716),
+    // Indoor unit sits high; bias upward so the head unit stays readable.
     mobilePosition: '48% 28%',
-    desktopPosition: '42% 40%',
+    laptopPosition: '44% 34%',
+    desktopPosition: '40% 38%',
     overlayStrength: 0.12,
   },
   {
@@ -69,26 +80,21 @@ export const heroSlides: HeroSlide[] = [
     label: 'Dubbele buitenunits aan gevel',
     mobile: variant('hero-airco-exterior-duo-01', 'mobile', 900, 1200),
     desktop: variant('hero-airco-exterior-duo-01', 'desktop', 1273, 716),
-    mobilePosition: '52% 72%',
-    desktopPosition: '55% 78%',
+    // Dual outdoor units at ground; keep both visible under hero overlay.
+    mobilePosition: '48% 84%',
+    laptopPosition: '50% 80%',
+    desktopPosition: '52% 82%',
     overlayStrength: 0.06,
-  },
-  {
-    id: 'hero-airco-indoor-kaisai-01',
-    label: 'Kaisai binnenunit in slaapkamer',
-    mobile: variant('hero-airco-indoor-kaisai-01', 'mobile', 900, 1200),
-    desktop: null,
-    mobilePosition: '52% 40%',
-    desktopPosition: '50% 50%',
-    overlayStrength: 0.1,
   },
   {
     id: 'hero-airco-exterior-nok-01',
     label: 'Buitenunit bij gevelnok',
     mobile: variant('hero-airco-exterior-nok-01', 'mobile', 900, 1200),
     desktop: variant('hero-airco-exterior-nok-01', 'desktop', 1273, 716),
-    mobilePosition: '38% 55%',
-    desktopPosition: '32% 72%',
+    // Unit sits mid-facade; avoid cropping to roof/sky on phones.
+    mobilePosition: '38% 42%',
+    laptopPosition: '34% 48%',
+    desktopPosition: '32% 52%',
     overlayStrength: 0.05,
   },
   {
@@ -96,26 +102,20 @@ export const heroSlides: HeroSlide[] = [
     label: 'Remeha hybride binnenopstelling',
     mobile: variant('hero-warmtepomp-indoor-remeha-01', 'mobile', 900, 1200),
     desktop: null,
-    mobilePosition: '55% 38%',
-    desktopPosition: '50% 50%',
+    mobilePosition: '50% 34%',
+    laptopPosition: '48% 38%',
+    desktopPosition: '46% 40%',
     overlayStrength: 0.14,
   },
-  {
-    id: 'hero-airco-indoor-praktijk-01',
-    label: 'Binnenunit in praktijkruimte',
-    mobile: variant('hero-airco-indoor-praktijk-01', 'mobile', 900, 1200),
-    desktop: null,
-    mobilePosition: '42% 26%',
-    desktopPosition: '50% 50%',
-    overlayStrength: 0.1,
-  },
+  // hero-airco-indoor-praktijk-01 stays in /public/images/hero but is omitted:
+  // desk clutter reads poorly behind hero copy at common crops.
 ]
 
 export const heroSlideshowTiming = {
   /** Time each slide stays fully visible before crossfade starts. */
-  displayMs: 7000,
+  displayMs: 8000,
   /** Crossfade duration (matches CSS transition). */
-  transitionMs: 1500,
+  transitionMs: 1600,
 } as const
 
 export const heroSlideshowCopy = {

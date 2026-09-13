@@ -3,5 +3,9 @@ Allow: /
 
 Disallow: /blackberry97
 Disallow: /blackberry97/
+Disallow: /privacy
+Disallow: /cookies
+Disallow: /algemene-voorwaarden
+Disallow: /disclaimer
 
 Sitemap: https://greeninstallatienoord.nl/sitemap.xml

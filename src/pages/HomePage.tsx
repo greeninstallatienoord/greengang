@@ -1,4 +1,5 @@
 import { ExperienceSection } from '../components/home/ExperienceSection'
+import { HomeCalculatorTeaser } from '../components/home/HomeCalculatorTeaser'
 import { HomeFollow } from '../components/home/HomeFollow'
 import { HomeHero } from '../components/home/HomeHero'
 import { HomeMaintenanceTeaser } from '../components/home/HomeMaintenanceTeaser'
@@ -23,16 +24,17 @@ export function HomePage() {
         jsonLd={[websiteJsonLd(), localBusinessJsonLd()]}
       />
       <HomeHero />
+      <TrustMarks />
       <HomeQuickStart />
-      <ExperienceSection />
       <ServiceList />
+      <ExperienceSection />
+      <HomeCalculatorTeaser />
       <HomeMaintenanceTeaser />
       <WhyHome />
       <ProcessSteps />
       <HomeProjects />
-      <TrustMarks />
-      <LocalSection />
       <KnowledgePreview />
+      <LocalSection />
       <HomeFollow />
       <CTASection image={null} />
     </>

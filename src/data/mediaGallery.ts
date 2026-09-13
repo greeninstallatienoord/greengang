@@ -7,12 +7,21 @@ function shot(
   return { ...base, ...extras }
 }
 
+/**
+ * Portfolio entries for /werk.
+ *
+ * Classification notes (verified against asset + filename + visible branding):
+ * - cv-intergas: Intergas boiler is the clear primary subject → cv-ketel.
+ *   A narrower nevenunit sits beside it; we do not claim a specific hybrid model.
+ * - cv-opstelling: Nefit ketel + Remeha Elga Ace (visible) → warmtepomp (hybride).
+ * - warmtepomp-intergas: Intergas outdoor heat-pump unit (visible logo) → warmtepomp.
+ */
 export const workShots: WorkShot[] = [
   shot(
     {
       id: 'omkasting-dubbel',
       asset: workPhotos.aircoOmkastingDubbel,
-      title: 'Dubbele omkasting',
+      title: 'Dubbele airco-omkasting',
       caption: 'Twee buitenunits in een omkasting, leidingen langs de gevel.',
       category: 'airco',
       href: '/airco',
@@ -24,10 +33,10 @@ export const workShots: WorkShot[] = [
     {
       id: 'cv-intergas',
       asset: workPhotos.cvIntergas,
-      title: 'Hybride binnenopstelling',
-      caption: 'Intergas-ketel met warmtepompmodule en leidingwerk.',
-      category: 'warmtepomp',
-      href: '/warmtepomp',
+      title: 'Intergas cv-ketel binnenopstelling',
+      caption: 'Intergas-ketel met nevenunit en leidingwerk in de technische ruimte.',
+      category: 'cv-ketel',
+      href: '/cv-ketel',
     },
     { kind: 'technische-installatie' },
   ),
@@ -35,8 +44,8 @@ export const workShots: WorkShot[] = [
     {
       id: 'warmtepomp',
       asset: workPhotos.warmtepompIntergas,
-      title: 'Intergas warmtepomp',
-      caption: 'Intergas warmtepomp-buitenunit bij de woning.',
+      title: 'Intergas warmtepomp-buitenunit',
+      caption: 'Intergas warmtepomp-buitenunit op dempers bij de woning.',
       category: 'warmtepomp',
       href: '/warmtepomp',
     },
@@ -46,7 +55,7 @@ export const workShots: WorkShot[] = [
     {
       id: 'zolder',
       asset: workPhotos.aircoZolder,
-      title: 'Binnenunit op zolder',
+      title: 'Airco-binnenunit op zolder',
       caption: 'Wandmodel met afgewerkte leidinggoot.',
       category: 'airco',
       href: '/airco',
@@ -57,7 +66,7 @@ export const workShots: WorkShot[] = [
     {
       id: 'omkasting',
       asset: workPhotos.aircoOmkasting,
-      title: 'Afgewerkte omkasting',
+      title: 'Airco-omkasting aan de gevel',
       caption: 'Antraciete omkasting bij een lichte gevel.',
       category: 'airco',
       href: '/airco',
@@ -68,7 +77,7 @@ export const workShots: WorkShot[] = [
     {
       id: 'terras',
       asset: workPhotos.aircoTerras,
-      title: 'Buitenunit op plat dak',
+      title: 'Airco-buitenunit op plat dak',
       caption: 'Buitenunit op een plat dak, naast de gevel.',
       category: 'airco',
       href: '/airco',
@@ -79,7 +88,7 @@ export const workShots: WorkShot[] = [
     {
       id: 'cv-opstelling',
       asset: workPhotos.cvOpstelling,
-      title: 'Hybride technische opstelling',
+      title: 'Remeha Elga Ace hybride binnenopstelling',
       caption: 'Nefit-ketel met Remeha Elga Ace en expansievat.',
       category: 'warmtepomp',
       href: '/warmtepomp',
@@ -90,7 +99,7 @@ export const workShots: WorkShot[] = [
     {
       id: 'kaisai',
       asset: workPhotos.aircoKaisai,
-      title: 'Vloerconsole in de slaapkamer',
+      title: 'Kaisai airco-vloerconsole op zolder',
       caption: 'Vloerconsole in een zolderkamer.',
       category: 'airco',
       href: '/airco',
@@ -101,7 +110,7 @@ export const workShots: WorkShot[] = [
     {
       id: 'binnen',
       asset: workPhotos.aircoBinnen,
-      title: 'Binnenunit in de kamer',
+      title: 'Airco-binnenunit in de kamer',
       caption: 'Compacte binnenunit boven een spiegel.',
       category: 'airco',
       href: '/airco',
@@ -110,9 +119,20 @@ export const workShots: WorkShot[] = [
   ),
   shot(
     {
+      id: 'gevel',
+      asset: workPhotos.aircoGevel,
+      title: 'Mitsubishi airco-buitenunit op dempers',
+      caption: 'Mitsubishi Electric buitenunit op dempers met weggewerkt leidingwerk.',
+      category: 'airco',
+      href: '/airco',
+    },
+    { kind: 'buitenunit' },
+  ),
+  shot(
+    {
       id: 'nok',
       asset: workPhotos.aircoNok,
-      title: 'Buitenunit hoog op de gevel',
+      title: 'Airco-buitenunit hoog op de gevel',
       caption: 'Buitenunit met leiding naar de nok.',
       category: 'airco',
       href: '/airco',
@@ -123,7 +143,7 @@ export const workShots: WorkShot[] = [
     {
       id: 'beugel',
       asset: workPhotos.aircoBeugel,
-      title: 'Buitenunit op beugel',
+      title: 'Airco-buitenunit op gevelbeugel',
       caption: 'Buitenunit aan de gevel op een beugel.',
       category: 'airco',
       href: '/airco',
@@ -134,8 +154,8 @@ export const workShots: WorkShot[] = [
     {
       id: 'platdak',
       asset: workPhotos.aircoPlatdak,
-      title: 'Buitenunit op dempers',
-      caption: 'Buitenunit op trillingsdempers.',
+      title: 'Airco-buitenunit op dempers',
+      caption: 'Buitenunit op trillingsdempers op een plat dak.',
       category: 'airco',
       href: '/airco',
     },
@@ -145,8 +165,19 @@ export const workShots: WorkShot[] = [
     {
       id: 'praktijk',
       asset: workPhotos.aircoPraktijk,
-      title: 'Binnenunit in een praktijkruimte',
+      title: 'Airco-binnenunit in praktijkruimte',
       caption: 'Binnenunit in een zakelijke ruimte.',
+      category: 'airco',
+      href: '/airco',
+    },
+    { kind: 'binnenunit' },
+  ),
+  shot(
+    {
+      id: 'vloer',
+      asset: workPhotos.aircoVloer,
+      title: 'Sinclair airco-vloerconsole',
+      caption: 'Vloermodel airconditioning in de woonruimte.',
       category: 'airco',
       href: '/airco',
     },
@@ -157,3 +188,6 @@ export const workShots: WorkShot[] = [
 export const workFilterIds = ['all', 'cv-ketel', 'airco', 'warmtepomp'] as const
 
 export type WorkFilterId = (typeof workFilterIds)[number]
+
+/** Initial count for a balanced 3-column default grid (4 rows). */
+export const WORK_PAGE_INITIAL_COUNT = 12

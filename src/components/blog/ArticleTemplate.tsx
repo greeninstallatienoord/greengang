@@ -1,11 +1,14 @@
 import { Link } from 'react-router-dom'
-import { blogCategoryLabels, blogPosts } from '../../data/blog'
+import {
+  blogCategoryLabels,
+  blogPosts,
+  estimateReadingMinutes,
+} from '../../data/blog'
 import { getFaqsByIds } from '../../data/faq'
 import { getServicesBySlug } from '../../data/services'
 import { site } from '../../data/site'
 import {
   articleJsonLd,
-  breadcrumbJsonLd,
   faqJsonLd,
   localBusinessJsonLd,
 } from '../../lib/jsonld'
@@ -13,8 +16,8 @@ import { formatNlDate } from '../../lib/dates'
 import type { BlogPost } from '../../types'
 import { ContentLinks } from '../ContentLinks'
 import { Container } from '../Container'
-import { CtaPair } from '../CtaPair'
-import { blogImage } from '../../data/media'
+import { Heading } from '../Heading'
+import { postImage } from '../../data/media'
 import { MediaImage } from '../media/MediaImage'
 import { PageFaq } from '../page/PageFaq'
 import { PageHero } from '../page/PageHero'
@@ -31,23 +34,18 @@ type ArticleTemplateProps = {
 }
 
 export function ArticleTemplate({ post }: ArticleTemplateProps) {
-  const related = blogPosts.filter((item) =>
-    post.relatedArticleSlugs.includes(item.slug),
-  )
+  const related = blogPosts
+    .filter((item) => post.relatedArticleSlugs.includes(item.slug))
+    .slice(0, 3)
   const relatedServices = getServicesBySlug(post.relatedServiceSlugs)
   const faqItems = getFaqsByIds(post.faqIds)
   const categoryLabel = blogCategoryLabels[post.category]
   const path = `/blog/${post.slug}`
+  const minutes = estimateReadingMinutes(post)
   const jsonLd = [
     localBusinessJsonLd(),
     articleJsonLd(post),
     faqJsonLd(faqItems),
-    breadcrumbJsonLd([
-      { name: 'Home', path: '/' },
-      { name: 'Kennisbank', path: '/blog' },
-      { name: categoryLabel, path: `/blog/categorie/${post.category}` },
-      { name: post.title, path },
-    ]),
   ].filter((item): item is Record<string, unknown> => Boolean(item))
 
   return (
@@ -63,113 +61,139 @@ export function ArticleTemplate({ post }: ArticleTemplateProps) {
         jsonLd={jsonLd}
       />
       <PageHero
+        compact
+        narrow
         crumbs={[
           { label: 'Home', href: '/' },
-          { label: 'Kennisbank', href: '/blog' },
+          { label: 'Advies & kennis', href: '/blog' },
           { label: categoryLabel, href: `/blog/categorie/${post.category}` },
           { label: post.title, href: path },
         ]}
         eyebrow={categoryLabel}
         title={post.title}
+        titleClassName="text-[clamp(1.45rem,3.2vw,2.35rem)]"
         intro={post.intro}
-        narrow
       >
         <p className="mt-4 text-sm text-ink-muted">
-          Door {site.name} · gepubliceerd {formatNlDate(post.publishedAt)} ·
-          bijgewerkt {formatNlDate(post.updatedAt)}
+          Door {site.name} · bijgewerkt {formatNlDate(post.updatedAt)} · circa{' '}
+          {minutes} {minutes === 1 ? 'minuut' : 'minuten'} lezen
         </p>
-        <div className="mt-5">
-          <CtaPair equal />
-        </div>
       </PageHero>
-      <Section>
-        <Container className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,17.5rem)] lg:items-start">
-          <Reveal>
-            <div className="max-w-3xl">
-              <MediaImage
-                asset={blogImage(post.category)}
-                alt={post.imageAlt}
-                className="mb-8"
-                ratio="16 / 10"
-                sizes="(min-width: 768px) 48rem, 100vw"
-              />
-              {post.sections.map((section) => (
-                <article key={section.id} id={section.id} className="mb-8 scroll-mt-28">
-                  <h2 className="text-2xl font-semibold">{section.heading}</h2>
-                  {section.paragraphs.map((paragraph) => (
-                    <p key={paragraph} className="mt-3 text-ink-muted">
-                      {paragraph}
-                    </p>
-                  ))}
-                  {section.links ? <ContentLinks items={section.links} /> : null}
-                </article>
-              ))}
-              <ArticleWorkNote />
-              {post.resources && post.resources.length > 0 ? (
-                <aside className="mt-10 border border-line bg-paper p-5">
-                  <h2 className="text-xl font-semibold">Officiële bronnen</h2>
-                  <p className="mt-2 text-sm text-ink-muted">
-                    Handige verwijzingen naar overheids- of vakbronnen bij dit
-                    onderwerp.
-                  </p>
-                  <ContentLinks items={post.resources} />
-                </aside>
-              ) : null}
-            </div>
-          </Reveal>
 
-          <Reveal delay={50} className="lg:sticky lg:top-28">
-            <aside className="grid gap-4">
-              <nav aria-label="Inhoudsopgave" className="border border-line bg-paper p-5">
-                <h2 className="text-base font-semibold">Inhoud</h2>
-                <ol className="mt-3 grid gap-2 text-sm">
-                  {post.sections.map((section) => (
-                    <li key={section.id}>
-                      <a href={`#${section.id}`} className="underline underline-offset-2">
-                        {section.heading}
-                      </a>
-                    </li>
-                  ))}
-                </ol>
-              </nav>
-              <nav className="border border-line bg-paper p-5" aria-label="Vervolg">
-                <h2 className="text-base font-semibold">Vervolg</h2>
-                <ul className="mt-3 grid gap-2 text-sm font-semibold">
-                  <li>
+      <Section className="!py-7 sm:!py-9 lg:!py-11">
+        <Container>
+          <div className="mx-auto grid max-w-3xl gap-10 lg:mx-0 lg:max-w-none lg:grid-cols-[minmax(0,1fr)_minmax(12rem,15rem)] lg:gap-12 xl:grid-cols-[minmax(0,42rem)_minmax(12rem,15rem)] xl:justify-between">
+            <Reveal>
+              <div>
+                <MediaImage
+                  asset={postImage(post)}
+                  alt={post.imageAlt}
+                  className="mb-8"
+                  ratio="16 / 10"
+                  sizes="(min-width: 768px) 42rem, 100vw"
+                  priority
+                />
+                {post.sections.length > 1 ? (
+                  <nav
+                    aria-label="Inhoudsopgave"
+                    className="mb-8 border border-line bg-paper p-5 lg:hidden"
+                  >
+                    <h2 className="text-base font-semibold">Inhoud</h2>
+                    <ol className="mt-3 grid gap-2 text-sm">
+                      {post.sections.map((section) => (
+                        <li key={section.id}>
+                          <a
+                            href={`#${section.id}`}
+                            className="underline underline-offset-2"
+                          >
+                            {section.heading}
+                          </a>
+                        </li>
+                      ))}
+                    </ol>
+                  </nav>
+                ) : null}
+                {post.sections.map((section) => (
+                  <article
+                    key={section.id}
+                    id={section.id}
+                    className="mb-8 scroll-mt-[calc(var(--header-offset)+0.75rem)]"
+                  >
+                    <Heading
+                      as="h2"
+                      className="!text-[clamp(1.25rem,2.2vw,1.65rem)]"
+                    >
+                      {section.heading}
+                    </Heading>
+                    {section.paragraphs.map((paragraph) => (
+                      <p key={paragraph} className="mt-3 text-ink-muted">
+                        {paragraph}
+                      </p>
+                    ))}
+                    {section.links ? <ContentLinks items={section.links} /> : null}
+                  </article>
+                ))}
+                <ArticleWorkNote />
+                {post.resources && post.resources.length > 0 ? (
+                  <aside className="mt-10 border border-line bg-paper p-5">
+                    <Heading
+                      as="h2"
+                      className="!text-[clamp(1.2rem,2vw,1.45rem)]"
+                    >
+                      Officiële bronnen
+                    </Heading>
+                    <p className="mt-2 text-sm text-ink-muted">
+                      Verwijzingen naar overheids- of vakbronnen bij dit onderwerp.
+                    </p>
+                    <ContentLinks items={post.resources} />
+                  </aside>
+                ) : null}
+              </div>
+            </Reveal>
+
+            {post.sections.length > 1 ? (
+              <Reveal delay={50} className="hidden lg:block">
+                <aside className="sticky top-28">
+                  <nav
+                    aria-label="Inhoudsopgave"
+                    className="border border-line bg-paper p-5"
+                  >
+                    <h2 className="text-base font-semibold">Inhoud</h2>
+                    <ol className="mt-3 grid gap-2 text-sm">
+                      {post.sections.map((section) => (
+                        <li key={section.id}>
+                          <a
+                            href={`#${section.id}`}
+                            className="underline underline-offset-2"
+                          >
+                            {section.heading}
+                          </a>
+                        </li>
+                      ))}
+                    </ol>
+                  </nav>
+                  <p className="mt-4 text-sm">
                     <Link
                       to={`/blog/categorie/${post.category}`}
-                      className="underline underline-offset-2"
+                      className="font-semibold underline underline-offset-2"
                     >
                       Meer over {categoryLabel.toLowerCase()}
                     </Link>
-                  </li>
-                  {relatedServices.map((service) => (
-                    <li key={service.slug}>
-                      <Link to={service.href} className="underline underline-offset-2">
-                        Dienst: {service.name}
-                      </Link>
-                    </li>
-                  ))}
-                  <li>
-                    <Link to="/veelgestelde-vragen" className="underline underline-offset-2">
-                      Veelgestelde vragen
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/blog" className="underline underline-offset-2">
-                      Alle artikelen
-                    </Link>
-                  </li>
-                </ul>
-              </nav>
-            </aside>
-          </Reveal>
+                  </p>
+                </aside>
+              </Reveal>
+            ) : null}
+          </div>
         </Container>
       </Section>
+
       <PageFaq items={faqItems} title="Vragen bij dit onderwerp" />
       <RelatedServices services={relatedServices} />
-      <RelatedArticles posts={related} title="Meer artikelen" />
+      <RelatedArticles posts={related} title="Gerelateerde artikelen" />
       <CTASection
+        eyebrow="Advies"
+        title="Advies nodig over uw installatie?"
+        text="Bespreek uw situatie met Green Installatie Noord."
         quoteTo={
           relatedServices[0]
             ? `/offerte-aanvragen?dienst=${relatedServices[0].slug}`

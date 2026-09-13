@@ -4,6 +4,18 @@ import { featuredGuideSlugs, guidePosts } from './guides'
 
 export { featuredGuideSlugs }
 
+/** Primary featured article on the Advies & kennis overview. */
+export const primaryFeaturedSlug = 'gids-cv-ketel' as const
+
+export function estimateReadingMinutes(post: {
+  intro: string
+  sections: { paragraphs: string[] }[]
+}): number {
+  const text = [post.intro, ...post.sections.flatMap((s) => s.paragraphs)].join(' ')
+  const words = text.split(/\s+/).filter(Boolean).length
+  return Math.max(1, Math.round(words / 200))
+}
+
 export const blogCategoryServiceHref: Partial<Record<BlogCategorySlug, string>> = {
   'cv-ketel': '/cv-ketel',
   airco: '/airco',
@@ -41,6 +53,7 @@ const corePosts: BlogPost[] = [
     tags: ['cv-ketel', 'vervanging', 'beoordeling'],
     publishedAt: '2026-09-01',
     updatedAt: '2026-09-12',
+    imageKey: 'cvOpstelling',
     imageAlt: 'Opstelling van een cv-ketel in een technische ruimte, ter illustratie',
     relatedServiceSlugs: ['cv-ketel', 'service-onderhoud'],
     relatedArticleSlugs: ['gids-cv-ketel', 'onderhoud-cv-ketel', 'offerte-voorbereiden'],
@@ -84,6 +97,7 @@ const corePosts: BlogPost[] = [
     tags: ['onderhoud', 'cv-ketel', 'service'],
     publishedAt: '2026-09-01',
     updatedAt: '2026-09-12',
+    imageKey: 'cvIntergas',
     imageAlt: 'Controle van een cv-installatie tijdens onderhoud, ter illustratie',
     relatedServiceSlugs: ['service-onderhoud', 'cv-ketel'],
     relatedArticleSlugs: ['gids-cv-ketel', 'checklist-onderhoud', 'onderhoudsinterval'],
@@ -122,6 +136,7 @@ const corePosts: BlogPost[] = [
     tags: ['airco', 'koelen', 'installatie'],
     publishedAt: '2026-09-01',
     updatedAt: '2026-09-12',
+    imageKey: 'aircoPraktijk',
     imageAlt: 'Binnenunit van een airconditioner aan een muur, ter illustratie',
     relatedServiceSlugs: ['airco'],
     relatedArticleSlugs: ['gids-airco-onderhoud', 'comfort-in-huis', 'kiezen-tussen-systemen'],
@@ -161,6 +176,7 @@ const corePosts: BlogPost[] = [
     tags: ['warmtepomp', 'advies', 'woning'],
     publishedAt: '2026-09-01',
     updatedAt: '2026-09-12',
+    imageKey: 'warmtepompIntergas',
     imageAlt: 'Buitenunit van een warmtepomp bij een woning, ter illustratie',
     relatedServiceSlugs: ['warmtepomp', 'cv-ketel'],
     relatedArticleSlugs: ['gids-warmtepomp', 'kiezen-tussen-systemen', 'comfort-in-huis'],
@@ -203,7 +219,8 @@ const corePosts: BlogPost[] = [
     tags: ['onderhoud', 'planning'],
     publishedAt: '2026-09-01',
     updatedAt: '2026-09-12',
-    imageAlt: 'Onderhoudssticker of logboek bij een installatie, ter illustratie',
+    imageKey: 'cvOpstelling',
+    imageAlt: 'Cv-installatie waarbij onderhoudsplanning relevant is, ter illustratie',
     relatedServiceSlugs: ['service-onderhoud'],
     relatedArticleSlugs: ['checklist-onderhoud', 'onderhoud-cv-ketel'],
     faqIds: ['onderhoud-interval', 'onderhoud-waarom'],
@@ -241,7 +258,8 @@ const corePosts: BlogPost[] = [
     tags: ['advies', 'cv-ketel', 'airco', 'warmtepomp'],
     publishedAt: '2026-09-01',
     updatedAt: '2026-09-12',
-    imageAlt: 'Schematische vergelijking van verwarmings- en klimaatopties, ter illustratie',
+    imageKey: 'aircoTerras',
+    imageAlt: 'Buitenunit bij een woning, ter illustratie van klimaat- en verwarmingskeuzes',
     relatedServiceSlugs: ['cv-ketel', 'airco', 'warmtepomp'],
     relatedArticleSlugs: [
       'wanneer-cv-ketel-vervangen',
@@ -283,7 +301,8 @@ const corePosts: BlogPost[] = [
     tags: ['comfort', 'verwarmen', 'koelen'],
     publishedAt: '2026-09-12',
     updatedAt: '2026-09-12',
-    imageAlt: 'Woonkamer met aandacht voor binnenklimaat, ter illustratie',
+    imageKey: 'aircoVloer',
+    imageAlt: 'Klimaatunit in huis, ter illustratie van comfortvragen',
     relatedServiceSlugs: ['cv-ketel', 'airco', 'warmtepomp'],
     relatedArticleSlugs: ['kiezen-tussen-systemen', 'airco-koelen-en-verwarmen'],
     faqIds: ['algemeen-diensten', 'airco-verwarmen'],
@@ -299,7 +318,7 @@ const corePosts: BlogPost[] = [
         id: 'volgende-stap',
         heading: 'De volgende stap zonder overdrijven',
         paragraphs: [
-          'Als het om de hele woning en de winter gaat, start u bij de cv-ketel of een warmtepompgesprek. Gaat het om één ruimte in de zomer, dan is airconditioning meestal het gesprek. Twijfelt u, gebruik dan de kennisbank of het contactformulier.',
+          'Als het om de hele woning en de winter gaat, start u bij de cv-ketel of een warmtepompgesprek. Gaat het om één ruimte in de zomer, dan is airconditioning meestal het gesprek. Twijfelt u, gebruik dan Advies & kennis of het contactformulier.',
         ],
         links: [
           { label: 'Kiezen tussen systemen', href: '/blog/kiezen-tussen-systemen' },
@@ -321,7 +340,8 @@ const corePosts: BlogPost[] = [
     tags: ['offerte', 'voorbereiding'],
     publishedAt: '2026-09-12',
     updatedAt: '2026-09-12',
-    imageAlt: 'Notities en een foto van een installatie ter voorbereiding, illustratie',
+    imageKey: 'aircoBeugel',
+    imageAlt: 'Geïnstalleerde buitenunit, ter illustratie van offertevoorbereiding',
     relatedServiceSlugs: ['cv-ketel', 'airco', 'warmtepomp', 'service-onderhoud'],
     relatedArticleSlugs: ['wanneer-cv-ketel-vervangen', 'kiezen-tussen-systemen'],
     faqIds: ['offerte-wat-nodig', 'offerte-prijs'],

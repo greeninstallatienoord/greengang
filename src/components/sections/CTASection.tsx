@@ -9,16 +9,26 @@ import { Heading } from '../Heading'
 type CTASectionProps = {
   title?: string
   text?: string
+  eyebrow?: string
   quoteTo?: string
   appointmentTo?: string
+  primaryLabel?: string
+  secondaryLabel?: string
+  showEmergency?: boolean
+  phoneLead?: string | null
   image?: MediaAsset | null
 }
 
 export function CTASection({
   title = site.copy.ctaTitle,
   text = site.copy.ctaText,
+  eyebrow = 'Contact',
   quoteTo = '/offerte-aanvragen',
   appointmentTo = '/afspraak-maken',
+  primaryLabel = site.copy.ctaQuote,
+  secondaryLabel = site.copy.ctaAppointment,
+  showEmergency = true,
+  phoneLead = null,
   image = null,
 }: CTASectionProps) {
   return (
@@ -32,7 +42,7 @@ export function CTASection({
       >
         <div className={image ? 'lg:col-span-6' : 'max-w-2xl'}>
           <p className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-white/70">
-            Contact
+            {eyebrow}
           </p>
           <Heading as="h2" className="mt-2.5 text-white sm:mt-3">
             {title}
@@ -45,17 +55,20 @@ export function CTASection({
               to={quoteTo}
               className="min-h-11 px-4 text-[0.875rem] min-[360px]:flex-1 sm:flex-none sm:px-5 sm:text-[0.9375rem]"
             >
-              {site.copy.ctaQuote}
+              {primaryLabel}
             </ButtonLink>
             <ButtonLink
               to={appointmentTo}
               variant="ghost"
               className="min-h-11 border border-white/35 bg-transparent px-4 text-[0.875rem] text-white hover:border-white hover:bg-white/10 min-[360px]:flex-1 sm:flex-none sm:px-5 sm:text-[0.9375rem]"
             >
-              {site.copy.ctaAppointment}
+              {secondaryLabel}
             </ButtonLink>
           </div>
           <div className="mt-4 flex flex-col gap-1.5 sm:mt-5">
+            {phoneLead ? (
+              <p className="text-sm text-white/70">{phoneLead}</p>
+            ) : null}
             <a
               href={site.contact.phoneHref}
               className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-white/90 hover:text-white"
@@ -63,14 +76,15 @@ export function CTASection({
               <Phone size={16} strokeWidth={1.75} aria-hidden="true" />
               {site.contact.phone}
             </a>
-            {business.emergencyService.available ? (
+            {showEmergency && business.emergencyService.available ? (
               <p className="text-sm text-white/70">
-                Storing? Onze storingsdienst is 24/7 bereikbaar —{' '}
+                {business.emergencyService.summary}{' '}
                 <a
                   href={business.emergencyService.phoneHref}
                   className="font-semibold text-white/85 underline-offset-2 hover:text-white hover:underline"
+                  aria-label={`${business.emergencyService.label}: bel ${business.emergencyService.phone}`}
                 >
-                  bel {business.emergencyService.phone}
+                  Bel {business.emergencyService.phone}
                 </a>
               </p>
             ) : null}

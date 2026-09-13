@@ -45,6 +45,17 @@ export const quoteSituations: { value: QuoteSituation; label: string }[] = [
   { value: 'weet-ik-niet', label: 'Weet ik nog niet' },
 ]
 
+export const contactSubjects = [
+  { value: '', label: 'Kies een onderwerp (optioneel)' },
+  { value: 'Algemene vraag', label: 'Algemene vraag' },
+  { value: 'CV-ketel', label: 'CV-ketel' },
+  { value: 'Airconditioning', label: 'Airconditioning' },
+  { value: 'Warmtepomp', label: 'Warmtepomp' },
+  { value: 'Onderhoud / storing', label: 'Onderhoud / storing' },
+  { value: 'Offerte', label: 'Offerte' },
+  { value: 'Anders', label: 'Anders' },
+] as const
+
 export const contactMethods: { value: ContactMethod; label: string }[] = [
   { value: 'telefoon', label: 'Telefonisch' },
   { value: 'e-mail', label: 'Per e-mail' },
@@ -61,6 +72,7 @@ export const appointmentTypes: { value: AppointmentType; label: string }[] = [
 export const timeWindows = [
   { value: 'ochtend', label: 'Ochtend' },
   { value: 'middag', label: 'Middag' },
+  { value: 'namiddag', label: 'Namiddag' },
   { value: 'geen-voorkeur', label: 'Geen voorkeur' },
 ]
 

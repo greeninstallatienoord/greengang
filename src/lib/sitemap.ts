@@ -11,7 +11,7 @@ export type SitemapEntry = {
   priority: string
 }
 
-const today = '2026-09-12'
+const today = '2026-09-13'
 
 const staticIndexable: SitemapEntry[] = [
   { path: '/', lastmod: today, changefreq: 'weekly', priority: '1.0' },
@@ -27,10 +27,6 @@ const staticIndexable: SitemapEntry[] = [
   { path: '/offerte-aanvragen', lastmod: today, changefreq: 'monthly', priority: '0.8' },
   { path: '/afspraak-maken', lastmod: today, changefreq: 'monthly', priority: '0.7' },
   { path: '/veelgestelde-vragen', lastmod: today, changefreq: 'monthly', priority: '0.6' },
-  { path: '/privacy', lastmod: today, changefreq: 'monthly', priority: '0.3' },
-  { path: '/cookies', lastmod: today, changefreq: 'monthly', priority: '0.3' },
-  { path: '/algemene-voorwaarden', lastmod: today, changefreq: 'monthly', priority: '0.3' },
-  { path: '/disclaimer', lastmod: today, changefreq: 'monthly', priority: '0.3' },
 ]
 
 export function getIndexableEntries(): SitemapEntry[] {

@@ -35,10 +35,10 @@ export const api = {
       body: JSON.stringify(payload),
     }),
   admin: {
-    login: (email: string, password: string) =>
+    login: (email: string, password: string, turnstileToken: string) =>
       apiRequest<{ ok: boolean }>('/api/admin/login', {
         method: 'POST',
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, turnstileToken }),
       }),
     logout: () => apiRequest<{ ok: boolean }>('/api/admin/logout', { method: 'POST' }),
     session: () => apiRequest<{ email: string }>('/api/admin/session'),
@@ -58,51 +58,89 @@ export const api = {
         appointmentStatusCounts: Record<string, number>
         quoteStatusCounts: Record<string, number>
       }>('/api/admin/dashboard'),
-    appointments: () =>
-      apiRequest<{ items: Array<Record<string, string>> }>('/api/admin/appointments'),
+    appointments: (params?: { from?: string; to?: string }) => {
+      const query = new URLSearchParams()
+      if (params?.from) query.set('from', params.from)
+      if (params?.to) query.set('to', params.to)
+      const suffix = query.toString() ? `?${query.toString()}` : ''
+      return apiRequest<{ items: Array<Record<string, string>>; from?: string; to?: string }>(
+        `/api/admin/appointments${suffix}`,
+      )
+    },
     appointment: (id: string) =>
       apiRequest<
         Record<string, string> & { emails?: Array<Record<string, string>> }
       >(`/api/admin/appointments/${id}`),
     createAppointment: (payload: Record<string, string>) =>
-      apiRequest<{ id: string; status: string }>('/api/admin/appointments', {
+      apiRequest<{ id: string; status: string; customer_id?: string }>('/api/admin/appointments', {
         method: 'POST',
         body: JSON.stringify(payload),
       }),
-    updateAppointment: (id: string, status: string) =>
+    updateAppointment: (
+      id: string,
+      payload: {
+        status?: string
+        appointment_date?: string
+        appointment_time?: string
+        internal_notes?: string
+      },
+    ) =>
       apiRequest<{ ok: boolean; status: string; emailStatus?: string }>(
         `/api/admin/appointments/${id}`,
-        { method: 'PATCH', body: JSON.stringify({ status }) },
+        { method: 'PATCH', body: JSON.stringify(payload) },
       ),
     customers: () =>
       apiRequest<{ items: Array<Record<string, string>> }>('/api/admin/customers'),
     customer: (id: string) =>
-      apiRequest<
-        Record<string, string> & {
-          appointments: Array<Record<string, string>>
-          quotes: Array<Record<string, string>>
-          contacts: Array<Record<string, string>>
-        }
-      >(`/api/admin/customers/${id}`),
+      apiRequest<{
+        id: string
+        name: string
+        email: string
+        phone?: string
+        address?: string
+        internal_notes?: string
+        created_at: string
+        updated_at: string
+        last_activity?: string
+        appointments: Array<Record<string, string>>
+        quotes: Array<Record<string, string>>
+        contacts: Array<Record<string, string>>
+        emails?: Array<Record<string, string>>
+        activity?: Array<{
+          id: string
+          source: string
+          eventType: string
+          title: string
+          detail: string | null
+          href: string | null
+          createdAt: string
+        }>
+      }>(`/api/admin/customers/${id}`),
     quotes: () => apiRequest<{ items: Array<Record<string, string>> }>('/api/admin/quotes'),
     quote: (id: string) =>
       apiRequest<Record<string, string> & { emails?: Array<Record<string, string>> }>(
         `/api/admin/quotes/${id}`,
       ),
-    updateQuote: (id: string, status: string) =>
+    updateQuote: (
+      id: string,
+      payload: { status?: string; internal_notes?: string } | string,
+    ) =>
       apiRequest<{ ok: boolean; status: string }>(`/api/admin/quotes/${id}`, {
         method: 'PATCH',
-        body: JSON.stringify({ status }),
+        body: JSON.stringify(typeof payload === 'string' ? { status: payload } : payload),
       }),
     contact: () => apiRequest<{ items: Array<Record<string, string>> }>('/api/admin/contact'),
     contactItem: (id: string) =>
       apiRequest<Record<string, string> & { emails?: Array<Record<string, string>> }>(
         `/api/admin/contact/${id}`,
       ),
-    updateContact: (id: string, status: string) =>
+    updateContact: (
+      id: string,
+      payload: { status?: string; internal_notes?: string } | string,
+    ) =>
       apiRequest<{ ok: boolean; status: string }>(`/api/admin/contact/${id}`, {
         method: 'PATCH',
-        body: JSON.stringify({ status }),
+        body: JSON.stringify(typeof payload === 'string' ? { status: payload } : payload),
       }),
     emails: () => apiRequest<{ items: Array<Record<string, string>> }>('/api/admin/emails'),
     email: (id: string) => apiRequest<Record<string, string>>(`/api/admin/emails/${id}`),
@@ -111,7 +149,13 @@ export const api = {
         `/api/admin/recipients?q=${encodeURIComponent(query)}`,
       ),
     previewEmail: (payload: Record<string, unknown>) =>
-      apiRequest<{ subject: string; text: string; html: string }>('/api/admin/emails/preview', {
+      apiRequest<{
+        subject: string
+        text: string
+        html: string
+        from?: string
+        heading?: string
+      }>('/api/admin/emails/preview', {
         method: 'POST',
         body: JSON.stringify(payload),
       }),
@@ -123,13 +167,29 @@ export const api = {
     templates: () =>
       apiRequest<{
         items: Array<Record<string, string> & { compose?: number }>
-        variables?: Array<{ key: string; label: string }>
+        variables?: Array<{ key: string; label: string; group?: string }>
+        sampleVars?: Record<string, string>
       }>('/api/admin/templates'),
     template: (id: string) =>
       apiRequest<
-        Record<string, string> & { variables?: Array<{ key: string; label: string }> }
+        Record<string, string> & {
+          variables?: Array<{ key: string; label: string; group?: string }>
+          sampleVars?: Record<string, string>
+        }
       >(`/api/admin/templates/${id}`),
-    updateTemplate: (id: string, payload: { subject: string; body_text: string }) =>
+    updateTemplate: (
+      id: string,
+      payload: {
+        subject: string
+        body_text?: string
+        body?: string
+        heading?: string
+        intro?: string
+        closing?: string
+        cta_label?: string
+        cta_url?: string
+      },
+    ) =>
       apiRequest<{ ok: boolean }>(`/api/admin/templates/${id}`, {
         method: 'PATCH',
         body: JSON.stringify(payload),
@@ -145,6 +205,7 @@ export const api = {
           siteUrl: string
           adminPath: string
           sessionConfigured: boolean
+          turnstileConfigured?: boolean
         }
       }>('/api/admin/settings'),
     updateSettings: (values: Record<string, string>) =>

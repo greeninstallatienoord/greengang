@@ -27,15 +27,15 @@ export const pageSeo = {
     path: '/warmtepomp',
   },
   onderhoud: {
-    title: 'Service, onderhoud en 24/7 storingsdienst',
+    title: 'Service en onderhoud | 24/7 storingsdienst',
     description:
       'Onderhoudsabonnementen vanaf €7,99 per maand en 24/7 storingsdienst voor cv-ketels en klimaatinstallaties in Noord-Nederland.',
     path: '/service-onderhoud',
   },
   about: {
-    title: 'Over Green Installatie Noord',
+    title: 'Specialist in installatietechniek in Noord-Nederland',
     description:
-      'Green Installatie Noord is een installatiebedrijf voor Noord-Nederland, gevestigd in Oude Pekela. Cv-ketel, airco, warmtepomp en onderhoud.',
+      'Green Installatie Noord: betrouwbare installatie en onderhoud van cv-ketels, airco en warmtepompen in Noord-Nederland. Eerlijk advies, snelle opvolging. Gevestigd in Oude Pekela.',
     path: '/over-ons',
   },
   work: {
@@ -45,21 +45,21 @@ export const pageSeo = {
     path: '/werk',
   },
   areas: {
-    title: 'Werkgebied Noord-Nederland',
+    title: 'Werkgebied | Installateur Groningen, Drenthe & Friesland | Green Installatie Noord',
     description:
-      'Green Installatie Noord werkt in Noord-Nederland: Groningen, Drenthe en Friesland. Gevestigd in Oude Pekela.',
+      'Green Installatie Noord is gevestigd in Oude Pekela en werkt in Groningen, Drenthe en Friesland. Cv-ketel, airco, warmtepomp, service en onderhoud. Bel 050 569 0997.',
     path: '/werkgebied',
   },
   blog: {
-    title: 'Kennisbank over cv-ketel, airco en warmtepomp',
+    title: 'Advies & kennis over cv-ketel, airco en warmtepomp',
     description:
-      'Artikelen over cv-ketel, airconditioning, warmtepomp en onderhoud. Praktische uitleg voor woningeigenaren in Noord-Nederland.',
+      'Praktische informatie over cv-ketels, airconditioning, warmtepompen, onderhoud en energiezuinig wonen. Voor woningeigenaren in Noord-Nederland.',
     path: '/blog',
   },
   contact: {
-    title: 'Contact met Green Installatie Noord',
+    title: 'Contact',
     description:
-      `Neem contact op met ${business.businessName}. Gevestigd in ${business.address.city}, werkzaam in Noord-Nederland. Bel ${business.phone} of mail ${business.email}.`,
+      `Neem contact op met ${business.businessName} in ${business.address.city}. Reguliere bereikbaarheid ma–vr 07:00–17:00. Bij storingen is de 24/7 storingsdienst bereikbaar via ${business.phone}.`,
     path: '/contact',
   },
   quote: {
@@ -75,9 +75,9 @@ export const pageSeo = {
     path: '/afspraak-maken',
   },
   faq: {
-    title: 'Vragen over cv-ketel, airco, warmtepomp en onderhoud',
+    title: 'Veelgestelde vragen | CV-ketel, airco, warmtepomp en onderhoud',
     description:
-      'Antwoorden over installatie, onderhoud, offertes en afspraken bij Green Installatie Noord.',
+      'Antwoorden over cv-ketels, airconditioning, warmtepompen, onderhoud, offertes en afspraken bij Green Installatie Noord. Zoek snel of bel 050 569 0997.',
     path: '/veelgestelde-vragen',
   },
 } as const satisfies Record<string, SeoRecord>
@@ -103,9 +103,9 @@ export const blogCategorySeo: Record<
   airco: {
     title: 'Artikelen over airconditioning',
     description:
-      'Artikelen over airconditioning in huis: koelen, soms verwarmen, en vragen vóór installatie.',
+      'Artikelen over airconditioning in huis: koelen, soms verwarmen, onderhoud en vragen vóór installatie.',
     intro:
-      'Korte stukken over airconditioning per ruimte en de vragen die het advies scherp maken.',
+      'Praktische stukken over airconditioning: gebruik, onderhoud en de vragen die het advies scherp maken.',
   },
   warmtepomp: {
     title: 'Artikelen over warmtepompen',
@@ -119,7 +119,7 @@ export const blogCategorySeo: Record<
     description:
       'Artikelen over onderhoud van cv-ketels en klimaatinstallaties.',
     intro:
-      'Praktische uitleg over onderhoud en hoe u een servicebezoek kunt voorbereiden.',
+      'Praktische uitleg over onderhoud, storingen en het goed laten functioneren van uw installatie.',
   },
   'energie-comfort': {
     title: 'Artikelen over energie en comfort',

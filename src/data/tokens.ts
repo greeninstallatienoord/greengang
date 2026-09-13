@@ -62,7 +62,7 @@ export const tokens = {
   },
   cta: {
     primary: 'Offerte aanvragen',
-    secondary: 'Afspraak maken',
+    secondary: 'Afspraak aanvragen',
     tertiary: 'Bel ons',
   },
 } as const

@@ -24,7 +24,7 @@ const listSummaries: Record<ServiceSlug, string> = {
   warmtepomp:
     'Hybride of all-electric: eerst beoordelen, daarna adviseren en installeren.',
   'service-onderhoud': business.emergencyService.available
-    ? 'Onderhoud, service en 24/7 hulp bij storingen.'
+    ? 'Onderhoud, service en 24/7 storingsdienst.'
     : 'Onderhoud en service van cv-ketels en klimaatinstallaties.',
 }
 
@@ -52,7 +52,7 @@ export function ServiceList() {
                 <li key={service.slug}>
                   <Link
                     to={service.href}
-                    className="group flex min-h-14 items-start gap-3 border border-line bg-paper px-3.5 py-3.5 transition-[border-color,background-color] duration-[var(--duration-fast)] hover:border-ink/25 hover:bg-stone/40 min-[390px]:gap-3.5 min-[390px]:px-4 min-[390px]:py-4 sm:grid sm:grid-cols-[auto_1fr_auto] sm:items-center sm:gap-8 sm:border-0 sm:bg-transparent sm:px-0 sm:py-5 sm:hover:bg-transparent"
+                    className="group flex min-h-14 items-start gap-3 border border-line bg-paper px-3.5 py-3.5 transition-[border-color,background-color] duration-[var(--duration-fast)] hover:border-ink/25 hover:bg-stone/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand min-[390px]:gap-3.5 min-[390px]:px-4 min-[390px]:py-4 sm:grid sm:grid-cols-[auto_1fr_auto] sm:items-center sm:gap-8 sm:border-0 sm:bg-transparent sm:px-0 sm:py-5 sm:hover:bg-transparent"
                   >
                     <span className="mt-0.5 inline-flex text-brand-dark sm:mt-0">
                       <Icon size={20} strokeWidth={1.5} aria-hidden="true" />

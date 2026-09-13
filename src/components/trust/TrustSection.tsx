@@ -39,8 +39,8 @@ export function TrustSection() {
           Vakmanschap en kwaliteit
         </Heading>
         <p className="lead mt-4">
-          Informatie over vestiging, werkwijze en ervaringen. Meer details volgen
-          wanneer die beschikbaar zijn.
+          Gevestigd in {business.address.city}. Beoordelingen, keurmerken en
+          garanties tonen we alleen wanneer die geverifieerd zijn.
         </p>
 
         {notes.length > 0 || trustContent.yearsOfExperience !== null ? (

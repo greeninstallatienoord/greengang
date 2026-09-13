@@ -25,6 +25,7 @@ type ButtonLinkProps = {
   external?: boolean
   tabIndex?: number
   onClick?: MouseEventHandler<HTMLAnchorElement>
+  'aria-label'?: string
 }
 
 export function ButtonLink({
@@ -36,6 +37,7 @@ export function ButtonLink({
   external,
   tabIndex,
   onClick,
+  'aria-label': ariaLabel,
 }: ButtonLinkProps) {
   const overrideColor = Boolean(className?.includes('text-'))
   const classes = cn(
@@ -57,6 +59,7 @@ export function ButtonLink({
         target={isHttp ? '_blank' : undefined}
         tabIndex={tabIndex}
         onClick={onClick}
+        aria-label={ariaLabel}
       >
         {children}
       </a>
@@ -64,7 +67,7 @@ export function ButtonLink({
   }
 
   return (
-    <Link to={to} className={classes} tabIndex={tabIndex} onClick={onClick}>
+    <Link to={to} className={classes} tabIndex={tabIndex} onClick={onClick} aria-label={ariaLabel}>
       {children}
     </Link>
   )

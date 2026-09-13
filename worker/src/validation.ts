@@ -16,9 +16,20 @@ export function text(value: unknown, label: string, max: number, required = true
   return next
 }
 
+/** Subject/header-safe string: no CR/LF/null (header injection). */
+export function emailHeader(value: unknown, label: string, max: number, required = true): string {
+  const next = text(value, label, max, required)
+  if (!next) return ''
+  if (/[\r\n\0]/.test(next)) {
+    throw new HttpError(400, `${label} bevat ongeldige tekens.`)
+  }
+  return next
+}
+
 export function email(value: unknown): string {
   const next = text(value, 'E-mail', 120)
   if (!EMAIL.test(next)) throw new HttpError(400, 'Vul een geldig e-mailadres in.')
+  if (/[\r\n\0]/.test(next)) throw new HttpError(400, 'Vul een geldig e-mailadres in.')
   return next.toLowerCase()
 }
 
@@ -49,6 +60,31 @@ export function timeOnly(value: unknown): string {
   const next = text(value, 'Tijd', 5)
   if (!TIME.test(next)) throw new HttpError(400, 'Gebruik een geldige tijd.')
   return next
+}
+
+const PREFERENCE_WINDOWS = new Set(['ochtend', 'middag', 'namiddag', 'geen-voorkeur'])
+
+const PREFERENCE_LABELS: Record<string, string> = {
+  ochtend: 'Ochtend (07:00–10:30)',
+  middag: 'Middag (10:30–14:00)',
+  namiddag: 'Namiddag (14:00–17:00)',
+  'geen-voorkeur': 'Geen voorkeur',
+}
+
+/**
+ * Accepts exact HH:MM (legacy/admin) or preference window keys from the public form.
+ * Returns a storage/display string for appointment_time.
+ */
+export function preferredTimeWindow(value: unknown): { time: string; isExactSlot: boolean } {
+  const raw = text(value, 'Voorkeurstijd', 80)
+  if (TIME.test(raw)) return { time: raw, isExactSlot: true }
+  const key = raw.toLowerCase()
+  if (PREFERENCE_WINDOWS.has(key)) {
+    return { time: PREFERENCE_LABELS[key] ?? raw, isExactSlot: false }
+  }
+  // Already a human label from an older draft
+  if (raw.length >= 3) return { time: raw, isExactSlot: false }
+  throw new HttpError(400, 'Kies een voorkeurstijd.')
 }
 
 export function rejectHoneypot(value: unknown): void {

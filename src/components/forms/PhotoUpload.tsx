@@ -21,7 +21,7 @@ export function PhotoUpload({
     <Field
       id={id}
       label="Foto’s van de situatie (optioneel)"
-      hint={`${hint} Maximaal ${PHOTO_MAX_FILES} bestanden, elk tot 8 MB. Foto’s worden meegestuurd met uw aanvraag.`}
+      hint={`${hint} Maximaal ${PHOTO_MAX_FILES} bestanden, elk tot 8 MB. Beeldbestanden worden niet geüpload; alleen bestandsnaam, grootte en type kunnen in de aanvraag meegaan.`}
       error={error}
     >
       <input

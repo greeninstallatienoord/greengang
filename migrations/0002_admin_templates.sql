@@ -16,7 +16,7 @@ Tijd: {{appointment.time}}
 
 Green Installatie Noord
 Burgemeester van Weringstraat 23, 9665 GN Oude Pekela
-06 28 73 91 34
+050 569 0997
 info@greeninstallatienoord.nl',
     datetime('now')
   ),
@@ -34,7 +34,7 @@ Neem gerust contact op als u een nieuw moment wilt plannen.
 
 Green Installatie Noord
 Burgemeester van Weringstraat 23, 9665 GN Oude Pekela
-06 28 73 91 34
+050 569 0997
 info@greeninstallatienoord.nl',
     datetime('now')
   ),
@@ -49,7 +49,7 @@ Bedankt voor uw offerteaanvraag. We nemen deze in behandeling en nemen contact m
 
 Green Installatie Noord
 Burgemeester van Weringstraat 23, 9665 GN Oude Pekela
-06 28 73 91 34
+050 569 0997
 info@greeninstallatienoord.nl',
     datetime('now')
   ),
@@ -64,7 +64,7 @@ Dank voor uw bericht. We hebben het ontvangen en nemen contact met u op.
 
 Green Installatie Noord
 Burgemeester van Weringstraat 23, 9665 GN Oude Pekela
-06 28 73 91 34
+050 569 0997
 info@greeninstallatienoord.nl',
     datetime('now')
   );

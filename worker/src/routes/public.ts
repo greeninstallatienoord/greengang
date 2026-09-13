@@ -106,23 +106,33 @@ export async function createContact(env: WorkerEnv, body: Record<string, unknown
   const reserved = await reserveSubmission(env, 'contact', key, id, now)
   if ('replayId' in reserved) return replayContact(env, reserved.replayId)
 
-  await findOrCreateCustomer(env, { name, email, phone })
+  const customerId = await findOrCreateCustomer(env, { name, email, phone })
   try {
     try {
       await env.DB.prepare(
-        `INSERT INTO contact_submissions (id, name, email, phone, message, subject, status, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, 'new', ?)`,
+        `INSERT INTO contact_submissions
+           (id, name, email, phone, message, subject, status, created_at, updated_at, customer_id)
+         VALUES (?, ?, ?, ?, ?, ?, 'new', ?, ?, ?)`,
       )
-        .bind(id, name, email, phone || null, message, subject || null, now)
+        .bind(id, name, email, phone || null, message, subject || null, now, now, customerId)
         .run()
     } catch {
-      const storedMessage = subject ? `Onderwerp: ${subject}\n\n${message}` : message
-      await env.DB.prepare(
-        `INSERT INTO contact_submissions (id, name, email, phone, message, status, created_at)
-         VALUES (?, ?, ?, ?, ?, 'new', ?)`,
-      )
-        .bind(id, name, email, phone || null, storedMessage, now)
-        .run()
+      try {
+        await env.DB.prepare(
+          `INSERT INTO contact_submissions (id, name, email, phone, message, subject, status, created_at)
+           VALUES (?, ?, ?, ?, ?, ?, 'new', ?)`,
+        )
+          .bind(id, name, email, phone || null, message, subject || null, now)
+          .run()
+      } catch {
+        const storedMessage = subject ? `Onderwerp: ${subject}\n\n${message}` : message
+        await env.DB.prepare(
+          `INSERT INTO contact_submissions (id, name, email, phone, message, status, created_at)
+           VALUES (?, ?, ?, ?, ?, 'new', ?)`,
+        )
+          .bind(id, name, email, phone || null, storedMessage, now)
+          .run()
+      }
     }
   } catch (error) {
     await releaseSubmission(env, key)
@@ -165,7 +175,7 @@ export async function createContact(env: WorkerEnv, body: Record<string, unknown
       '',
       'We hebben uw bericht ontvangen en nemen het in behandeling. Dit is een ontvangstbevestiging.',
       '',
-      'U kunt ons bereiken via 06 28 73 91 34 of info@greeninstallatienoord.nl.',
+      'U kunt ons bereiken via 050 569 0997 of info@greeninstallatienoord.nl.',
       '',
       'Met vriendelijke groet,',
       'Green Installatie Noord',
@@ -211,22 +221,54 @@ export async function createQuote(env: WorkerEnv, body: Record<string, unknown>)
   const reserved = await reserveSubmission(env, 'quote', key, id, now)
   if ('replayId' in reserved) return replayQuote(env, reserved.replayId)
 
-  await findOrCreateCustomer(env, { name, email, phone, address })
+  const customerId = await findOrCreateCustomer(env, { name, email, phone, address })
   try {
     try {
       await env.DB.prepare(
-        `INSERT INTO quote_requests (id, name, email, phone, address, service, situation, message, status, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'new', ?)`,
+        `INSERT INTO quote_requests
+           (id, name, email, phone, address, service, situation, message, status, created_at, updated_at, customer_id)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'new', ?, ?, ?)`,
       )
-        .bind(id, name, email, phone, address || null, service, situation || null, storedMessage || null, now)
+        .bind(
+          id,
+          name,
+          email,
+          phone,
+          address || null,
+          service,
+          situation || null,
+          storedMessage || null,
+          now,
+          now,
+          customerId,
+        )
         .run()
     } catch {
-      await env.DB.prepare(
-        `INSERT INTO quote_requests (id, name, email, phone, address, service, message, status, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, 'new', ?)`,
-      )
-        .bind(id, name, email, phone, address || null, service, storedMessage || null, now)
-        .run()
+      try {
+        await env.DB.prepare(
+          `INSERT INTO quote_requests (id, name, email, phone, address, service, situation, message, status, created_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'new', ?)`,
+        )
+          .bind(
+            id,
+            name,
+            email,
+            phone,
+            address || null,
+            service,
+            situation || null,
+            storedMessage || null,
+            now,
+          )
+          .run()
+      } catch {
+        await env.DB.prepare(
+          `INSERT INTO quote_requests (id, name, email, phone, address, service, message, status, created_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, 'new', ?)`,
+        )
+          .bind(id, name, email, phone, address || null, service, storedMessage || null, now)
+          .run()
+      }
     }
   } catch (error) {
     await releaseSubmission(env, key)
@@ -240,7 +282,7 @@ export async function createQuote(env: WorkerEnv, body: Record<string, unknown>)
     templateId: 'tpl-quote-admin',
     relatedType: 'quote',
     relatedId: id,
-    subject: `Nieuwe offerteaanvraag - ${serviceName}`,
+    subject: `[Offerteaanvraag] ${serviceName} – ${name}`,
     text: [
       'Er is een offerteaanvraag binnengekomen. Dit is geen bestelling.',
       `Ontvangen: ${formatStamp(now)}`,
@@ -264,20 +306,20 @@ export async function createQuote(env: WorkerEnv, body: Record<string, unknown>)
     templateId: 'tpl-quote-received-customer',
     relatedType: 'quote',
     relatedId: id,
-    subject: 'Uw offerteaanvraag is ontvangen',
+    subject: 'Wij hebben uw offerteaanvraag ontvangen',
     recipientName: name,
     text: [
       `Beste ${firstName},`,
       '',
-      'Bedankt voor uw aanvraag bij Green Installatie Noord.',
+      'Wij hebben uw offerteaanvraag ontvangen.',
       '',
-      'We hebben uw offerteaanvraag ontvangen. Dit is een ontvangstbevestiging, nog geen offerte en geen opdracht.',
+      'Dit is een ontvangstbevestiging, nog geen offerte en geen opdracht.',
       `Dienst: ${serviceName}`,
       situationName ? `Situatie: ${situationName}` : '',
       '',
-      'We bekijken uw aanvraag en nemen contact met u op.',
+      'We bekijken uw aanvraag en nemen contact met u op om de details te bespreken.',
       '',
-      'U kunt ons bereiken via 06 28 73 91 34 of info@greeninstallatienoord.nl.',
+      'U kunt ons bereiken via 050 569 0997 of info@greeninstallatienoord.nl.',
       '',
       'Met vriendelijke groet,',
       'Green Installatie Noord',
@@ -299,7 +341,8 @@ export async function createAppointment(env: WorkerEnv, body: Record<string, unk
   const phone = v.phone(body.phone)
   const service = v.service(body.service)
   const date = v.dateOnly(body.preferredDate ?? body.appointment_date)
-  const time = v.timeOnly(body.preferredTimeWindow ?? body.appointment_time)
+  const preferred = v.preferredTimeWindow(body.preferredTimeWindow ?? body.appointment_time)
+  const time = preferred.time
   const notes = v.text(body.message ?? body.notes, 'Toelichting', 4000, false)
   const address = v.text(body.address, 'Adres', 200)
   const now = nowIso()
@@ -309,11 +352,13 @@ export async function createAppointment(env: WorkerEnv, body: Record<string, unk
   const reserved = await reserveSubmission(env, 'appointment', key, appointmentId, now)
   if ('replayId' in reserved) return replayAppointment(env, reserved.replayId)
 
-  try {
-    await assertSlotFree(env, date, time)
-  } catch (error) {
-    await releaseSubmission(env, key)
-    throw error
+  if (preferred.isExactSlot) {
+    try {
+      await assertSlotFree(env, date, time)
+    } catch (error) {
+      await releaseSubmission(env, key)
+      throw error
+    }
   }
 
   const customerId = await findOrCreateCustomer(env, { name, email, phone, address })
@@ -335,18 +380,23 @@ export async function createAppointment(env: WorkerEnv, body: Record<string, unk
     templateId: 'tpl-appointment-admin',
     relatedType: 'appointment',
     relatedId: appointmentId,
-    subject: `Nieuwe afspraakaanvraag - ${serviceName} - ${date}`,
+    subject: `[Afspraakaanvraag] ${serviceName} – ${date} – ${name}`,
     text: [
-      'Er is een afspraakaanvraag binnengekomen. Dit is nog geen bevestigde afspraak.',
+      'Green Installatie Noord — Nieuwe afspraakaanvraag',
+      '',
+      'Dit is een afspraakaanvraag en nog geen definitief bevestigde afspraak.',
       `Ontvangen: ${formatStamp(now)}`,
-      `Klant: ${name}`,
-      `Dienst: ${serviceName}`,
-      `Datum: ${date}`,
-      `Tijd: ${time}`,
-      `Telefoon: ${phone}`,
+      `Referentie: ${appointmentId}`,
+      '',
+      `DIENST: ${serviceName}`,
+      `GEWENSTE DATUM: ${date}`,
+      `VOORKEURSTIJD: ${time}`,
+      '',
+      `KLANT: ${name}`,
       `E-mail: ${email}`,
-      `Adres: ${address}`,
-      notes ? `Opmerking: ${notes}` : '',
+      `Telefoon: ${phone}`,
+      `LOCATIE / ADRES: ${address}`,
+      notes ? `OPMERKING: ${notes}` : '',
       '',
       `Beheer: ${adminRecordUrl(env, `/appointments/${appointmentId}`)}`,
     ]
@@ -359,23 +409,22 @@ export async function createAppointment(env: WorkerEnv, body: Record<string, unk
     templateId: 'tpl-appointment-customer',
     relatedType: 'appointment',
     relatedId: appointmentId,
-    subject: 'Uw afspraakaanvraag bij Green Installatie Noord',
+    subject: 'Wij hebben uw afspraakaanvraag ontvangen',
     recipientName: name,
     text: [
       `Beste ${firstName},`,
       '',
-      'Bedankt voor uw aanvraag bij Green Installatie Noord.',
+      'Wij hebben uw afspraakaanvraag ontvangen.',
       '',
-      'Uw afspraakaanvraag is ontvangen. Dit is nog geen bevestigde afspraak.',
+      'Dit is nog geen bevestigde afspraak. Green Installatie Noord neemt contact met u op om het moment definitief te bevestigen.',
+      '',
       `Dienst: ${serviceName}`,
       `Gewenste datum: ${date}`,
-      `Gewenste tijd: ${time}`,
+      `Voorkeurstijd: ${time}`,
       address ? `Adres: ${address}` : '',
       notes ? `Opmerking: ${notes}` : '',
       '',
-      'We bekijken uw aanvraag en nemen contact met u op.',
-      '',
-      'U kunt ons bereiken via 06 28 73 91 34 of info@greeninstallatienoord.nl.',
+      'U kunt ons bereiken via 050 569 0997 of info@greeninstallatienoord.nl.',
       '',
       'Met vriendelijke groet,',
       'Green Installatie Noord',

@@ -1,4 +1,9 @@
-import type { InputHTMLAttributes, ReactNode, TextareaHTMLAttributes } from 'react'
+import type {
+  InputHTMLAttributes,
+  ReactNode,
+  SelectHTMLAttributes,
+  TextareaHTMLAttributes,
+} from 'react'
 import { cn } from '../../lib/cn'
 
 type FieldProps = {
@@ -70,5 +75,27 @@ export function TextArea({ error, className, id, ...props }: TextAreaProps) {
       )}
       {...props}
     />
+  )
+}
+
+type SelectProps = SelectHTMLAttributes<HTMLSelectElement> & {
+  error?: string
+}
+
+export function SelectInput({ error, className, id, children, ...props }: SelectProps) {
+  return (
+    <select
+      id={id}
+      aria-invalid={Boolean(error)}
+      aria-describedby={error && id ? `${id}-error` : undefined}
+      className={cn(
+        'min-h-12 w-full rounded-sm border border-line bg-surface px-3.5 text-base outline-none transition-colors focus:border-brand',
+        error && 'border-danger',
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </select>
   )
 }

@@ -1,12 +1,11 @@
 import { useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { CtaPair } from '../components/CtaPair'
+import { BlogCategoryNav } from '../components/blog/BlogCategoryNav'
 import { BlogPostGrid } from '../components/blog/BlogPostGrid'
-import { BlogSidebar } from '../components/blog/BlogSidebar'
+import { BlogSearch } from '../components/blog/BlogSearch'
 import { PageHero } from '../components/page/PageHero'
 import { RelatedServices } from '../components/page/RelatedServices'
 import { Container } from '../components/Container'
-import { Heading } from '../components/Heading'
 import { Reveal } from '../components/Reveal'
 import { CTASection } from '../components/sections/CTASection'
 import { Section } from '../components/Section'
@@ -20,7 +19,6 @@ import { blogCategorySeo } from '../data/seo'
 import { getServicesBySlug } from '../data/services'
 import type { BlogCategorySlug, ServiceSlug } from '../types'
 import {
-  breadcrumbJsonLd,
   collectionPageJsonLd,
   localBusinessJsonLd,
 } from '../lib/jsonld'
@@ -79,53 +77,59 @@ export function BlogCategoryPage() {
               path: `/blog/${post.slug}`,
             })),
           }),
-          breadcrumbJsonLd([
-            { name: 'Home', path: '/' },
-            { name: 'Kennisbank', path: '/blog' },
-            { name: label, path },
-          ]),
         ]}
       />
       <PageHero
+        compact
         crumbs={[
           { label: 'Home', href: '/' },
-          { label: 'Kennisbank', href: '/blog' },
+          { label: 'Advies & kennis', href: '/blog' },
           { label, href: path },
         ]}
-        eyebrow="Categorie"
-        title={seo.title}
+        eyebrow="Advies & kennis"
+        title={label}
+        titleClassName="max-w-[16ch] text-[clamp(1.55rem,3.4vw,2.45rem)]"
         intro={seo.intro}
-        actions={<CtaPair equal />}
       />
 
-      <Section className="bg-paper">
-        <Container className="grid gap-8 lg:grid-cols-[minmax(0,17.5rem)_1fr] lg:items-start">
+      <Section className="!py-7 sm:!py-9 lg:!py-11">
+        <Container>
           <Reveal>
-            <BlogSidebar
+            <BlogSearch
+              id={`blog-search-${validCategory}`}
               query={query}
               onQueryChange={setQuery}
-              activeCategory={validCategory}
             />
           </Reveal>
-          <Reveal delay={50}>
-            <section>
-              <Heading as="h2">{label}</Heading>
-              <p className="mt-1 text-sm text-ink-muted">
-                {filtered.length} {filtered.length === 1 ? 'artikel' : 'artikelen'}
-              </p>
-              <div className="mt-4">
-                <BlogPostGrid
-                  posts={filtered}
-                  emptyText="In deze categorie staan nog geen artikelen voor deze zoekopdracht."
-                />
-              </div>
-            </section>
+
+          <Reveal delay={40} className="mt-6 sm:mt-7">
+            <BlogCategoryNav activeCategory={validCategory} />
+          </Reveal>
+
+          <Reveal delay={60} className="mt-8 sm:mt-10">
+            <p className="text-sm text-ink-muted">
+              {filtered.length}{' '}
+              {filtered.length === 1 ? 'artikel' : 'artikelen'}
+              {query.trim() ? ` voor “${query.trim()}”` : null}
+            </p>
+            <div className="mt-5 sm:mt-6">
+              <BlogPostGrid
+                posts={filtered}
+                emptyText="In deze categorie staan nog geen artikelen voor deze zoekopdracht."
+              />
+            </div>
           </Reveal>
         </Container>
       </Section>
 
-      <RelatedServices services={relatedServices} title="Dienst bij dit onderwerp" />
+      {relatedServices.length > 0 ? (
+        <RelatedServices services={relatedServices} title="Dienst bij dit onderwerp" />
+      ) : null}
+
       <CTASection
+        eyebrow="Advies"
+        title="Advies nodig over uw installatie?"
+        text="Bespreek uw situatie met Green Installatie Noord."
         quoteTo={
           serviceSlug
             ? `/offerte-aanvragen?dienst=${serviceSlug}`

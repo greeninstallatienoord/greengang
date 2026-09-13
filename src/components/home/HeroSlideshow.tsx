@@ -12,23 +12,8 @@ import {
   type HeroSlide,
   type HeroSlideVariant,
 } from '../../data/heroSlideshow'
+import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
 import { cn } from '../../lib/cn'
-
-function usePrefersReducedMotion(): boolean {
-  const [reduced, setReduced] = useState(() => {
-    if (typeof window === 'undefined' || !window.matchMedia) return false
-    return window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  })
-
-  useEffect(() => {
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const onChange = () => setReduced(media.matches)
-    media.addEventListener('change', onChange)
-    return () => media.removeEventListener('change', onChange)
-  }, [])
-
-  return reduced
-}
 
 function sourcesFor(slide: HeroSlide, desktop: boolean): HeroSlideVariant {
   if (desktop && slide.desktop) return slide.desktop
@@ -51,7 +36,11 @@ type LayerProps = {
 
 function SlidePicture({ slide, desktop, active, eager }: LayerProps) {
   const sources = sourcesFor(slide, desktop)
-  const position = desktop ? slide.desktopPosition : slide.mobilePosition
+  const positionStyle = {
+    '--hero-pos-mobile': slide.mobilePosition,
+    '--hero-pos-laptop': slide.laptopPosition,
+    '--hero-pos-desktop': slide.desktopPosition,
+  } as CSSProperties
 
   return (
     <div
@@ -94,8 +83,8 @@ function SlidePicture({ slide, desktop, active, eager }: LayerProps) {
           fetchPriority={eager ? 'high' : 'low'}
           loading={eager ? 'eager' : 'lazy'}
           draggable={false}
-          className="absolute inset-0 size-full max-w-none object-cover"
-          style={{ objectPosition: position } as CSSProperties}
+          className="hero-slide-photo absolute inset-0 size-full max-w-none object-cover"
+          style={positionStyle}
         />
       </picture>
       <div

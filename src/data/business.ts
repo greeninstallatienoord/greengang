@@ -11,9 +11,9 @@ import type { ServiceSlug } from '../types'
 export const business = {
   businessName: 'Green Installatie Noord',
   legalName: 'Green Installatie Noord',
-  phone: '06 28 73 91 34',
-  phoneInternational: '+31 6 28 73 91 34',
-  phoneHref: 'tel:+31628739134',
+  phone: '050 569 0997',
+  phoneInternational: '+31 50 569 0997',
+  phoneHref: 'tel:+31505690997',
   email: 'info@greeninstallatienoord.nl',
   emailHref: 'mailto:info@greeninstallatienoord.nl',
   address: {
@@ -21,6 +21,8 @@ export const business = {
     postalCode: '9665 GN',
     city: 'Oude Pekela',
     region: 'Groningen',
+    /** ISO 3166-2 NL subdivision for geo meta (NL-GR). */
+    regionCode: 'GR',
     country: 'Netherlands',
     countryCode: 'NL',
   },
@@ -40,9 +42,15 @@ export const business = {
   emergencyService: {
     available: true,
     label: '24/7 storingsdienst',
+    /** Compact label for tight UI (mobile topbar). */
+    shortLabel: '24/7 storing',
     summary: 'Storing? Onze storingsdienst is 24/7 bereikbaar.',
-    phone: '06 28 73 91 34',
-    phoneHref: 'tel:+31628739134',
+    detail:
+      'Heeft u een storing aan uw installatie? Onze storingsdienst is dag en nacht bereikbaar.',
+    hoursDistinction:
+      'Voor offertes, afspraken en algemene vragen zijn wij regulier bereikbaar op maandag t/m vrijdag van 07:00 tot 17:00.',
+    phone: '050 569 0997',
+    phoneHref: 'tel:+31505690997',
   },
   /**
    * Supplied for the website: weekdays 07:00–17:00, weekend closed.

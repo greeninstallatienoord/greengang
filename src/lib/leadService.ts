@@ -4,7 +4,7 @@ import { api } from './api'
 export type LeadResult = SubmissionResult
 
 const UNAVAILABLE =
-  'We konden uw aanvraag nu niet versturen. Controleer uw verbinding of bel 06 28 73 91 34.'
+  'We konden uw aanvraag nu niet versturen. Controleer uw verbinding of bel 050 569 0997.'
 
 export async function submitLead(payload: LeadRequest): Promise<LeadResult> {
   if (payload.website?.trim()) {

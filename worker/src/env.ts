@@ -6,10 +6,16 @@ export type WorkerEnv = {
   ADMIN_BASE_PATH: string
   RESEND_API_KEY?: string
   ADMIN_SESSION_SECRET?: string
+  /** Cloudflare Turnstile secret — Worker only, never VITE_*. */
+  TURNSTILE_SECRET_KEY?: string
+  /** Optional override for Turnstile hostname checks (defaults include production domain). */
+  TURNSTILE_EXPECTED_HOSTNAME?: string
 }
 
 export const COOKIE_NAME = 'gin_admin_session'
 export const SESSION_HOURS = 12
+/** Idle timeout: session dies after this much inactivity (absolute max remains SESSION_HOURS). */
+export const SESSION_IDLE_HOURS = 2
 export const MAX_BODY_BYTES = 80_000
 
 export function isProduction(env: WorkerEnv): boolean {
@@ -17,11 +23,16 @@ export function isProduction(env: WorkerEnv): boolean {
 }
 
 export function allowedOrigins(env: WorkerEnv): string[] {
-  const extras = [
-    'http://localhost:5173',
-    'http://127.0.0.1:5173',
+  const origins = new Set<string>([
+    env.PUBLIC_SITE_URL.replace(/\/$/, ''),
     'https://greeninstallatienoord.nl',
     'https://www.greeninstallatienoord.nl',
-  ]
-  return Array.from(new Set([env.PUBLIC_SITE_URL.replace(/\/$/, ''), ...extras]))
+  ])
+  if (!isProduction(env)) {
+    origins.add('http://localhost:5173')
+    origins.add('http://127.0.0.1:5173')
+    origins.add('http://localhost:4173')
+    origins.add('http://127.0.0.1:4173')
+  }
+  return [...origins]
 }

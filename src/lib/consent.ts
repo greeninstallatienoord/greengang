@@ -1,13 +1,16 @@
 export {
   acceptAllConsent,
   consentCopy,
+  CONSENT_POLICY_VERSION,
   CONSENT_STORAGE_KEY,
   defaultConsent,
   getConsent,
+  getConsentRecord,
   hasConsent,
   initConsentRuntime,
   openPreferences,
   registerOptionalScript,
   rejectOptionalConsent,
   setConsent,
+  withdrawConsent,
 } from './consentManager'

@@ -16,6 +16,7 @@ const TOKEN = /\{\{\s*([a-z0-9_.]+)\s*\}\}/gi
 
 const ALIASES: Record<string, string> = {
   'customer.name': 'customer_name',
+  'customer.fullName': 'customer_name',
   customer_name: 'customer_name',
   'customer.firstName': 'customer_first_name',
   customer_first_name: 'customer_first_name',
@@ -26,6 +27,7 @@ const ALIASES: Record<string, string> = {
   'appointment.time': 'appointment_time',
   appointment_time: 'appointment_time',
   'appointment.service': 'service',
+  'service.name': 'service',
   service: 'service',
   'quote.reference': 'quote_reference',
   quote_reference: 'quote_reference',
@@ -41,18 +43,59 @@ const ALIASES: Record<string, string> = {
 }
 
 export const TEMPLATE_VARIABLES = [
-  { key: 'customer.firstName', label: 'Voornaam klant' },
-  { key: 'customer.name', label: 'Naam klant' },
-  { key: 'customer.email', label: 'E-mail klant' },
-  { key: 'appointment.date', label: 'Afspraakdatum' },
-  { key: 'appointment.time', label: 'Afspraaktijd' },
-  { key: 'appointment.service', label: 'Dienst' },
-  { key: 'quote.reference', label: 'Offertereferentie' },
-  { key: 'company.name', label: 'Bedrijfsnaam' },
-  { key: 'company.phone', label: 'Bedrijfstelefoon' },
-  { key: 'company.email', label: 'Bedrijfs-e-mail' },
-  { key: 'website.url', label: 'Website' },
+  { key: 'customer.firstName', label: 'Voornaam klant', group: 'customer' },
+  { key: 'customer.fullName', label: 'Volledige naam', group: 'customer' },
+  { key: 'customer.name', label: 'Naam klant (alias)', group: 'customer' },
+  { key: 'customer.email', label: 'E-mail klant', group: 'customer' },
+  { key: 'appointment.date', label: 'Afspraakdatum', group: 'appointment' },
+  { key: 'appointment.time', label: 'Afspraaktijd', group: 'appointment' },
+  { key: 'service.name', label: 'Dienst', group: 'service' },
+  { key: 'appointment.service', label: 'Dienst (alias)', group: 'service' },
+  { key: 'quote.reference', label: 'Offertereferentie', group: 'quote' },
+  { key: 'company.name', label: 'Bedrijfsnaam', group: 'company' },
+  { key: 'company.phone', label: 'Bedrijfstelefoon', group: 'company' },
+  { key: 'company.email', label: 'Bedrijfs-e-mail', group: 'company' },
+  { key: 'website.url', label: 'Website', group: 'company' },
 ] as const
+
+/** Preview-only sample data. Never persist or send as a real customer record. */
+export const SAMPLE_PREVIEW_VARS: TemplateVars = {
+  'customer.name': 'Jan Jansen',
+  'customer.fullName': 'Jan Jansen',
+  'customer.firstName': 'Jan',
+  'customer.email': 'voorbeeld@greeninstallatienoord.nl',
+  'appointment.date': '20-09-2026',
+  'appointment.time': '09:00',
+  'appointment.service': 'cv-ketel',
+  'service.name': 'cv-ketel',
+  'quote.reference': 'OFF-2041',
+}
+
+export type StructuredTemplateParts = {
+  heading?: string
+  intro?: string
+  body?: string
+  closing?: string
+  ctaLabel?: string
+  ctaUrl?: string
+}
+
+/** Strip HTML/script from template fields — plain text only. */
+export function sanitizeTemplateText(value: string, max = 8000): string {
+  return value
+    .replace(/<\s*script[\s\S]*?>[\s\S]*?<\s*\/\s*script\s*>/gi, '')
+    .replace(/<\s*style[\s\S]*?>[\s\S]*?<\s*\/\s*style\s*>/gi, '')
+    .replace(/<[^>]+>/g, '')
+    .replace(/\u0000/g, '')
+    .slice(0, max)
+}
+
+export function assembleBodyText(parts: StructuredTemplateParts): string {
+  const blocks = [parts.intro?.trim(), parts.body?.trim(), parts.closing?.trim()].filter(
+    Boolean,
+  ) as string[]
+  return blocks.join('\n\n')
+}
 
 export function firstNameFrom(name: string): string {
   const [first] = name.trim().split(/\s+/)
@@ -67,7 +110,7 @@ export function labelService(value?: string): string {
 export function companyVars(env?: WorkerEnv): TemplateVars {
   return {
     company_name: 'Green Installatie Noord',
-    company_phone: '06 28 73 91 34',
+    company_phone: '050 569 0997',
     company_email: 'info@greeninstallatienoord.nl',
     website_url: env ? websiteUrl(env) : 'https://greeninstallatienoord.nl',
   }
@@ -88,6 +131,9 @@ export function mergeVars(input: TemplateVars, env?: WorkerEnv): TemplateVars {
   return resolved
 }
 
+/**
+ * Replace {{tokens}}. Unknown or empty values become "" so customers never see placeholders.
+ */
 export function applyTemplate(source: string, vars: TemplateVars, env?: WorkerEnv): string {
   const resolved = mergeVars(vars, env)
   return source.replace(TOKEN, (_full, key: string) => {
@@ -135,6 +181,14 @@ export const COMPOSE_TEMPLATE_META: ComposeTemplateMeta[] = [
     compose: true,
   },
   {
+    id: 'tpl-appointment-rescheduled',
+    slug: 'appointment-rescheduled',
+    name: 'Afspraak gewijzigd',
+    purpose: 'Bericht wanneer een afspraak is verplaatst.',
+    description: 'Informeert de klant over de nieuwe datum en tijd.',
+    compose: true,
+  },
+  {
     id: 'tpl-quote-received-customer',
     slug: 'quote-received-customer',
     name: 'Offerteaanvraag ontvangen',
@@ -167,6 +221,14 @@ export const COMPOSE_TEMPLATE_META: ComposeTemplateMeta[] = [
     compose: true,
   },
   {
+    id: 'tpl-contact-response',
+    slug: 'contact-response',
+    name: 'Reactie op contactbericht',
+    purpose: 'Antwoord op een contactaanvraag.',
+    description: 'Gebruik dit om een websitebericht vriendelijk te beantwoorden.',
+    compose: true,
+  },
+  {
     id: 'tpl-appointment-cancelled',
     slug: 'appointment-cancelled',
     name: 'Afspraak geannuleerd',
@@ -185,6 +247,11 @@ export const DEFAULT_TEMPLATES: Array<{
   purpose?: string
   description?: string
   compose?: number
+  heading?: string
+  intro?: string
+  closing?: string
+  cta_label?: string
+  cta_url?: string
 }> = [
   {
     id: 'tpl-appointment-confirmed',
@@ -194,16 +261,44 @@ export const DEFAULT_TEMPLATES: Array<{
     purpose: COMPOSE_TEMPLATE_META[0]?.purpose,
     description: COMPOSE_TEMPLATE_META[0]?.description,
     compose: 1,
+    heading: 'Uw afspraak is bevestigd',
     body_text: [
       'Beste {{customer.firstName}},',
       '',
       'Uw afspraak bij Green Installatie Noord is bevestigd.',
       '',
-      'Dienst: {{appointment.service}}',
+      'Dienst: {{service.name}}',
       'Datum: {{appointment.date}}',
       'Tijd: {{appointment.time}}',
       '',
       'Wij staan op het afgesproken moment bij u langs. Belt u ons gerust als er iets wijzigt.',
+      '',
+      'Onze algemene voorwaarden: https://greeninstallatienoord.nl/algemene-voorwaarden',
+      'Privacyverklaring: https://greeninstallatienoord.nl/privacy',
+      '',
+      'Met vriendelijke groet,',
+      'Green Installatie Noord',
+    ].join('\n'),
+  },
+  {
+    id: 'tpl-appointment-rescheduled',
+    slug: 'appointment-rescheduled',
+    name: 'Afspraak gewijzigd',
+    subject: 'Uw afspraak is verplaatst - Green Installatie Noord',
+    purpose: COMPOSE_TEMPLATE_META[1]?.purpose,
+    description: COMPOSE_TEMPLATE_META[1]?.description,
+    compose: 1,
+    heading: 'Uw afspraak is verplaatst',
+    body_text: [
+      'Beste {{customer.firstName}},',
+      '',
+      'Uw afspraak bij Green Installatie Noord is verplaatst.',
+      '',
+      'Dienst: {{service.name}}',
+      'Nieuwe datum: {{appointment.date}}',
+      'Nieuwe tijd: {{appointment.time}}',
+      '',
+      'Klopt dit niet of wilt u opnieuw verzetten? Bel ons op {{company.phone}}.',
       '',
       'Met vriendelijke groet,',
       'Green Installatie Noord',
@@ -214,9 +309,10 @@ export const DEFAULT_TEMPLATES: Array<{
     slug: 'quote-received-customer',
     name: 'Offerteaanvraag ontvangen',
     subject: 'Wij hebben uw offerteaanvraag ontvangen',
-    purpose: COMPOSE_TEMPLATE_META[1]?.purpose,
-    description: COMPOSE_TEMPLATE_META[1]?.description,
+    purpose: COMPOSE_TEMPLATE_META[2]?.purpose,
+    description: COMPOSE_TEMPLATE_META[2]?.description,
     compose: 1,
+    heading: 'Offerteaanvraag ontvangen',
     body_text: [
       'Beste {{customer.firstName}},',
       '',
@@ -228,6 +324,8 @@ export const DEFAULT_TEMPLATES: Array<{
       '',
       'Heeft u intussen extra informatie? Stuur die gerust naar {{company.email}} of bel {{company.phone}}.',
       '',
+      'Algemene voorwaarden: https://greeninstallatienoord.nl/algemene-voorwaarden',
+      '',
       'Met vriendelijke groet,',
       'Green Installatie Noord',
     ].join('\n'),
@@ -237,9 +335,10 @@ export const DEFAULT_TEMPLATES: Array<{
     slug: 'quote-follow-up',
     name: 'Offerte opvolging',
     subject: 'Even contact over uw aanvraag',
-    purpose: COMPOSE_TEMPLATE_META[2]?.purpose,
-    description: COMPOSE_TEMPLATE_META[2]?.description,
+    purpose: COMPOSE_TEMPLATE_META[3]?.purpose,
+    description: COMPOSE_TEMPLATE_META[3]?.description,
     compose: 1,
+    heading: 'Even contact',
     body_text: [
       'Beste {{customer.firstName}},',
       '',
@@ -258,15 +357,16 @@ export const DEFAULT_TEMPLATES: Array<{
     slug: 'appointment-reminder',
     name: 'Afspraakherinnering',
     subject: 'Herinnering: uw afspraak bij Green Installatie Noord',
-    purpose: COMPOSE_TEMPLATE_META[3]?.purpose,
-    description: COMPOSE_TEMPLATE_META[3]?.description,
+    purpose: COMPOSE_TEMPLATE_META[4]?.purpose,
+    description: COMPOSE_TEMPLATE_META[4]?.description,
     compose: 1,
+    heading: 'Herinnering aan uw afspraak',
     body_text: [
       'Beste {{customer.firstName}},',
       '',
       'Dit is een korte herinnering aan uw afspraak.',
       '',
-      'Dienst: {{appointment.service}}',
+      'Dienst: {{service.name}}',
       'Datum: {{appointment.date}}',
       'Tijd: {{appointment.time}}',
       '',
@@ -281,15 +381,38 @@ export const DEFAULT_TEMPLATES: Array<{
     slug: 'thank-you',
     name: 'Bedankt voor uw aanvraag',
     subject: 'Dank voor uw bericht - Green Installatie Noord',
-    purpose: COMPOSE_TEMPLATE_META[4]?.purpose,
-    description: COMPOSE_TEMPLATE_META[4]?.description,
+    purpose: COMPOSE_TEMPLATE_META[5]?.purpose,
+    description: COMPOSE_TEMPLATE_META[5]?.description,
     compose: 1,
+    heading: 'Dank voor uw bericht',
     body_text: [
       'Beste {{customer.firstName}},',
       '',
       'Hartelijk dank voor uw bericht. Wij hebben uw aanvraag ontvangen en nemen deze in behandeling.',
       '',
       'U hoort zo snel mogelijk van ons. Heeft u spoed, dan kunt u ons ook bellen op {{company.phone}}.',
+      '',
+      'Met vriendelijke groet,',
+      'Green Installatie Noord',
+    ].join('\n'),
+  },
+  {
+    id: 'tpl-contact-response',
+    slug: 'contact-response',
+    name: 'Reactie op contactbericht',
+    subject: 'Reactie op uw bericht - Green Installatie Noord',
+    purpose: COMPOSE_TEMPLATE_META[6]?.purpose,
+    description: COMPOSE_TEMPLATE_META[6]?.description,
+    compose: 1,
+    heading: 'Reactie op uw bericht',
+    body_text: [
+      'Beste {{customer.firstName}},',
+      '',
+      'Bedankt voor uw bericht. Hieronder onze reactie.',
+      '',
+      '[Typ hier uw antwoord]',
+      '',
+      'Heeft u nog vragen? Bel {{company.phone}} of mail {{company.email}}.',
       '',
       'Met vriendelijke groet,',
       'Green Installatie Noord',
@@ -305,7 +428,7 @@ export const DEFAULT_TEMPLATES: Array<{
       'Beste {{customer.firstName}},',
       '',
       'We hebben uw afspraakaanvraag ontvangen. Dit is nog geen definitieve afspraak.',
-      'Dienst: {{appointment.service}}',
+      'Dienst: {{service.name}}',
       'Voorkeursdatum: {{appointment.date}}',
       'Voorkeurstijd: {{appointment.time}}',
       '',
@@ -317,15 +440,16 @@ export const DEFAULT_TEMPLATES: Array<{
     slug: 'appointment-cancelled',
     name: 'Afspraak geannuleerd',
     subject: 'Uw afspraakaanvraag is geannuleerd - Green Installatie Noord',
-    purpose: COMPOSE_TEMPLATE_META[5]?.purpose,
-    description: COMPOSE_TEMPLATE_META[5]?.description,
+    purpose: COMPOSE_TEMPLATE_META[7]?.purpose,
+    description: COMPOSE_TEMPLATE_META[7]?.description,
     compose: 1,
+    heading: 'Afspraak geannuleerd',
     body_text: [
       'Beste {{customer.firstName}},',
       '',
       'Uw afspraakaanvraag bij Green Installatie Noord is geannuleerd.',
       '',
-      'Dienst: {{appointment.service}}',
+      'Dienst: {{service.name}}',
       'Datum: {{appointment.date}}',
       'Tijd: {{appointment.time}}',
       '',

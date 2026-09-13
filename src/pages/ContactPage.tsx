@@ -1,26 +1,66 @@
-import { Link } from 'react-router-dom'
+import { Headphones, Mail, Phone } from 'lucide-react'
 import { ContactDetails } from '../components/ContactDetails'
 import { CtaPair } from '../components/CtaPair'
 import { ContactForm } from '../components/forms/ContactForm'
 import { PageFaq } from '../components/page/PageFaq'
 import { PageHero } from '../components/page/PageHero'
-import { RelatedServices } from '../components/page/RelatedServices'
-import { SocialLinks } from '../components/SocialLinks'
+import { ButtonLink } from '../components/ButtonLink'
 import { Container } from '../components/Container'
 import { Heading } from '../components/Heading'
 import { Reveal } from '../components/Reveal'
-import { CTASection } from '../components/sections/CTASection'
 import { Section } from '../components/Section'
 import { PageMeta } from '../components/seo/PageMeta'
+import { business } from '../data/business'
 import { getFaqsByIds } from '../data/faq'
 import { pageSeo } from '../data/seo'
-import { breadcrumbJsonLd, contactPageJsonLd, faqJsonLd, localBusinessJsonLd } from '../lib/jsonld'
-import { services } from '../data/services'
+import { site } from '../data/site'
+import { contactPageJsonLd, faqJsonLd, localBusinessJsonLd } from '../lib/jsonld'
 
-const contactFaqs = getFaqsByIds(['algemeen-diensten', 'algemeen-werkwijze', 'afspraak-hoe'])
+const contactFaqs = getFaqsByIds([
+  'algemeen-diensten',
+  'algemeen-werkwijze',
+  'afspraak-hoe',
+  'onderhoud-storing',
+])
 const contactFaqLd = faqJsonLd(contactFaqs)
 
+function StoringCard() {
+  const emergency = business.emergencyService
+  if (!emergency.available) return null
+
+  return (
+    <aside
+      className="border border-line bg-surface px-4 py-5 sm:px-5"
+      aria-labelledby="storing-heading"
+    >
+      <p className="text-[0.68rem] font-semibold tracking-[0.14em] text-brand-dark uppercase">
+        Storing?
+      </p>
+      <h2 id="storing-heading" className="mt-1.5 font-display text-[clamp(1.2rem,2.2vw,1.45rem)] tracking-[-0.015em]">
+        {emergency.label}
+      </h2>
+      <p className="mt-2 max-w-xl text-sm leading-relaxed text-ink-muted">
+        {emergency.detail}
+      </p>
+      <ButtonLink
+        to={emergency.phoneHref}
+        external
+        className="mt-4 min-h-12"
+        aria-label={`${emergency.label}: bel ${emergency.phone}`}
+      >
+        <Phone size={16} strokeWidth={1.75} aria-hidden="true" />
+        Bel storingsdienst — {emergency.phone}
+      </ButtonLink>
+      <p className="mt-3 text-xs leading-relaxed text-ink-muted sm:text-sm">
+        {emergency.hoursDistinction}
+      </p>
+    </aside>
+  )
+}
+
 export function ContactPage() {
+  const emergency = business.emergencyService
+
   return (
     <>
       <PageMeta
@@ -28,87 +68,103 @@ export function ContactPage() {
         jsonLd={[
           localBusinessJsonLd(),
           contactPageJsonLd(),
-          breadcrumbJsonLd([
-            { name: 'Home', path: '/' },
-            { name: 'Contact', path: '/contact' },
-          ]),
           ...(contactFaqLd ? [contactFaqLd] : []),
         ]}
       />
       <PageHero
+        compact
         crumbs={[
           { label: 'Home', href: '/' },
           { label: 'Contact', href: '/contact' },
         ]}
         eyebrow="Bereikbaar"
-        title="Contact met Green Installatie Noord"
-        intro="Bel, mail of stuur een bericht. Voor een voorstel of een moment op locatie gebruikt u offerte of afspraak."
-        actions={<CtaPair equal />}
+        title="Contact"
+        titleClassName="max-w-[12ch] text-[clamp(1.55rem,3.4vw,2.45rem)]"
+        intro="Bel, mail of stuur ons een bericht. Voor offertes en afspraken zijn we regulier bereikbaar. Bij een storing is de 24/7 storingsdienst beschikbaar."
+        actions={<CtaPair />}
       />
-      <Section>
-        <Container className="grid gap-6 lg:grid-cols-[minmax(0,20rem)_1fr] lg:items-start lg:gap-8">
-          <Reveal>
-            <aside className="grid gap-4">
+
+      <Section className="!py-7 sm:!py-9 lg:!py-11">
+        <Container>
+          {/* Mobile quick actions */}
+          <div className="mb-5 grid grid-cols-3 gap-2 lg:hidden">
+            <ButtonLink
+              to={site.contact.phoneHref}
+              external
+              variant="secondary"
+              className="min-h-11 justify-center px-2 text-[0.8rem]"
+              aria-label={`Bellen: ${site.contact.phone}`}
+            >
+              <Phone size={15} strokeWidth={1.75} aria-hidden="true" />
+              Bellen
+            </ButtonLink>
+            {emergency.available ? (
+              <ButtonLink
+                to={emergency.phoneHref}
+                external
+                className="min-h-11 justify-center px-2 text-[0.8rem]"
+                aria-label={`${emergency.label}: bel ${emergency.phone}`}
+              >
+                <Headphones size={15} strokeWidth={1.75} aria-hidden="true" />
+                24/7 storing
+              </ButtonLink>
+            ) : null}
+            <ButtonLink
+              to={site.contact.emailHref}
+              variant="secondary"
+              external
+              className="min-h-11 justify-center px-2 text-[0.8rem]"
+              aria-label={`E-mail: ${site.contact.email}`}
+            >
+              <Mail size={15} strokeWidth={1.75} aria-hidden="true" />
+              E-mail
+            </ButtonLink>
+          </div>
+
+          {/* Storing first — before the long form */}
+          <Reveal className="mb-6 lg:mb-8">
+            <StoringCard />
+          </Reveal>
+
+          <div className="grid gap-8 lg:grid-cols-12 lg:items-start lg:gap-10">
+            <Reveal className="lg:col-span-4">
               <div className="border border-line bg-paper p-5 sm:p-6">
-                <Heading as="h2" className="text-xl sm:text-xl">
-                  Gegevens
+                <Heading as="h2" className="!text-[clamp(1.25rem,2vw,1.5rem)]">
+                  Direct contact
                 </Heading>
-                <div className="mt-4">
-                  <ContactDetails />
+                <p className="mt-2 text-sm text-ink-muted">
+                  Bel of mail voor een snelle reactie. Voor een voorstel of een moment op locatie
+                  gebruikt u offerte of afspraak.
+                </p>
+                <ContactDetails showSocial className="mt-5" />
+              </div>
+            </Reveal>
+
+            <Reveal delay={50} className="lg:col-span-8">
+              <div className="border border-line bg-paper p-5 sm:p-7">
+                <Heading as="h2" className="!text-[clamp(1.25rem,2vw,1.5rem)]">
+                  Stuur een bericht
+                </Heading>
+                <p className="mt-2 max-w-xl text-sm text-ink-muted">
+                  Kort en duidelijk is genoeg. We vragen geen extra persoonsgegevens. Bij een
+                  acute storing belt u liever direct.
+                </p>
+                <div className="mt-5 max-w-2xl">
+                  <ContactForm />
                 </div>
               </div>
-              <div className="border border-line bg-paper p-5 sm:p-6">
-                <h3 className="font-semibold tracking-[-0.01em]">Volg ons</h3>
-                <p className="mt-1 text-sm text-ink-muted">
-                  Volg recente projecten en updates, of deel uw ervaring via Google.
-                </p>
-                <SocialLinks className="mt-3" />
-              </div>
-              <nav aria-label="Vervolgstappen" className="border border-line bg-paper p-5 sm:p-6">
-                <h3 className="font-semibold tracking-[-0.01em]">Vervolg</h3>
-                <ul className="mt-3 grid gap-2 text-sm font-semibold">
-                  <li>
-                    <Link to="/offerte-aanvragen" className="underline underline-offset-2">
-                      Offerte aanvragen
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/afspraak-maken" className="underline underline-offset-2">
-                      Afspraak maken
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/werkgebied" className="underline underline-offset-2">
-                      Werkgebied
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/over-ons" className="underline underline-offset-2">
-                      Over ons
-                    </Link>
-                  </li>
-                </ul>
-              </nav>
-            </aside>
-          </Reveal>
-          <Reveal delay={70}>
-            <div className="border border-line bg-paper p-5 sm:p-7">
-              <Heading as="h2" className="text-xl sm:text-xl">
-                Stuur een bericht
-              </Heading>
-              <p className="mt-2 text-sm text-ink-muted">
-                Kort en duidelijk is genoeg. We vragen geen extra persoonsgegevens.
-              </p>
-              <div className="mt-5">
-                <ContactForm />
-              </div>
-            </div>
-          </Reveal>
+            </Reveal>
+          </div>
         </Container>
       </Section>
-      <PageFaq items={contactFaqs} />
-      <RelatedServices services={services} title="Diensten" />
-      <CTASection />
+
+      <PageFaq
+        items={contactFaqs}
+        title="Veelgestelde vragen"
+        intro="Nog een vraag? Misschien staat het antwoord hier al tussen."
+        tone="plain"
+        compact
+      />
     </>
   )
 }

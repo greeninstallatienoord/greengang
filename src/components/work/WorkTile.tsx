@@ -23,11 +23,16 @@ export function WorkTile({
   return (
     <button
       type="button"
-      className={cn('group work-tile relative w-full text-left', className)}
+      className={cn(
+        'group work-tile relative w-full rounded-sm text-left',
+        'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
+        className,
+      )}
       onClick={onOpen}
+      aria-label={`${shot.title} vergroten`}
     >
       <span
-        className="relative block overflow-hidden bg-stone"
+        className="relative block overflow-hidden rounded-md bg-stone"
         style={{ aspectRatio: ratio }}
       >
         <img
@@ -39,15 +44,17 @@ export function WorkTile({
           loading={priority ? 'eager' : 'lazy'}
           fetchPriority={priority ? 'high' : 'auto'}
           decoding="async"
-          className="media-photo absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out motion-safe:group-hover:scale-[1.03]"
+          className="media-photo absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out motion-safe:group-hover:scale-[1.02]"
           style={mediaPositionStyle(shot.asset)}
         />
       </span>
-      <span className="mt-2.5 block">
+      <span className="mt-2.5 block sm:mt-3">
         <span className="block text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-brand-dark">
           {category}
         </span>
-        <span className="mt-0.5 block text-sm font-semibold">{shot.title}</span>
+        <span className="mt-1.5 block text-[0.95rem] font-semibold leading-snug tracking-[-0.01em] text-ink transition-colors group-hover:text-brand-dark">
+          {shot.title}
+        </span>
       </span>
     </button>
   )

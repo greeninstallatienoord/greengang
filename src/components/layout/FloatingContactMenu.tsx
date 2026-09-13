@@ -10,7 +10,7 @@ import {
 import { Link, useLocation } from 'react-router-dom'
 import { business } from '../../data/business'
 import { useFocusTrap } from '../../hooks/useFocusTrap'
-import { isFormPath } from '../../data/navigation'
+import { isFormPath, isLegalPath } from '../../data/navigation'
 import { site } from '../../data/site'
 import { cn } from '../../lib/cn'
 
@@ -28,7 +28,7 @@ const baseActions: FabAction[] = [
     key: 'appointment',
     href: '/afspraak-maken',
     external: false,
-    label: 'Afspraak maken',
+    label: 'Afspraak aanvragen',
     detail: 'Kies een voorkeursmoment',
     icon: CalendarDays,
   },
@@ -102,16 +102,16 @@ export function FloatingContactMenu({ lifted = false }: FloatingContactMenuProps
     }
   }, [open])
 
-  if (isFormPath(pathname)) return null
+  if (isFormPath(pathname) || isLegalPath(pathname)) return null
 
   return (
     <div
       ref={rootRef}
       className={cn(
-        'fab-root pointer-events-none fixed right-[max(1rem,env(safe-area-inset-right))] z-[45]',
+        'fab-root pointer-events-none fixed right-[max(0.875rem,env(safe-area-inset-right))] z-[45] sm:right-[max(1rem,env(safe-area-inset-right))]',
         lifted
-          ? 'bottom-[calc(var(--cookie-banner-offset)+0.75rem)]'
-          : 'bottom-[max(1rem,calc(env(safe-area-inset-bottom)+0.85rem))]',
+          ? 'bottom-[calc(var(--cookie-banner-offset)+0.85rem)]'
+          : 'bottom-[max(1.15rem,calc(env(safe-area-inset-bottom)+1rem))] sm:bottom-[max(1.25rem,calc(env(safe-area-inset-bottom)+1.1rem))]',
       )}
     >
       <ul
@@ -175,7 +175,7 @@ export function FloatingContactMenu({ lifted = false }: FloatingContactMenuProps
       <button
         ref={toggleRef}
         type="button"
-        className="pointer-events-auto inline-flex size-12 touch-manipulation items-center justify-center rounded-full bg-brand text-white shadow-lift transition-[background-color] duration-[var(--duration-base)] hover:bg-brand-dark"
+        className="pointer-events-auto inline-flex size-11 touch-manipulation items-center justify-center rounded-full bg-brand text-white shadow-lift transition-[background-color,transform] duration-[var(--duration-base)] hover:bg-brand-dark motion-safe:active:scale-[0.98] sm:size-12"
         aria-label={open ? 'Contactopties sluiten' : 'Contactopties openen'}
         aria-expanded={open}
         aria-controls={menuId}

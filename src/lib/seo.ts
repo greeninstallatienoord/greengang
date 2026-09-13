@@ -49,7 +49,7 @@ export function applySeo({
   setMeta('twitter:description', description)
   setMeta('twitter:image', imageUrl)
   setMeta('twitter:image:alt', imageAlt)
-  setMeta('geo.region', `${site.contact.countryCode}-${site.contact.region.slice(0, 2).toUpperCase()}`)
+  setMeta('geo.region', `${site.contact.countryCode}-${site.contact.regionCode}`)
   setMeta('geo.placename', `${site.contact.city}, ${site.contact.region}`)
   if (type === 'article' && publishedTime) {
     setMeta('article:published_time', publishedTime, 'property')

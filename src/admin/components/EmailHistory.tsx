@@ -35,7 +35,7 @@ export function EmailHistory({ items }: EmailHistoryProps) {
               </div>
               {item.id ? (
                 <Link
-                  to={adminUrl(`emails/${item.id}`)}
+                  to={adminUrl(`emails/logs/${item.id}`)}
                   className="mt-2 inline-block text-sm underline decoration-[var(--admin-line)] underline-offset-2"
                 >
                   Open e-mail

@@ -22,6 +22,12 @@ type PageHeroProps = {
   children?: ReactNode
   narrow?: boolean
   className?: string
+  /** Constrain the copy column (useful with hero images). */
+  copyClassName?: string
+  titleClassName?: string
+  imageClassName?: string
+  /** Slightly tighter vertical rhythm for long headlines + CTAs above the fold. */
+  compact?: boolean
 }
 
 export function PageHero({
@@ -35,32 +41,56 @@ export function PageHero({
   children,
   narrow = false,
   className,
+  copyClassName,
+  titleClassName,
+  imageClassName,
+  compact = false,
 }: PageHeroProps) {
   return (
-    <section className={cn('border-b border-line bg-paper py-8 sm:py-12 lg:py-16', className)}>
+    <section
+      className={cn(
+        'border-b border-line bg-paper',
+        compact ? 'py-7 sm:py-9 lg:py-11' : 'py-8 sm:py-12 lg:py-16',
+        className,
+      )}
+    >
       <Container className={narrow ? 'max-w-3xl' : undefined}>
         <Breadcrumbs items={crumbs} />
         <div
           className={
             image
-              ? 'mt-6 grid items-center gap-6 sm:mt-8 sm:gap-10 lg:grid-cols-[1fr_0.95fr]'
+              ? cn(
+                  'grid items-center lg:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)]',
+                  compact
+                    ? 'mt-5 gap-6 sm:mt-6 sm:gap-8 lg:gap-10'
+                    : 'mt-6 gap-8 sm:mt-8 sm:gap-10 lg:gap-12',
+                )
               : 'mt-6 max-w-3xl sm:mt-8'
           }
         >
-          <div>
+          <div className={cn(image ? 'max-w-xl' : undefined, copyClassName)}>
             {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
-            <Heading as="h1" className={eyebrow ? 'mt-3' : 'mt-0'}>
+            <Heading as="h1" className={cn(eyebrow ? 'mt-3' : 'mt-0', titleClassName)}>
               {title}
             </Heading>
-            {intro ? <p className="lead mt-4">{intro}</p> : null}
-            {actions ? <div className="mt-5">{actions}</div> : null}
+            {intro ? (
+              <p className={cn('lead max-w-prose', compact ? 'mt-4' : 'mt-5')}>{intro}</p>
+            ) : null}
+            {actions ? (
+              <div className={compact ? 'mt-6 sm:mt-7' : 'mt-7 sm:mt-8'}>{actions}</div>
+            ) : null}
             {children}
           </div>
           {image ? (
             <MediaImage
               asset={image}
               alt={imageAlt}
-              className="rounded-none max-h-[16.5rem] sm:max-h-[18rem] lg:max-h-[20rem]"
+              className={cn(
+                compact
+                  ? 'max-h-[15rem] sm:max-h-[17rem] lg:max-h-[19rem]'
+                  : 'max-h-[16.5rem] sm:max-h-[18rem] lg:max-h-[21rem]',
+                imageClassName ?? 'rounded-none',
+              )}
               ratio="16 / 10"
               sizes="(min-width: 1024px) 38vw, 100vw"
               priority

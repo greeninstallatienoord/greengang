@@ -6,12 +6,15 @@ import logo from '../assets/images/branding/logo.png'
 import { business } from '../data/business'
 import { api } from '../lib/api'
 import { Notice } from './components/Notice'
+import { TurnstileField } from './components/TurnstileField'
 import { adminUrl } from './adminPath'
 
 export function AdminLoginPage() {
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const [resetSignal, setResetSignal] = useState(0)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
 
@@ -27,21 +30,31 @@ export function AdminLoginPage() {
   }, [])
 
   async function onSubmit() {
-    setBusy(true)
-    setError('')
-    const result = await api.admin.login(email, password)
-    setBusy(false)
-    if (!result.ok) {
-      setError(result.message)
+    if (busy) return
+    if (!turnstileToken) {
+      setError('Rond de beveiligingscontrole af en probeer opnieuw.')
       return
     }
+
+    setBusy(true)
+    setError('')
+    const result = await api.admin.login(email, password, turnstileToken)
+    setBusy(false)
+
+    if (!result.ok) {
+      setError(result.message)
+      setTurnstileToken(null)
+      setResetSignal((value) => value + 1)
+      return
+    }
+
     navigate(adminUrl('dashboard'))
   }
 
   return (
-    <div className="admin-app flex min-h-dvh items-center justify-center px-4 py-10">
+    <div className="admin-app flex min-h-dvh items-center justify-center px-3 py-8 min-[360px]:px-4 sm:py-10">
       <form
-        className="w-full max-w-[26rem] border border-[var(--admin-line)] bg-[var(--admin-panel)] p-7 shadow-[0_10px_36px_rgb(16_36_24_/_0.08)]"
+        className="w-full max-w-[26rem] border border-[var(--admin-line)] bg-[var(--admin-panel)] p-5 shadow-[0_10px_36px_rgb(16_36_24_/_0.08)] min-[360px]:p-6 sm:p-7"
         onSubmit={(event) => {
           event.preventDefault()
           void onSubmit()
@@ -60,22 +73,30 @@ export function AdminLoginPage() {
             <TextInput
               id="admin-email"
               type="email"
+              name="username"
               autoComplete="username"
+              inputMode="email"
+              required
               value={email}
               onChange={(event) => setEmail(event.target.value)}
+              className="min-h-11"
             />
           </Field>
           <Field id="admin-password" label="Wachtwoord">
             <TextInput
               id="admin-password"
               type="password"
+              name="password"
               autoComplete="current-password"
+              required
               value={password}
               onChange={(event) => setPassword(event.target.value)}
+              className="min-h-11"
             />
           </Field>
+          <TurnstileField onToken={setTurnstileToken} resetSignal={resetSignal} />
           {error ? <Notice tone="error">{error}</Notice> : null}
-          <Button type="submit" disabled={busy}>
+          <Button type="submit" disabled={busy || !turnstileToken} className="min-h-11">
             {busy ? 'Bezig…' : 'Inloggen'}
           </Button>
         </div>

@@ -4,7 +4,7 @@ import { api } from './api'
 export type ContactResult = SubmissionResult
 
 const UNAVAILABLE =
-  'We konden uw bericht nu niet versturen. Controleer uw verbinding of bel 06 28 73 91 34.'
+  'We konden uw bericht nu niet versturen. Controleer uw verbinding of bel 050 569 0997.'
 
 export async function submitContact(
   payload: ContactRequest,

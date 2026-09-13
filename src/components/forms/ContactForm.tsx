@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { contactSubjects } from '../../data/forms'
 import { useSessionDraft } from '../../hooks/useSessionDraft'
 import { submitContact } from '../../lib/contactService'
 import { focusFirstError } from '../../lib/focusError'
@@ -7,8 +8,7 @@ import { FIELD_MAX } from '../../lib/formLimits'
 import { required, validateEmail, validatePhone } from '../../lib/validation'
 import type { ContactRequest, FormStatus } from '../../types'
 import { Button } from '../Button'
-import { Field, TextArea, TextInput } from './Field'
-import { FormPrivacyNote } from './FormPrivacyNote'
+import { Field, SelectInput, TextArea, TextInput } from './Field'
 import { FormSuccess } from './FormSuccess'
 
 function newKey(): string {
@@ -102,6 +102,15 @@ export function ContactForm() {
     )
   }
 
+  const subjectOptions = contactSubjects.some((item) => item.value === form.subject)
+    ? contactSubjects
+    : [
+        ...contactSubjects,
+        ...(form.subject
+          ? [{ value: form.subject, label: form.subject } as const]
+          : []),
+      ]
+
   return (
     <form
       className="grid gap-4"
@@ -121,12 +130,13 @@ export function ContactForm() {
           onChange={(event) => setHoneypot(event.target.value)}
         />
       </div>
-      <FormPrivacyNote purpose="Naam, e-mail en bericht zijn nodig om te antwoorden. Telefoon en onderwerp zijn optioneel." />
+
       <div className="grid gap-4 sm:grid-cols-2">
         <Field id="name" label="Naam" error={errors.name}>
           <TextInput
             id="name"
             autoComplete="name"
+            required
             value={form.name}
             error={errors.name}
             maxLength={FIELD_MAX.name}
@@ -138,13 +148,14 @@ export function ContactForm() {
             id="email"
             type="email"
             autoComplete="email"
+            required
             value={form.email}
             error={errors.email}
             maxLength={FIELD_MAX.email}
             onChange={(event) => update('email', event.target.value)}
           />
         </Field>
-        <Field id="phone" label="Telefoon" hint="Optioneel" error={errors.phone}>
+        <Field id="phone" label="Telefoon (optioneel)" error={errors.phone}>
           <TextInput
             id="phone"
             type="tel"
@@ -155,31 +166,54 @@ export function ContactForm() {
             onChange={(event) => update('phone', event.target.value)}
           />
         </Field>
-        <Field id="subject" label="Onderwerp" hint="Optioneel">
-          <TextInput
+        <Field id="subject" label="Onderwerp (optioneel)">
+          <SelectInput
             id="subject"
             value={form.subject}
-            error={errors.subject}
-            maxLength={FIELD_MAX.subject}
             onChange={(event) => update('subject', event.target.value)}
-          />
+          >
+            {subjectOptions.map((item) => (
+              <option key={item.value || 'none'} value={item.value}>
+                {item.label}
+              </option>
+            ))}
+          </SelectInput>
         </Field>
       </div>
+
       <Field
         id="message"
         label="Bericht"
-        hint="Beschrijf uw vraag. Geen BSN of extra persoonsgegevens."
+        hint="Beschrijf kort uw vraag. Deel geen BSN of andere gevoelige persoonsgegevens."
         error={errors.message}
       >
         <TextArea
           id="message"
-          className="min-h-40"
+          className="min-h-[8.5rem] resize-y"
+          rows={6}
+          required
           value={form.message}
           error={errors.message}
           maxLength={FIELD_MAX.message}
           onChange={(event) => update('message', event.target.value)}
         />
       </Field>
+
+      <p className="text-sm text-ink-muted">
+        We gebruiken uw gegevens alleen om uw vraag te beantwoorden. Lees onze{' '}
+        <Link to="/privacy" className="font-semibold text-ink underline underline-offset-2">
+          privacyverklaring
+        </Link>
+        . Onze{' '}
+        <Link
+          to="/algemene-voorwaarden"
+          className="font-semibold text-ink underline underline-offset-2"
+        >
+          algemene voorwaarden
+        </Link>{' '}
+        gelden pas bij een latere overeenkomst; u kunt ze nu al inzien.
+      </p>
+
       <label className="flex min-h-11 items-start gap-3 text-sm">
         <input
           id="privacy"
@@ -191,7 +225,11 @@ export function ContactForm() {
           onChange={(event) => update('privacyAccepted', event.target.checked)}
         />
         <span>
-          Ik heb de <Link to="/privacy" className="underline">privacyverklaring</Link> gelezen.
+          Ik heb de{' '}
+          <Link to="/privacy" className="underline underline-offset-2">
+            privacyverklaring
+          </Link>{' '}
+          gelezen.
         </span>
       </label>
       {errors.privacy ? (
@@ -204,9 +242,16 @@ export function ContactForm() {
           {submitError}
         </p>
       ) : null}
-      <Button type="submit" className="w-full sm:w-auto" disabled={status === 'submitting'}>
-        {status === 'submitting' ? 'Verwerken…' : 'Bericht versturen'}
-      </Button>
+
+      <div>
+        <Button
+          type="submit"
+          className="w-full min-[400px]:w-auto"
+          disabled={status === 'submitting'}
+        >
+          {status === 'submitting' ? 'Bericht versturen…' : 'Bericht versturen'}
+        </Button>
+      </div>
     </form>
   )
 }

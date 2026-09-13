@@ -2,6 +2,7 @@ import { requireAdmin } from './auth'
 import { MAX_BODY_BYTES, type WorkerEnv } from './env'
 import { HttpError, json, logSafe, optionsResponse, readJson } from './http'
 import { clientKey, rateLimit } from './rateLimit'
+import { assertTrustedMutation } from './security'
 import * as admin from './routes/admin'
 import * as pub from './routes/public'
 
@@ -65,19 +66,23 @@ async function handle(request: Request, env: WorkerEnv): Promise<Response> {
   }
 
   if (request.method === 'POST' && path === '/api/admin/login') {
-    limit(request, 'login', 8, 15 * 60_000)
+    assertTrustedMutation(env, request)
+    // Soft in-isolate limit; durable D1 throttle lives inside admin.login.
+    limit(request, 'login', 12, 15 * 60_000)
     const body = await readJson<Record<string, unknown>>(request, MAX_BODY_BYTES)
-    const result = await admin.login(env, body)
+    const result = await admin.login(env, request, body)
     return json(env, request, result.data, 200, { 'Set-Cookie': result.cookie })
   }
 
   if (request.method === 'POST' && path === '/api/admin/logout') {
+    assertTrustedMutation(env, request)
     const result = await admin.logout(env, request)
     return json(env, request, { ok: true }, 200, { 'Set-Cookie': result.cookie })
   }
 
   if (path.startsWith('/api/admin')) {
     await requireAdmin(env, request)
+    assertTrustedMutation(env, request)
     return handleAdmin(request, env, path)
   }
 
@@ -102,7 +107,9 @@ async function handleAdmin(request: Request, env: WorkerEnv, path: string): Prom
   }
 
   if (resource === 'appointments') {
-    if (request.method === 'GET' && !id) return json(env, request, await admin.listAppointments(env))
+    if (request.method === 'GET' && !id) {
+      return json(env, request, await admin.listAppointments(env, request))
+    }
     if (request.method === 'GET' && id) return json(env, request, await admin.getAppointment(env, id))
     if (request.method === 'POST' && !id) {
       const body = await readJson<Record<string, unknown>>(request, MAX_BODY_BYTES)

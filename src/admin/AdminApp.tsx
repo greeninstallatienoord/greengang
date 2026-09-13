@@ -20,6 +20,9 @@ const AppointmentDetailPage = lazy(() =>
 const AppointmentNewPage = lazy(() =>
   import('./pages/AppointmentNewPage').then((module) => ({ default: module.AppointmentNewPage })),
 )
+const CalendarPage = lazy(() =>
+  import('./pages/CalendarPage').then((module) => ({ default: module.CalendarPage })),
+)
 const CustomersPage = lazy(() =>
   import('./pages/CustomersPage').then((module) => ({ default: module.CustomersPage })),
 )
@@ -55,6 +58,9 @@ const TemplateDetailPage = lazy(() =>
 )
 const SettingsPage = lazy(() =>
   import('./pages/SettingsPage').then((module) => ({ default: module.SettingsPage })),
+)
+const WebsiteInfoPage = lazy(() =>
+  import('./pages/WebsiteInfoPage').then((module) => ({ default: module.WebsiteInfoPage })),
 )
 
 function Fallback() {
@@ -98,6 +104,7 @@ export function AdminApp() {
           <Route path="appointments" element={<AppointmentsPage />} />
           <Route path="appointments/new" element={<AppointmentNewPage />} />
           <Route path="appointments/:id" element={<AppointmentDetailPage />} />
+          <Route path="calendar" element={<CalendarPage />} />
           <Route path="customers" element={<CustomersPage />} />
           <Route path="customers/:id" element={<CustomerDetailPage />} />
           <Route path="quotes" element={<QuotesPage />} />
@@ -110,6 +117,7 @@ export function AdminApp() {
           <Route path="templates" element={<TemplatesPage />} />
           <Route path="templates/:id" element={<TemplateDetailPage />} />
           <Route path="settings" element={<SettingsPage />} />
+          <Route path="website-info" element={<WebsiteInfoPage />} />
         </Route>
         <Route path="*" element={<Navigate to={adminUrl('dashboard')} replace />} />
       </Routes>

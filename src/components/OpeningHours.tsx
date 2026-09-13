@@ -12,10 +12,95 @@ function todayKey(): string {
 
 type OpeningHoursProps = {
   className?: string
+  /** Compact weekday grouping for cards / sidebars. */
+  compact?: boolean
 }
 
-export function OpeningHours({ className }: OpeningHoursProps) {
+export function OpeningHours({ className, compact = false }: OpeningHoursProps) {
   const today = todayKey()
+
+  if (compact) {
+    const weekday = business.openingHours.days.find((day) => day.day === 'monday')
+    const saturday = business.openingHours.days.find((day) => day.day === 'saturday')
+    const sunday = business.openingHours.days.find((day) => day.day === 'sunday')
+    const weekdayHours = weekday ? formatDayHours(weekday) : '07:00–17:00'
+    const weekendClosed =
+      Boolean(saturday?.closed || !saturday?.opens) &&
+      Boolean(sunday?.closed || !sunday?.opens)
+    const isWeekday =
+      today === 'monday' ||
+      today === 'tuesday' ||
+      today === 'wednesday' ||
+      today === 'thursday' ||
+      today === 'friday'
+    const isWeekend = today === 'saturday' || today === 'sunday'
+
+    return (
+      <div className={className}>
+        <dl className="grid gap-2.5 text-sm">
+          <div className="flex items-baseline justify-between gap-3">
+            <dt className={cn('font-medium', isWeekday ? 'text-ink' : 'text-ink-muted')}>
+              Maandag t/m vrijdag
+              {isWeekday ? <span className="sr-only"> (vandaag)</span> : null}
+            </dt>
+            <dd className="shrink-0 font-semibold tabular-nums text-ink">{weekdayHours}</dd>
+          </div>
+          {weekendClosed ? (
+            <div className="flex items-baseline justify-between gap-3 border-t border-line/80 pt-2.5">
+              <dt className={cn('font-medium', isWeekend ? 'text-ink' : 'text-ink-muted')}>
+                Weekend
+                {isWeekend ? <span className="sr-only"> (vandaag)</span> : null}
+              </dt>
+              <dd className="shrink-0 text-ink-muted">Gesloten</dd>
+            </div>
+          ) : (
+            <>
+              <div className="flex items-baseline justify-between gap-3 border-t border-line/80 pt-2.5">
+                <dt
+                  className={cn(
+                    'font-medium',
+                    today === 'saturday' ? 'text-ink' : 'text-ink-muted',
+                  )}
+                >
+                  Zaterdag
+                  {today === 'saturday' ? <span className="sr-only"> (vandaag)</span> : null}
+                </dt>
+                <dd className="shrink-0 text-ink-muted">
+                  {saturday ? formatDayHours(saturday) : 'Gesloten'}
+                </dd>
+              </div>
+              <div className="flex items-baseline justify-between gap-3 border-t border-line/80 pt-2.5">
+                <dt
+                  className={cn(
+                    'font-medium',
+                    today === 'sunday' ? 'text-ink' : 'text-ink-muted',
+                  )}
+                >
+                  Zondag
+                  {today === 'sunday' ? <span className="sr-only"> (vandaag)</span> : null}
+                </dt>
+                <dd className="shrink-0 text-ink-muted">
+                  {sunday ? formatDayHours(sunday) : 'Gesloten'}
+                </dd>
+              </div>
+            </>
+          )}
+        </dl>
+        {business.emergencyService.available ? (
+          <p className="mt-3 text-xs leading-relaxed text-ink-muted">
+            Bij storingen is de{' '}
+            <a
+              href={business.emergencyService.phoneHref}
+              className="font-semibold text-brand-dark underline-offset-2 hover:underline"
+            >
+              {business.emergencyService.label}
+            </a>{' '}
+            ook buiten deze tijden bereikbaar.
+          </p>
+        ) : null}
+      </div>
+    )
+  }
 
   return (
     <div className={className}>

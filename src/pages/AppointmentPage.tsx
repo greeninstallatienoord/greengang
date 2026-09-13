@@ -1,6 +1,5 @@
 import { AppointmentFlow } from '../components/forms/AppointmentFlow'
 import { PageHero } from '../components/page/PageHero'
-import { CrossLinks } from '../components/page/CrossLinks'
 import { PhoneFallback } from '../components/page/PhoneFallback'
 import { Container } from '../components/Container'
 import { Section } from '../components/Section'
@@ -22,39 +21,27 @@ export function AppointmentPage() {
         }}
       />
       <PageHero
+        compact
+        className="!py-6 sm:!py-8 lg:!py-9"
         crumbs={[
           { label: 'Home', href: '/' },
-          { label: 'Afspraak maken', href: '/afspraak-maken' },
+          { label: 'Afspraak aanvragen', href: '/afspraak-maken' },
         ]}
         eyebrow="Planning"
-        title="Afspraak maken"
-        intro="Kies een dienst, een datum en een vrij tijdstip. Daarna uw gegevens en een korte controle. Een gekozen moment is pas definitief na onze bevestiging."
+        title="Afspraak aanvragen"
+        titleClassName="text-[clamp(1.5rem,3.2vw,2.35rem)]"
+        intro="Kies een dienst, voorkeursdatum en tijdvak. Daarna uw gegevens. Een gekozen moment is pas definitief na onze bevestiging."
         narrow
       />
-      <Section>
+      <Section className="!py-6 sm:!py-8 lg:!py-10">
         <Container className="max-w-3xl">
+          <p className="mb-5 text-sm text-ink-muted">
+            U vraagt een voorkeursmoment aan. Wij bekijken de aanvraag en bevestigen
+            het moment persoonlijk.
+          </p>
           <AppointmentFlow />
         </Container>
       </Section>
-      <CrossLinks
-        links={[
-          {
-            href: '/contact',
-            label: 'Contact',
-            note: 'Bellen of mailen als een formulier niet past.',
-          },
-          {
-            href: '/offerte-aanvragen',
-            label: 'Offerte aanvragen',
-            note: 'Liever eerst een voorstel? Vraag een offerte aan.',
-          },
-          {
-            href: '/veelgestelde-vragen',
-            label: 'Vragen over afspraken',
-            note: 'Een gekozen moment is een voorkeur tot wij bevestigen.',
-          },
-        ]}
-      />
       <PhoneFallback text="Liever bellen om een moment af te stemmen? Gebruik het telefoonnummer of de contactpagina." />
     </>
   )

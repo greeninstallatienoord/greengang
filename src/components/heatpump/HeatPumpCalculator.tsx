@@ -95,9 +95,9 @@ export function HeatPumpCalculator() {
             Wat kan een warmtepomp u opleveren?
           </Heading>
           <p className="lead mt-3 sm:mt-4">
-            Vul uw huidige gasverbruik in en bekijk een indicatie van het
-            energieverbruik, de jaarlijkse besparing en mogelijke
-            terugverdientijd.
+            Vul uw huidige gasverbruik in voor een indicatie van
+            energieverbruik, jaarlijkse besparing en mogelijke terugverdientijd.
+            Geen offerte en geen garantie — wel een bruikbaar startpunt.
           </p>
         </div>
 

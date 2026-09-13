@@ -1,70 +1,36 @@
-import { Link } from 'react-router-dom'
 import { QuoteForm } from '../components/forms/QuoteForm'
 import { PageHero } from '../components/page/PageHero'
-import { CrossLinks } from '../components/page/CrossLinks'
 import { PhoneFallback } from '../components/page/PhoneFallback'
 import { Container } from '../components/Container'
 import { Section } from '../components/Section'
 import { PageMeta } from '../components/seo/PageMeta'
 import { pageSeo } from '../data/seo'
-import { services } from '../data/services'
 
 export function QuotePage() {
   return (
     <>
       <PageMeta {...pageSeo.quote} />
       <PageHero
+        compact
+        className="!py-6 sm:!py-8 lg:!py-9"
         crumbs={[
           { label: 'Home', href: '/' },
           { label: 'Offerte aanvragen', href: '/offerte-aanvragen' },
         ]}
         eyebrow="Offerte"
         title="Offerte aanvragen"
-        intro="Vier stappen: wat u wilt laten doen, de situatie, uw gegevens, en een controle voordat u verstuurt."
+        titleClassName="text-[clamp(1.5rem,3.2vw,2.35rem)]"
+        intro="Vier korte stappen: wat u wilt laten doen, de situatie, uw gegevens en een controle. Dit is een aanvraag, geen automatisch voorstel."
         narrow
-      >
-        <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm">
-          {services.map((service) => (
-            <li key={service.slug}>
-              <Link to={service.href} className="underline">
-                {service.heroTitle}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </PageHero>
-      <Section>
+      />
+      <Section className="!py-6 sm:!py-8 lg:!py-10">
         <Container className="max-w-3xl">
-          <div className="mb-8 border border-line bg-paper p-6">
-            <h2 className="font-semibold">Hoe we met uw aanvraag omgaan</h2>
-            <p className="mt-2 text-sm text-ink-muted">
-              Na het versturen nemen we contact op om de vraag scherp te krijgen.
-              We gebruiken alleen de gegevens die nodig zijn om u te bereiken. De
-              privacytoelichting staat bij de laatste stap.
-            </p>
-          </div>
+          <p className="mb-5 text-sm text-ink-muted">
+            Na het versturen nemen we contact op om de vraag scherp te krijgen.
+          </p>
           <QuoteForm />
         </Container>
       </Section>
-      <CrossLinks
-        links={[
-          {
-            href: '/contact',
-            label: 'Contact',
-            note: 'Telefoon, e-mail of het contactformulier.',
-          },
-          {
-            href: '/veelgestelde-vragen',
-            label: 'Veelgestelde vragen',
-            note: 'Wat er na een aanvraag gebeurt en hoe een offerte tot stand komt.',
-          },
-          {
-            href: '/blog/offerte-voorbereiden',
-            label: 'Offerte voorbereiden',
-            note: 'Wat u kunt noteren voordat u het formulier invult.',
-          },
-        ]}
-      />
       <PhoneFallback text="Liever telefonisch een offerte voorbereiden? Bel ons of gebruik de contactpagina." />
     </>
   )

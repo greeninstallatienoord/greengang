@@ -1,4 +1,4 @@
-import { allowedOrigins, type WorkerEnv } from './env'
+import { allowedOrigins, isProduction, type WorkerEnv } from './env'
 
 export class HttpError extends Error {
   status: number
@@ -11,6 +11,18 @@ export class HttpError extends Error {
   }
 }
 
+function securityHeaders(headers: Headers, env: WorkerEnv): void {
+  headers.set('Cache-Control', 'no-store')
+  headers.set('X-Content-Type-Options', 'nosniff')
+  headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+  headers.set('X-Frame-Options', 'DENY')
+  headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
+  headers.set('Cross-Origin-Resource-Policy', 'same-origin')
+  if (isProduction(env)) {
+    headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
+  }
+}
+
 export function json(
   env: WorkerEnv,
   request: Request,
@@ -20,7 +32,7 @@ export function json(
 ): Response {
   const headers = new Headers(extraHeaders)
   headers.set('Content-Type', 'application/json; charset=utf-8')
-  headers.set('Cache-Control', 'no-store')
+  securityHeaders(headers, env)
   applyCors(env, request, headers)
   return new Response(JSON.stringify(data), { status, headers })
 }
@@ -42,6 +54,7 @@ export function applyCors(env: WorkerEnv, request: Request, headers: Headers): v
 
 export function optionsResponse(env: WorkerEnv, request: Request): Response {
   const headers = new Headers()
+  securityHeaders(headers, env)
   applyCors(env, request, headers)
   return new Response(null, { status: 204, headers })
 }

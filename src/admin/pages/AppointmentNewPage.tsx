@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Button } from '../../components/Button'
 import { Field, TextArea, TextInput } from '../../components/forms/Field'
 import { api } from '../../lib/api'
@@ -15,13 +15,16 @@ const selectClass =
 
 export function AppointmentNewPage() {
   const navigate = useNavigate()
+  const [params] = useSearchParams()
   const [form, setForm] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    address: '',
+    name: params.get('name') ?? '',
+    email: params.get('email') ?? '',
+    phone: params.get('phone') ?? '',
+    address: params.get('address') ?? '',
     notes: '',
-    service: 'cv-ketel',
+    service: services.includes(params.get('service') as (typeof services)[number])
+      ? (params.get('service') as string)
+      : 'cv-ketel',
     appointment_date: '',
     appointment_time: '',
   })

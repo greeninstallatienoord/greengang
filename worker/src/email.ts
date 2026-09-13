@@ -51,7 +51,7 @@ export function businessBlock(): string {
   return [
     'Green Installatie Noord',
     'Burgemeester van Weringstraat 23, 9665 GN Oude Pekela',
-    '06 28 73 91 34',
+    '050 569 0997',
     'info@greeninstallatienoord.nl',
   ].join('\n')
 }

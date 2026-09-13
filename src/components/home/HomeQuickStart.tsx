@@ -27,8 +27,8 @@ export function HomeQuickStart() {
   const selectedSituation = situationForService(service, situation)
 
   return (
-    <Section className="bg-brand-deep text-white">
-      <Container className="grid gap-5 sm:gap-7 lg:grid-cols-[1fr_1.1fr] lg:items-end lg:gap-8">
+    <Section className="bg-brand-deep text-white !py-6 sm:!py-10 lg:!py-12">
+      <Container className="grid gap-4 sm:gap-6 lg:grid-cols-[1fr_1.1fr] lg:items-end lg:gap-8">
         <div className="max-w-xl">
           <p className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-white/70">
             Offerte

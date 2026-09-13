@@ -229,11 +229,23 @@ export function QuoteForm() {
   if (status === 'success') {
     return (
       <FormSuccess
-        title="Offerteaanvraag ontvangen"
+        title="Uw offerteaanvraag is ontvangen"
         confirmedByServer
         previewText=""
-        confirmedText="Bedankt voor uw aanvraag bij Green Installatie Noord. We hebben uw bericht ontvangen en nemen contact met u op."
+        confirmedText="Bedankt. We hebben uw aanvraag ontvangen en nemen contact met u op om de details te bespreken."
         warning={emailWarning || undefined}
+        summary={
+          <dl className="mt-5 grid gap-2 text-sm">
+            <div className="flex justify-between gap-4 border-b border-line py-2">
+              <dt className="text-ink-muted">Dienst</dt>
+              <dd className="font-medium text-right">{serviceLabel}</dd>
+            </div>
+            <div className="flex justify-between gap-4 py-2">
+              <dt className="text-ink-muted">Situatie</dt>
+              <dd className="font-medium text-right">{situationLabel}</dd>
+            </div>
+          </dl>
+        }
         onReset={() => {
           clearDraft()
           lock.current = false
@@ -274,17 +286,25 @@ export function QuoteForm() {
             Wat wilt u laten doen?
           </legend>
           <div className="grid gap-3 sm:grid-cols-2">
-            {primaryServices.map((option) => (
-              <button
-                key={option.value}
-                type="button"
-                className="min-h-14 rounded-md border border-line p-4 text-left text-base hover:border-brand hover:bg-brand-soft/60"
-                onClick={() => chooseService(option.value)}
-              >
-                <span className="block font-semibold">{option.label}</span>
-                <span className="mt-1 block text-sm text-ink-muted">{option.hint}</span>
-              </button>
-            ))}
+            {primaryServices.map((option) => {
+              const selected = form.service === option.value
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  aria-pressed={selected}
+                  className={`min-h-14 rounded-sm border p-4 text-left text-base transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
+                    selected
+                      ? 'border-brand bg-brand-soft/70'
+                      : 'border-line hover:border-brand/50 hover:bg-stone/40'
+                  }`}
+                  onClick={() => chooseService(option.value)}
+                >
+                  <span className="block font-semibold">{option.label}</span>
+                  <span className="mt-1 block text-sm text-ink-muted">{option.hint}</span>
+                </button>
+              )
+            })}
           </div>
           <p className="mt-4 text-sm">
             <button
@@ -303,26 +323,34 @@ export function QuoteForm() {
           <legend className="mb-4 text-lg font-semibold">Wat is de situatie?</legend>
           <p className="mb-4 text-sm text-ink-muted">Gekozen: {serviceLabel}</p>
           <div className="grid gap-3">
-            {situations.map((option) => (
-              <button
-                key={option.value}
-                type="button"
-                className="min-h-12 rounded-md border border-line p-3.5 text-left text-base font-medium hover:border-brand hover:bg-brand-soft/60"
-                onClick={() => {
-                  update('situation', option.value as QuoteSituation)
-                  setStep(2)
-                }}
-              >
-                {option.label}
-              </button>
-            ))}
+            {situations.map((option) => {
+              const selected = form.situation === option.value
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  aria-pressed={selected}
+                  className={`min-h-12 rounded-sm border p-3.5 text-left text-base font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
+                    selected
+                      ? 'border-brand bg-brand-soft/70'
+                      : 'border-line hover:border-brand/50 hover:bg-stone/40'
+                  }`}
+                  onClick={() => {
+                    update('situation', option.value as QuoteSituation)
+                    setStep(2)
+                  }}
+                >
+                  {option.label}
+                </button>
+              )
+            })}
           </div>
         </fieldset>
       ) : null}
 
       {step === 2 ? (
         <div className="grid gap-4">
-          <FormPrivacyNote purpose="We vragen naam, telefoon en e-mail om u te kunnen terugbellen of mailen over deze offerteaanvraag. Adres is niet verplicht." />
+          <FormPrivacyNote purpose="We vragen naam, telefoon en e-mail om u te kunnen terugbellen of mailen over deze offerteaanvraag. Adres is niet verplicht. Foto’s worden niet als beeldbestand naar onze server gestuurd; bestandsnaam, grootte en type kunnen wél in de aanvraag meegaan." />
           <div className="grid gap-4 sm:grid-cols-2">
             <Field id="firstName" label="Voornaam" error={errors.firstName}>
               <TextInput
@@ -502,7 +530,11 @@ export function QuoteForm() {
               <Link to="/privacy" className="underline">
                 privacyverklaring
               </Link>{' '}
-              gelezen.
+              gelezen. De{' '}
+              <Link to="/algemene-voorwaarden" className="underline">
+                algemene voorwaarden
+              </Link>{' '}
+              kan ik nu inzien; die gelden pas bij een latere overeenkomst.
             </span>
           </label>
           {errors.privacy ? (
@@ -536,7 +568,7 @@ export function QuoteForm() {
           </Button>
         ) : (
           <Button type="submit" disabled={status === 'submitting' || Boolean(photoError)}>
-            {status === 'submitting' ? 'Versturen…' : 'Aanvraag versturen'}
+            {status === 'submitting' ? 'Versturen…' : 'Offerte aanvragen'}
           </Button>
         )}
       </div>

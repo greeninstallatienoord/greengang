@@ -226,10 +226,10 @@ export const services: ServiceRecord[] = [
     navLabel: 'Service & Onderhoud',
     href: '/service-onderhoud',
     summary:
-      'Onderhoud, service en 24/7 hulp bij storingen aan klimaatinstallaties.',
+      'Onderhoud, service en 24/7 storingsdienst voor klimaatinstallaties.',
     benefit: 'Tijdig onderhoud helpt storingen voorkomen en houdt de installatie in beeld.',
     heroEyebrow: 'Service & onderhoud',
-    heroTitle: 'Kies het onderhoud dat bij u past',
+    heroTitle: 'Service en onderhoud',
     heroText:
       'Periodiek onderhoud duidelijk geregeld. Kies een pakket en bepaal zelf of u onderhoud eens per twee jaar of jaarlijks wilt.',
     explanation: [

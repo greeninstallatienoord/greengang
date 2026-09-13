@@ -140,6 +140,22 @@ export type BlogSection = {
   links?: ContentLink[]
 }
 
+/** Keys into `workPhotos` — assigned per article so imagery matches the subject. */
+export type BlogImageKey =
+  | 'cvIntergas'
+  | 'cvOpstelling'
+  | 'warmtepompIntergas'
+  | 'aircoBinnen'
+  | 'aircoGevel'
+  | 'aircoZolder'
+  | 'aircoPraktijk'
+  | 'aircoVloer'
+  | 'aircoTerras'
+  | 'aircoBeugel'
+  | 'aircoOmkasting'
+  | 'aircoPlatdak'
+  | 'aircoMuur'
+
 export type BlogPost = {
   slug: string
   title: string
@@ -149,6 +165,7 @@ export type BlogPost = {
   tags: string[]
   publishedAt: string
   updatedAt: string
+  imageKey: BlogImageKey
   imageAlt: string
   relatedServiceSlugs: ServiceSlug[]
   relatedArticleSlugs: string[]

@@ -117,7 +117,7 @@ export function ServicePage({ slug }: ServicePageProps) {
 
       {slug === 'airco' ? (
         <>
-          <Section className="bg-paper py-10 sm:py-12">
+          <Section>
             <Container className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
               <p className="max-w-xl text-ink-muted">
                 Binnenunits, buitenunits en omkastingen uit eigen werk staan op de
@@ -252,18 +252,8 @@ export function ServicePage({ slug }: ServicePageProps) {
       </Section>
 
       <CrossLinks
-        title="Offerte, afspraak of meer lezen"
+        title="Meer informatie"
         links={[
-          {
-            href: quoteTo,
-            label: 'Offerte aanvragen',
-            note: `Voorstel voor ${service.shortName.toLowerCase()}.`,
-          },
-          {
-            href: appointmentTo,
-            label: 'Afspraak maken',
-            note: 'Voorkeursmoment doorgeven. Bevestiging volgt later.',
-          },
           {
             href: '/veelgestelde-vragen',
             label: 'Veelgestelde vragen',
@@ -272,7 +262,12 @@ export function ServicePage({ slug }: ServicePageProps) {
           {
             href: `/blog/categorie/${serviceBlogCategory[slug]}`,
             label: 'Artikelen bij deze dienst',
-            note: 'Gidsen en checklists in de kennisbank.',
+            note: 'Gidsen en checklists bij Advies & kennis.',
+          },
+          {
+            href: '/werk',
+            label: 'Werk uit de praktijk',
+            note: 'Foto’s van vergelijkbare installaties.',
           },
         ]}
       />

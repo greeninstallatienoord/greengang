@@ -1,4 +1,4 @@
-import { COOKIE_NAME, SESSION_HOURS, isProduction, type WorkerEnv } from './env'
+import { COOKIE_NAME, SESSION_HOURS, SESSION_IDLE_HOURS, isProduction, type WorkerEnv } from './env'
 import { HttpError } from './http'
 
 function bytesToHex(buffer: ArrayBuffer): string {
@@ -29,6 +29,15 @@ export function randomHex(bytes = 16): string {
   return bytesToHex(view.buffer.slice(view.byteOffset, view.byteOffset + view.byteLength))
 }
 
+export function timingSafeEqualHex(a: string, b: string): boolean {
+  if (a.length !== b.length) return false
+  let different = 0
+  for (let i = 0; i < a.length; i += 1) {
+    different |= a.charCodeAt(i) ^ b.charCodeAt(i)
+  }
+  return different === 0
+}
+
 async function hmacHex(secret: string, value: string): Promise<string> {
   const key = await crypto.subtle.importKey(
     'raw',
@@ -53,7 +62,8 @@ export async function sessionCookie(
     `${COOKIE_NAME}=${signed}`,
     'Path=/',
     'HttpOnly',
-    'SameSite=Lax',
+    // Strict is compatible with same-origin SPA + /api on greeninstallatienoord.nl.
+    'SameSite=Strict',
     `Max-Age=${maxAgeSeconds}`,
   ]
   if (isProduction(env)) parts.push('Secure')
@@ -75,40 +85,60 @@ export async function readSignedSessionToken(
   const [token, signature] = raw.split('.')
   if (!token || !signature || !env.ADMIN_SESSION_SECRET) return null
   const expected = await hmacHex(env.ADMIN_SESSION_SECRET, token)
-  if (expected.length !== signature.length) return null
-  let different = 0
-  for (let i = 0; i < expected.length; i += 1) {
-    different |= (expected.charCodeAt(i) ?? 0) ^ (signature.charCodeAt(i) ?? 0)
-  }
-  return different === 0 ? token : null
+  if (!timingSafeEqualHex(expected, signature)) return null
+  return token
 }
 
 export async function requireAdmin(
   env: WorkerEnv,
   request: Request,
-): Promise<{ adminId: string; email: string }> {
+): Promise<{ adminId: string; email: string; sessionId: string }> {
   const token = await readSignedSessionToken(env, request)
   if (!token) throw new HttpError(401, 'Niet ingelogd.')
 
   const row = await env.DB.prepare(
-    `SELECT sessions.admin_id AS adminId, sessions.expires_at AS expiresAt, admins.email AS email
+    `SELECT sessions.admin_id AS adminId,
+            sessions.expires_at AS expiresAt,
+            sessions.created_at AS createdAt,
+            sessions.last_seen_at AS lastSeenAt,
+            admins.email AS email
      FROM sessions
      JOIN admins ON admins.id = sessions.admin_id
      WHERE sessions.id = ?`,
   )
     .bind(token)
-    .first<{ adminId: string; expiresAt: string; email: string }>()
+    .first<{
+      adminId: string
+      expiresAt: string
+      createdAt: string
+      lastSeenAt: string | null
+      email: string
+    }>()
 
-  if (!row || new Date(row.expiresAt).getTime() <= Date.now()) {
-    if (row) {
-      await env.DB.prepare('DELETE FROM sessions WHERE id = ?').bind(token).run()
-    }
+  if (!row) {
     throw new HttpError(401, 'Sessie verlopen. Log opnieuw in.')
   }
 
-  return { adminId: row.adminId, email: row.email }
+  const now = Date.now()
+  const absoluteExpired = new Date(row.expiresAt).getTime() <= now
+  const lastSeen = new Date(row.lastSeenAt ?? row.createdAt).getTime()
+  const idleExpired = now - lastSeen > SESSION_IDLE_HOURS * 60 * 60 * 1000
+
+  if (absoluteExpired || idleExpired) {
+    await env.DB.prepare('DELETE FROM sessions WHERE id = ?').bind(token).run()
+    throw new HttpError(401, 'Sessie verlopen. Log opnieuw in.')
+  }
+
+  await env.DB.prepare('UPDATE sessions SET last_seen_at = ? WHERE id = ?')
+    .bind(new Date().toISOString(), token)
+    .run()
+
+  return { adminId: row.adminId, email: row.email, sessionId: token }
 }
 
 export function sessionExpiry(): string {
   return new Date(Date.now() + SESSION_HOURS * 60 * 60 * 1000).toISOString()
 }
+
+/** Dummy salt used when no admin row exists so login always pays PBKDF2 cost. */
+export const LOGIN_DUMMY_SALT = 'a1b2c3d4e5f60718293a4b5c6d7e8f90'

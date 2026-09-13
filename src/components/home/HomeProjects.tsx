@@ -14,7 +14,7 @@ export function HomeProjects() {
   const [featured, ...rest] = homeProjectShots
 
   return (
-    <Section id="werkzaamheden" className="bg-paper">
+    <Section id="werkzaamheden" className="scroll-mt-[calc(var(--header-offset)+0.75rem)] bg-paper">
       <Container>
         <Reveal>
           <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end sm:gap-5">

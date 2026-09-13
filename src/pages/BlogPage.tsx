@@ -1,9 +1,10 @@
 import { useMemo, useState } from 'react'
-import { CtaPair } from '../components/CtaPair'
+import { Link } from 'react-router-dom'
+import { BlogCategoryNav } from '../components/blog/BlogCategoryNav'
+import { BlogFeatured } from '../components/blog/BlogFeatured'
 import { BlogPostGrid } from '../components/blog/BlogPostGrid'
-import { BlogSidebar } from '../components/blog/BlogSidebar'
+import { BlogSearch } from '../components/blog/BlogSearch'
 import { PageHero } from '../components/page/PageHero'
-import { RelatedServices } from '../components/page/RelatedServices'
 import { Container } from '../components/Container'
 import { Heading } from '../components/Heading'
 import { Reveal } from '../components/Reveal'
@@ -12,12 +13,10 @@ import { Section } from '../components/Section'
 import { PageMeta } from '../components/seo/PageMeta'
 import {
   blogPosts,
-  featuredGuideSlugs,
+  primaryFeaturedSlug,
 } from '../data/blog'
 import { pageSeo } from '../data/seo'
-import { services } from '../data/services'
 import {
-  breadcrumbJsonLd,
   collectionPageJsonLd,
   localBusinessJsonLd,
 } from '../lib/jsonld'
@@ -28,6 +27,12 @@ function matchesQuery(haystack: string, query: string) {
 
 export function BlogPage() {
   const [query, setQuery] = useState('')
+  const searching = query.trim().length > 0
+
+  const featured = useMemo(
+    () => blogPosts.find((post) => post.slug === primaryFeaturedSlug),
+    [],
+  )
 
   const filtered = useMemo(() => {
     return blogPosts.filter((post) =>
@@ -38,19 +43,10 @@ export function BlogPage() {
     )
   }, [query])
 
-  const featured = useMemo(
-    () =>
-      featuredGuideSlugs
-        .map((slug) => blogPosts.find((post) => post.slug === slug))
-        .filter((post): post is (typeof blogPosts)[number] => Boolean(post)),
-    [],
-  )
-
   const listed = useMemo(() => {
-    if (query.trim()) return filtered
-    const featuredSet = new Set<string>(featuredGuideSlugs)
-    return filtered.filter((post) => !featuredSet.has(post.slug))
-  }, [filtered, query])
+    if (searching) return filtered
+    return filtered.filter((post) => post.slug !== primaryFeaturedSlug)
+  }, [filtered, searching])
 
   return (
     <>
@@ -67,59 +63,81 @@ export function BlogPage() {
               path: `/blog/${post.slug}`,
             })),
           }),
-          breadcrumbJsonLd([
-            { name: 'Home', path: '/' },
-            { name: 'Kennisbank', path: '/blog' },
-          ]),
         ]}
       />
       <PageHero
+        compact
         crumbs={[
           { label: 'Home', href: '/' },
-          { label: 'Kennisbank', href: '/blog' },
+          { label: 'Advies & kennis', href: '/blog' },
         ]}
-        eyebrow="Kennisbank"
-        title="Kennisbank"
-        intro="Praktische artikelen om een gesprek over cv-ketel, airconditioning, warmtepomp of onderhoud voor te bereiden."
-        actions={<CtaPair equal />}
+        eyebrow="Advies & kennis"
+        title="Advies & kennis"
+        titleClassName="max-w-[16ch] text-[clamp(1.55rem,3.4vw,2.45rem)]"
+        intro="Praktische informatie over cv-ketels, airconditioning, warmtepompen, onderhoud en energiezuinig wonen."
       />
 
-      <Section className="bg-paper">
-        <Container className="grid gap-8 lg:grid-cols-[minmax(0,17.5rem)_1fr] lg:items-start">
+      <Section className="!py-7 sm:!py-9 lg:!py-11">
+        <Container>
           <Reveal>
-            <BlogSidebar query={query} onQueryChange={setQuery} />
+            <BlogSearch query={query} onQueryChange={setQuery} />
           </Reveal>
-          <Reveal delay={50}>
-            <div className="grid gap-10">
-              {query.trim() === '' ? (
-                <section>
-                  <Heading as="h2">Gidsen om te beginnen</Heading>
-                  <p className="mt-1 text-sm text-ink-muted">
-                    Langere stukken met officiële bronnen erbij.
-                  </p>
-                  <div className="mt-4">
-                    <BlogPostGrid posts={featured} />
-                  </div>
-                </section>
-              ) : null}
-              <section>
+
+          <Reveal delay={40} className="mt-6 sm:mt-7">
+            <BlogCategoryNav />
+          </Reveal>
+
+          {!searching && featured ? (
+            <Reveal delay={60} className="mt-8 sm:mt-10">
+              <p className="text-sm font-semibold text-ink-muted">Uitgelicht</p>
+              <div className="mt-3">
+                <BlogFeatured post={featured} />
+              </div>
+            </Reveal>
+          ) : null}
+
+          <Reveal delay={80} className="mt-10 sm:mt-12">
+            <div className="flex flex-wrap items-end justify-between gap-3">
+              <div>
                 <Heading as="h2">
-                  {query.trim() ? 'Zoekresultaten' : 'Overige artikelen'}
+                  {searching ? 'Zoekresultaten' : 'Alle artikelen'}
                 </Heading>
                 <p className="mt-1 text-sm text-ink-muted">
-                  {listed.length} {listed.length === 1 ? 'artikel' : 'artikelen'}
+                  {listed.length}{' '}
+                  {listed.length === 1 ? 'artikel' : 'artikelen'}
+                  {searching ? ` voor “${query.trim()}”` : null}
                 </p>
-                <div className="mt-4">
-                  <BlogPostGrid posts={listed} />
-                </div>
-              </section>
+              </div>
             </div>
+            <div className="mt-5 sm:mt-6">
+              <BlogPostGrid posts={listed} />
+            </div>
+          </Reveal>
+
+          <Reveal delay={100} className="mt-12 sm:mt-14">
+            <nav
+              aria-label="Vervolg"
+              className="flex flex-wrap gap-x-6 gap-y-3 border-t border-line pt-8 text-sm font-semibold"
+            >
+              <Link to="/veelgestelde-vragen" className="underline underline-offset-2">
+                Veelgestelde vragen
+              </Link>
+              <Link to="/werkgebied" className="underline underline-offset-2">
+                Werkgebied
+              </Link>
+              <Link to="/contact" className="underline underline-offset-2">
+                Contact
+              </Link>
+            </nav>
           </Reveal>
         </Container>
       </Section>
 
-      <RelatedServices services={services} title="Diensten" />
-      <CTASection />
+      <CTASection
+        eyebrow="Advies"
+        title="Advies nodig over uw installatie?"
+        text="Bespreek uw situatie met Green Installatie Noord."
+      />
     </>
   )
 }

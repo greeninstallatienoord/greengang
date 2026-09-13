@@ -40,18 +40,49 @@ export function EmailLogDetailPage() {
         items={[
           { label: 'Ontvanger', value: item.recipient_name || item.recipient },
           { label: 'E-mailadres', value: item.recipient, href: item.recipient ? `mailto:${item.recipient}` : undefined },
+          {
+            label: 'Klant',
+            value: item.customer_name,
+            href: item.customer_id ? adminUrl(`customers/${item.customer_id}`) : undefined,
+          },
           { label: 'Onderwerp', value: item.subject },
           { label: 'Template', value: item.template_name || 'Zonder template' },
           { label: 'Afzender', value: item.sender },
           { label: 'Verzonden', value: formatDateTime(item.created_at) },
           { label: 'Status', value: emailStatusLabel[item.status ?? ''] ?? item.status },
           { label: 'Bericht-ID', value: item.provider_message_id },
+          {
+            label: 'Gerelateerd',
+            value:
+              item.related_type === 'appointment'
+                ? 'Afspraak'
+                : item.related_type === 'quote'
+                  ? 'Offerte'
+                  : item.related_type === 'contact'
+                    ? 'Contact'
+                    : undefined,
+            href:
+              item.related_type && item.related_id
+                ? adminUrl(
+                    item.related_type === 'appointment'
+                      ? `appointments/${item.related_id}`
+                      : item.related_type === 'quote'
+                        ? `quotes/${item.related_id}`
+                        : `contact/${item.related_id}`,
+                  )
+                : undefined,
+          },
         ]}
       />
       {item.body_html ? (
         <div className="mt-6">
           <h2 className="mb-3 text-sm font-semibold">Verzonden inhoud</h2>
-          <EmailPreview html={item.body_html} subject={item.subject} to={item.recipient} />
+          <EmailPreview
+            html={item.body_html}
+            subject={item.subject}
+            to={item.recipient}
+            from={item.sender ?? undefined}
+          />
         </div>
       ) : item.body_text ? (
         <section className="mt-6 border border-[var(--admin-line)] bg-[var(--admin-panel)] px-4 py-4">

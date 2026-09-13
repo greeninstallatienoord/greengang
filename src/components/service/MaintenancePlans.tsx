@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react'
 import { business } from '../../data/business'
 import {
   formatEuroFromCents,
-  maintenanceConfig,
   maintenanceCopy,
   maintenancePackages,
   monthlyPriceCents,
@@ -32,13 +31,13 @@ export function MaintenancePlans() {
       <Container>
         <div className="max-w-2xl">
           <p className="eyebrow">{maintenanceCopy.eyebrow}</p>
-          <Heading as="h2" className="mt-2.5 sm:mt-3">
+          <Heading as="h2" className="mt-3">
             {maintenanceCopy.title}
           </Heading>
-          <p className="lead mt-3 sm:mt-4">{maintenanceCopy.intro}</p>
+          <p className="lead mt-4">{maintenanceCopy.intro}</p>
         </div>
 
-        <div className="mt-6 max-w-xl sm:mt-8">
+        <div className="mt-8 max-w-xl">
           <p className="text-sm font-semibold tracking-[-0.01em]">
             {maintenanceCopy.frequencyLabel}
           </p>
@@ -74,21 +73,21 @@ export function MaintenancePlans() {
               {maintenanceCopy.annualLabel}
             </button>
           </div>
-          <p className="mt-2.5 text-sm text-ink-muted">
+          <p className="mt-3 text-sm text-ink-muted">
             {frequency === 'annual'
               ? maintenanceCopy.annualNote
               : maintenanceCopy.biennialHint}
           </p>
         </div>
 
-        <ul className="mt-6 grid gap-3 sm:mt-8 lg:grid-cols-3 lg:gap-4">
+        <ul className="mt-8 grid gap-4 lg:grid-cols-3">
           {maintenancePackages.map((pack) => (
             <li
               key={pack.id}
-              className="flex h-full flex-col border border-line bg-surface p-4 sm:p-5"
+              className="flex h-full flex-col border border-line bg-surface p-5"
             >
               <h3 className="text-lg font-semibold tracking-[-0.015em]">{pack.name}</h3>
-              <p className="mt-3 flex flex-wrap items-baseline gap-x-2">
+              <p className="mt-4 flex flex-wrap items-baseline gap-x-2">
                 <span className="font-display text-[1.85rem] leading-none tracking-[-0.02em] text-brand-dark">
                   {formatEuroFromCents(prices[pack.id])}
                 </span>
@@ -97,24 +96,22 @@ export function MaintenancePlans() {
               <p className="mt-2 text-sm text-ink-muted">
                 Onderhoud {frequency === 'annual' ? 'elk jaar' : 'eens per 2 jaar'}
               </p>
-              <ul className="mt-4 flex-1 space-y-2 text-sm text-ink-muted">
-                <li className="border-t border-line pt-2 first:border-t-0 first:pt-0">
-                  Standaardinterval: eens per {maintenanceConfig.normalIntervalYears}{' '}
-                  jaar
-                </li>
-                <li className="border-t border-line pt-2">
-                  Jaarlijks mogelijk: +{' '}
-                  {formatEuroFromCents(maintenanceConfig.annualSurchargeCents)} / maand
-                </li>
-                {pack.features.map((item) => (
-                  <li key={item} className="border-t border-line pt-2">
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              {pack.features.length > 0 ? (
+                <ul className="mt-4 flex-1 space-y-2 text-sm text-ink-muted">
+                  {pack.features.map((item) => (
+                    <li key={item} className="border-t border-line pt-2">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-4 flex-1 text-sm leading-relaxed text-ink-muted">
+                  Dekking en inhoud van dit pakket bespreken we bij de aanvraag.
+                </p>
+              )}
               <ButtonLink
                 to={`/offerte-aanvragen?dienst=service-onderhoud&situatie=onderhoud&pakket=${pack.id}&frequentie=${frequency}`}
-                className="mt-5 min-h-11 w-full"
+                className="mt-5 min-h-11 w-full sm:w-auto"
                 size="sm"
               >
                 {maintenanceCopy.ctaChoose} {pack.name}
@@ -123,24 +120,28 @@ export function MaintenancePlans() {
           ))}
         </ul>
 
-        <p className="mt-5 max-w-2xl text-sm text-ink-muted sm:mt-6">
+        <p className="mt-6 max-w-2xl text-sm text-ink-muted">
           {maintenanceCopy.coverageNote}
         </p>
 
         {business.emergencyService.available ? (
           <div className="mt-8 flex flex-col gap-4 border border-line bg-brand-deep p-4 text-white sm:mt-10 sm:flex-row sm:items-center sm:justify-between sm:p-5">
             <div>
-              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-white/65">
-                Storing
+              <p className="text-[0.68rem] font-semibold tracking-[0.16em] text-white/65 uppercase">
+                Storing melden
               </p>
               <p className="mt-1.5 text-lg font-semibold tracking-[-0.015em]">
-                {business.emergencyService.summary}
+                {business.emergencyService.label}
+              </p>
+              <p className="mt-1 text-sm text-white/75">
+                {business.emergencyService.detail}
               </p>
             </div>
             <ButtonLink
               to={business.emergencyService.phoneHref}
               external
               className="min-h-11 shrink-0 self-start sm:self-center"
+              aria-label={`${business.emergencyService.label}: bel ${business.emergencyService.phone}`}
             >
               Bel {business.emergencyService.phone}
             </ButtonLink>

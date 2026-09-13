@@ -28,6 +28,7 @@ export const site = {
     region: business.address.region,
     country: business.address.country,
     countryCode: business.address.countryCode,
+    regionCode: business.address.regionCode,
     openingHours: business.openingHours.summary,
     serviceAreaSummary: serviceArea.regionName,
   },
@@ -58,7 +59,7 @@ export const site = {
     localText: serviceArea.intro,
     ctaTitle: 'Een installatievraag?',
     ctaText:
-      'Vraag een offerte aan of plan een afspraak. We denken mee over cv-ketel, airco, warmtepomp of onderhoud.',
+      'Vertel ons wat u wilt laten uitvoeren. We denken graag mee over een passende oplossing.',
     ctaQuote: tokens.cta.primary,
     ctaAppointment: tokens.cta.secondary,
     ctaCall: tokens.cta.tertiary,
@@ -76,8 +77,8 @@ export const site = {
         text: 'Nette montage en een oplevering die u kunt volgen.',
       },
       {
-        title: 'Service & onderhoud',
-        text: 'Ook na plaatsing bereikbaar voor onderhoud, vragen en storingen.',
+        title: '24/7 storingsdienst',
+        text: 'Ook buiten reguliere openingstijden bereikbaar bij storingen.',
       },
       {
         title: 'Regionaal bereikbaar',
@@ -100,7 +101,7 @@ export const site = {
       {
         step: '03',
         title: 'Service',
-        text: 'Na plaatsing kunt u bij ons terecht voor onderhoud, vragen en storingen.',
+        text: 'Na plaatsing kunt u bij ons terecht voor onderhoud en vragen. Bij storingen is de 24/7 storingsdienst bereikbaar.',
       },
     ],
   },

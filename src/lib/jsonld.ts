@@ -76,8 +76,8 @@ export function serviceAreaPageJsonLd(): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    name: 'Werkgebied Noord-Nederland',
-    description: site.copy.localText,
+    name: 'Werkgebied | Installateur Groningen, Drenthe en Friesland',
+    description: serviceArea.heroText,
     url: absoluteUrl('/werkgebied'),
     inLanguage: 'nl-NL',
     about: {
@@ -248,7 +248,7 @@ export function articleJsonLd(post: BlogPost): Record<string, unknown> {
     isPartOf: {
       '@type': 'CollectionPage',
       '@id': absoluteUrl('/blog'),
-      name: 'Kennisbank',
+      name: 'Advies & kennis',
     },
     about: post.relatedServiceSlugs.map((slug) => ({
       '@type': 'Service',

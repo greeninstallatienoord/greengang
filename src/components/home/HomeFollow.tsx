@@ -41,7 +41,7 @@ export function HomeFollow() {
   if (items.length === 0) return null
 
   return (
-    <Section className="bg-paper">
+    <Section className="border-t border-line">
       <Container>
         <Reveal>
           <div className="max-w-2xl">

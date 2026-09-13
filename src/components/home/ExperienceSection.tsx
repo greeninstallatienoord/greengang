@@ -1,5 +1,4 @@
 import { ClipboardCheck, Headphones, ShieldCheck } from 'lucide-react'
-import { business } from '../../data/business'
 import { pageImages } from '../../data/media'
 import { site } from '../../data/site'
 import { ButtonLink } from '../ButtonLink'
@@ -21,10 +20,8 @@ const trustPoints = [
     icon: ShieldCheck,
   },
   {
-    title: 'Ook voor service',
-    text: business.emergencyService.available
-      ? 'Bereikbaar voor onderhoud, vragen en 24/7 storing.'
-      : 'Bereikbaar voor onderhoud, vragen en storingen.',
+    title: 'Service na oplevering',
+    text: 'Bereikbaar voor onderhoud en vragen — en bij storingen via de 24/7 storingsdienst.',
     icon: Headphones,
   },
 ] as const
@@ -33,12 +30,12 @@ export function ExperienceSection() {
   return (
     <Section className="bg-paper">
       <Container>
-        <div className="grid items-center gap-8 lg:grid-cols-12 lg:gap-12">
+        <div className="grid items-center gap-6 lg:grid-cols-12 lg:gap-10 xl:gap-12">
           <Reveal className="lg:col-span-5">
             <MediaImage
               asset={pageImages.homeTrustPhoto}
-              className="rounded-none"
-              ratio="4 / 5"
+              className="max-h-[18rem] overflow-hidden rounded-none sm:max-h-[22rem] lg:max-h-none"
+              ratio="4 / 3"
               sizes="(min-width: 1024px) 38vw, 100vw"
             />
           </Reveal>
@@ -50,7 +47,7 @@ export function ExperienceSection() {
             </Heading>
             <p className="lead mt-3 sm:mt-4">{site.copy.introText}</p>
 
-            <ul className="mt-6 grid gap-4 sm:mt-7 sm:grid-cols-3 sm:gap-5">
+            <ul className="mt-6 grid gap-3.5 sm:mt-7 sm:grid-cols-3 sm:gap-4">
               {trustPoints.map((point) => {
                 const Icon = point.icon
                 return (

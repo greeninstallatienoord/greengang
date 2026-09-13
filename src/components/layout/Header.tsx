@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import { headerNav } from '../../data/navigation'
@@ -12,6 +12,7 @@ import { ServicesMenu } from './ServicesMenu'
 import { TopBar } from './TopBar'
 
 export function Header() {
+  const headerRef = useRef<HTMLElement>(null)
   const [compact, setCompact] = useState(
     () => typeof window !== 'undefined' && window.scrollY > 24,
   )
@@ -25,6 +26,27 @@ export function Header() {
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  useEffect(() => {
+    const el = headerRef.current
+    if (!el) return
+
+    const publishOffset = () => {
+      document.documentElement.style.setProperty(
+        '--header-offset',
+        `${el.offsetHeight}px`,
+      )
+    }
+
+    publishOffset()
+    const observer = new ResizeObserver(publishOffset)
+    observer.observe(el)
+    window.addEventListener('orientationchange', publishOffset)
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('orientationchange', publishOffset)
+    }
+  }, [compact, menuOpen])
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : ''
@@ -53,7 +75,7 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-40">
+      <header ref={headerRef} className="sticky top-0 z-40">
         <TopBar />
         <div
           className={cn(
