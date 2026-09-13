@@ -59,8 +59,8 @@ export const heatPumpProducts: HeatPumpProduct[] = [
     approved: true,
   },
   {
-    id: 'lg',
-    brand: 'LG',
+    id: 'intergas',
+    brand: 'Intergas',
     modelFamily: '',
     type: null,
     powerKw: null,
