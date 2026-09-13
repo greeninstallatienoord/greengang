@@ -94,10 +94,36 @@ export function QuoteForm() {
   const [params] = useSearchParams()
   const preset = params.get('dienst')
   const situationPreset = params.get('situatie')
+  const systemPreset = params.get('systeem')
+  const gasPreset = params.get('gasverbruik')
+  const packagePreset = params.get('pakket')
+  const frequencyPreset = params.get('frequentie')
   const initialService =
     preset && isServiceOption(preset) && preset !== 'overig' ? preset : null
   const initialSituation =
     situationPreset && isSituationOption(situationPreset) ? situationPreset : null
+
+  const prefillMessage = useMemo(() => {
+    const parts: string[] = []
+    if (systemPreset === 'hybrid' || systemPreset === 'hybride') {
+      parts.push('Voorkeur systeem: hybride')
+    } else if (systemPreset === 'all-electric') {
+      parts.push('Voorkeur systeem: all-electric')
+    }
+    if (gasPreset && Number.isFinite(Number(gasPreset))) {
+      parts.push(`Huidig gasverbruik: ${Number(gasPreset)} m³/jaar`)
+    }
+    if (packagePreset) {
+      parts.push(`Onderhoudspakket: ${packagePreset}`)
+    }
+    if (frequencyPreset === 'annual') {
+      parts.push('Onderhoudsfrequentie: jaarlijks')
+    } else if (frequencyPreset === 'biennial') {
+      parts.push('Onderhoudsfrequentie: eens per 2 jaar')
+    }
+    return parts.join('\n')
+  }, [systemPreset, gasPreset, packagePreset, frequencyPreset])
+
   const [step, setStep] = useState(initialService && initialSituation ? 2 : initialService ? 1 : 0)
   const [status, setStatus] = useState<FormStatus>('idle')
   const [emailWarning, setEmailWarning] = useState('')
@@ -109,7 +135,15 @@ export function QuoteForm() {
   const [form, setForm, clearDraft] = useSessionDraft<LeadRequest>('gin-quote-draft', {
     ...freshLead(initialService ?? 'cv-ketel'),
     situation: initialSituation ?? 'weet-ik-niet',
+    message: prefillMessage,
   })
+
+  useEffect(() => {
+    if (!prefillMessage) return
+    setForm((current) =>
+      current.message.trim() ? current : { ...current, message: prefillMessage },
+    )
+  }, [prefillMessage, setForm])
 
   useEffect(() => {
     setForm((current) =>
@@ -198,7 +232,7 @@ export function QuoteForm() {
         title="Offerteaanvraag ontvangen"
         confirmedByServer
         previewText=""
-        confirmedText="Bedankt voor uw aanvraag bij Green Installatie Noord. We hebben uw offerteaanvraag ontvangen. Dit is nog geen offerte. We nemen contact met u op."
+        confirmedText="Bedankt voor uw aanvraag bij Green Installatie Noord. We hebben uw bericht ontvangen en nemen contact met u op."
         warning={emailWarning || undefined}
         onReset={() => {
           clearDraft()
@@ -288,7 +322,7 @@ export function QuoteForm() {
 
       {step === 2 ? (
         <div className="grid gap-4">
-          <FormPrivacyNote purpose="We vragen naam, telefoon en e-mail om u te kunnen terugbellen of mailen over deze offerteaanvraag. Adres is niet verplicht. U stuurt een aanvraag, geen bestelling." />
+          <FormPrivacyNote purpose="We vragen naam, telefoon en e-mail om u te kunnen terugbellen of mailen over deze offerteaanvraag. Adres is niet verplicht." />
           <div className="grid gap-4 sm:grid-cols-2">
             <Field id="firstName" label="Voornaam" error={errors.firstName}>
               <TextInput
@@ -436,7 +470,7 @@ export function QuoteForm() {
         <div className="grid gap-4">
           <h2 className="text-lg font-semibold">Controleer uw aanvraag</h2>
           <p className="text-sm text-ink-muted">
-            U stuurt een offerteaanvraag. Dit is geen bestelling en nog geen opdracht.
+            Na verzenden nemen we contact op over uw aanvraag.
           </p>
           <dl className="grid gap-2 text-sm">
             <ReviewRow label="Dienst" value={serviceLabel} onEdit={() => setStep(0)} />

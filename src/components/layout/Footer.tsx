@@ -9,7 +9,6 @@ import { ButtonLink } from '../ButtonLink'
 import { Container } from '../Container'
 import { BrandLogo } from '../media/BrandLogo'
 import { SocialLinks } from '../SocialLinks'
-import { CertificationMarks } from '../trust/CertificationMarks'
 
 function FooterLink({ to, children }: { to: string; children: string }) {
   return (
@@ -36,14 +35,14 @@ export function Footer() {
 
   return (
     <footer className="bg-brand-deep text-white">
-      <Container className="grid gap-7 py-8 sm:gap-8 sm:py-10 lg:grid-cols-12 lg:gap-x-8 lg:gap-y-10 lg:py-12">
+      <Container className="grid gap-8 py-9 sm:gap-10 sm:py-11 lg:grid-cols-12 lg:gap-x-8 lg:gap-y-10 lg:py-14">
         <div className="lg:col-span-4">
           <BrandLogo className="bg-paper px-2.5 py-1.5" />
-          <p className="mt-3 max-w-sm text-sm leading-relaxed text-white/78">
+          <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/78">
             {site.shortDescription}
           </p>
           <p className="mt-2 text-sm text-white/70">KVK {business.kvk}</p>
-          <div className="mt-4 hidden sm:block">
+          <div className="mt-5 hidden sm:block">
             <ButtonLink to="/offerte-aanvragen" size="sm">
               {site.copy.ctaQuote}
             </ButtonLink>
@@ -54,7 +53,7 @@ export function Footer() {
           <FooterHeading>Contact</FooterHeading>
           <a
             href={phoneHref}
-            className="mt-2 inline-flex min-h-11 items-center gap-2 font-display text-[1.35rem] leading-none tracking-[-0.02em] text-white transition-colors hover:text-brand-soft sm:text-[1.45rem]"
+            className="mt-3 inline-flex min-h-11 items-center gap-2 font-display text-[1.35rem] leading-none tracking-[-0.02em] text-white transition-colors hover:text-brand-soft sm:text-[1.45rem]"
           >
             <Phone size={18} strokeWidth={1.7} className="shrink-0 text-white/70" aria-hidden="true" />
             {phone}
@@ -66,9 +65,20 @@ export function Footer() {
                 {email}
               </a>
             </li>
+            {business.emergencyService.available ? (
+              <li>
+                <a
+                  href={business.emergencyService.phoneHref}
+                  className="inline-flex min-h-11 items-center gap-2 font-semibold text-white hover:text-brand-soft"
+                >
+                  <Phone size={15} strokeWidth={1.7} className="shrink-0 text-white/70" aria-hidden="true" />
+                  {business.emergencyService.label}
+                </a>
+              </li>
+            ) : null}
             <li className="flex min-h-11 items-start gap-2 py-1.5">
               <MapPin size={15} strokeWidth={1.7} className="mt-0.5 shrink-0 text-white/70" aria-hidden="true" />
-              <span>
+              <span className="break-words">
                 {street}
                 <br />
                 {postalCode} {city}
@@ -84,7 +94,7 @@ export function Footer() {
         <nav className="grid grid-cols-2 gap-6 lg:col-span-5 lg:grid-cols-2" aria-label="Footer">
           <div>
             <FooterHeading>Navigatie</FooterHeading>
-            <ul className="mt-1 grid">
+            <ul className="mt-2 grid">
               {footerNav.company.map((item) => (
                 <li key={item.href}>
                   <FooterLink to={item.href}>{item.label}</FooterLink>
@@ -94,29 +104,24 @@ export function Footer() {
           </div>
           <div>
             <FooterHeading>Diensten</FooterHeading>
-            <ul className="mt-1 grid">
+            <ul className="mt-2 grid">
               {footerNav.services.map((item) => (
                 <li key={item.href}>
                   <FooterLink to={item.href}>{item.label}</FooterLink>
                 </li>
               ))}
             </ul>
-            <p className="mt-4 text-sm text-white/78">{serviceArea.regionName}</p>
+            <p className="mt-5 text-sm text-white/78">{serviceArea.regionName}</p>
           </div>
         </nav>
       </Container>
 
       <div className="border-t border-white/10">
         <Container className="flex flex-col gap-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:py-5">
-          <div className="min-w-0">
-            <p className="mb-2 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-white/70">
-              Kaders
-            </p>
-            <div className="bg-paper px-3 py-3 sm:px-5">
-              <CertificationMarks compact />
-            </div>
-          </div>
           <SocialLinks className="shrink-0" tone="onDark" />
+          <p className="text-sm text-white/70 sm:text-right">
+            {street}, {postalCode} {city}
+          </p>
         </Container>
       </div>
 

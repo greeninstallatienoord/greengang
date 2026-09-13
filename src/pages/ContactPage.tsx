@@ -60,8 +60,7 @@ export function ContactPage() {
               <div className="border border-line bg-paper p-5 sm:p-6">
                 <h3 className="font-semibold tracking-[-0.01em]">Volg ons</h3>
                 <p className="mt-1 text-sm text-ink-muted">
-                  Facebook, Instagram, TikTok en Google. Geen sterren of aantallen
-                  op deze pagina.
+                  Volg recente projecten en updates, of deel uw ervaring via Google.
                 </p>
                 <SocialLinks className="mt-3" />
               </div>

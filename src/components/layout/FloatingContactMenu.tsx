@@ -1,12 +1,29 @@
-import { useEffect, useId, useRef, useState, type CSSProperties } from 'react'
-import { CalendarDays, FileText, Phone, Plus, X } from 'lucide-react'
+import { useEffect, useId, useMemo, useRef, useState, type CSSProperties } from 'react'
+import {
+  AlertTriangle,
+  CalendarDays,
+  FileText,
+  MessageCircleMore,
+  Phone,
+  X,
+} from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
+import { business } from '../../data/business'
 import { useFocusTrap } from '../../hooks/useFocusTrap'
 import { isFormPath } from '../../data/navigation'
 import { site } from '../../data/site'
 import { cn } from '../../lib/cn'
 
-const actions = [
+type FabAction = {
+  key: string
+  href: string
+  external: boolean
+  label: string
+  detail: string
+  icon: typeof Phone
+}
+
+const baseActions: FabAction[] = [
   {
     key: 'appointment',
     href: '/afspraak-maken',
@@ -31,7 +48,7 @@ const actions = [
     detail: site.contact.phone,
     icon: Phone,
   },
-] as const
+]
 
 type FloatingContactMenuProps = {
   lifted?: boolean
@@ -45,6 +62,26 @@ export function FloatingContactMenu({ lifted = false }: FloatingContactMenuProps
   const menuId = useId()
   const open = openFor === pathname
   useFocusTrap(open, rootRef)
+
+  const showEmergency =
+    business.emergencyService.available &&
+    (pathname.startsWith('/service-onderhoud') ||
+      pathname.startsWith('/cv-ketel') ||
+      pathname.startsWith('/warmtepomp') ||
+      pathname.startsWith('/airco'))
+
+  const actions = useMemo(() => {
+    if (!showEmergency) return baseActions
+    const emergency: FabAction = {
+      key: 'emergency',
+      href: business.emergencyService.phoneHref,
+      external: true,
+      label: '24/7 storing',
+      detail: business.emergencyService.phone,
+      icon: AlertTriangle,
+    }
+    return [emergency, ...baseActions.filter((item) => item.key !== 'call')]
+  }, [showEmergency])
 
   useEffect(() => {
     if (!open) return
@@ -73,8 +110,8 @@ export function FloatingContactMenu({ lifted = false }: FloatingContactMenuProps
       className={cn(
         'fab-root pointer-events-none fixed right-[max(1rem,env(safe-area-inset-right))] z-[45]',
         lifted
-          ? 'bottom-[calc(var(--cookie-banner-offset)+1rem)]'
-          : 'bottom-[max(1.25rem,calc(env(safe-area-inset-bottom)+1rem))]',
+          ? 'bottom-[calc(var(--cookie-banner-offset)+0.75rem)]'
+          : 'bottom-[max(1rem,calc(env(safe-area-inset-bottom)+0.85rem))]',
       )}
     >
       <ul
@@ -97,8 +134,12 @@ export function FloatingContactMenu({ lifted = false }: FloatingContactMenuProps
                 <Icon size={17} strokeWidth={1.7} aria-hidden="true" />
               </span>
               <span className="min-w-0">
-                <span className="block text-sm font-semibold tracking-[-0.01em]">{action.label}</span>
-                <span className="mt-0.5 block text-xs leading-snug text-ink-muted">{action.detail}</span>
+                <span className="block text-sm font-semibold tracking-[-0.01em]">
+                  {action.label}
+                </span>
+                <span className="mt-0.5 block text-xs leading-snug text-ink-muted">
+                  {action.detail}
+                </span>
               </span>
             </>
           )
@@ -134,7 +175,7 @@ export function FloatingContactMenu({ lifted = false }: FloatingContactMenuProps
       <button
         ref={toggleRef}
         type="button"
-        className="pointer-events-auto inline-flex size-14 touch-manipulation items-center justify-center rounded-full bg-brand text-white shadow-lift transition-[background-color] duration-[var(--duration-base)] hover:bg-brand-dark"
+        className="pointer-events-auto inline-flex size-12 touch-manipulation items-center justify-center rounded-full bg-brand text-white shadow-lift transition-[background-color] duration-[var(--duration-base)] hover:bg-brand-dark"
         aria-label={open ? 'Contactopties sluiten' : 'Contactopties openen'}
         aria-expanded={open}
         aria-controls={menuId}
@@ -142,13 +183,13 @@ export function FloatingContactMenu({ lifted = false }: FloatingContactMenuProps
         onClick={() => setOpenFor(open ? null : pathname)}
       >
         <span className="relative size-6">
-          <Plus
+          <MessageCircleMore
             size={22}
             strokeWidth={1.7}
             aria-hidden="true"
             className={cn(
               'fab-icon absolute inset-0 m-auto',
-              open ? 'rotate-45 opacity-0' : 'rotate-0 opacity-100',
+              open ? 'scale-75 opacity-0' : 'scale-100 opacity-100',
             )}
           />
           <X
@@ -157,7 +198,7 @@ export function FloatingContactMenu({ lifted = false }: FloatingContactMenuProps
             aria-hidden="true"
             className={cn(
               'fab-icon absolute inset-0 m-auto',
-              open ? 'rotate-0 opacity-100' : '-rotate-45 opacity-0',
+              open ? 'scale-100 opacity-100' : 'scale-75 opacity-0',
             )}
           />
         </span>

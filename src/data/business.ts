@@ -34,6 +34,17 @@ export const business = {
   linkedin: '',
   whatsapp: '',
   /**
+   * 24/7 storingsdienst is verified by the business owner.
+   * Uses the same public phone number until a separate emergency line is confirmed.
+   */
+  emergencyService: {
+    available: true,
+    label: '24/7 storingsdienst',
+    summary: 'Storing? Onze storingsdienst is 24/7 bereikbaar.',
+    phone: '06 28 73 91 34',
+    phoneHref: 'tel:+31628739134',
+  },
+  /**
    * Supplied for the website: weekdays 07:00–17:00, weekend closed.
    * Keep identical to the public listing until a new written confirmation.
    */

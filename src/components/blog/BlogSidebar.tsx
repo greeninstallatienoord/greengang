@@ -116,10 +116,8 @@ export function BlogSidebar({
       <div className="border border-line bg-paper p-5">
         <h2 className="font-semibold tracking-[-0.01em]">Bronnen en links</h2>
         <p className="mt-2 text-sm leading-relaxed text-ink-muted">
-          Artikelen linken intern naar diensten, FAQ en andere stukken. Officiële
-          citaties gaan naar overheids- en vakbronnen. Dat zijn uitgaande
-          verwijzingen, geen gekochte backlinks en geen bewijs dat die sites naar
-          ons linken.
+          Artikelen linken intern naar diensten, FAQ en andere stukken. Waar
+          relevant verwijzen we naar officiële overheids- en vakbronnen.
         </p>
       </div>
     </aside>

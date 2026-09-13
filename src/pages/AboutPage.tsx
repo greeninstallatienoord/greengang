@@ -22,11 +22,11 @@ import { site } from '../data/site'
 const expect = [
   {
     title: 'Communicatie',
-    text: 'U weet wie u spreekt en wat de volgende stap is. Geen onduidelijke tussenlagen.',
+    text: 'U weet wie u spreekt en wat de volgende stap is.',
   },
   {
-    title: 'Veiligheid',
-    text: 'Installatiewerk in huis vraagt om zorgvuldig werken. Wat we niet kunnen onderbouwen, beloven we hier niet.',
+    title: 'Zorgvuldig werken',
+    text: 'Installatiewerk in huis vraagt om nette montage en aandacht voor detail.',
   },
   {
     title: 'Afronding',
@@ -45,7 +45,7 @@ export function AboutPage() {
         ]}
         eyebrow="Noord-Nederland"
         title="Installatiewerk dat begint met goed luisteren"
-        intro="Green Installatie Noord installeert en onderhoudt cv-ketels, airconditioning en warmtepompen. Eerst de situatie, dan een voorstel."
+        intro="Green Installatie Noord installeert en onderhoudt cv-ketels, airconditioning en warmtepompen. We beginnen bij uw situatie."
         image={pageImages.aboutHero}
         actions={<CtaPair equal />}
       />
@@ -64,9 +64,8 @@ export function AboutPage() {
                 Drenthe en Friesland.
               </p>
               <p className="mt-5 max-w-xl text-ink-muted">
-                We plaatsen hier geen verzonnen geschiedenis, teamfoto of jaartal.
-                Wat vaststaat: vier diensten, een bereikbaar adres, en een
-                werkwijze die begint bij uw woning.
+                Cv-ketel, airco, warmtepomp en onderhoud: bereikbaar vanuit Oude
+                Pekela.
               </p>
             </div>
           </Reveal>
@@ -113,8 +112,7 @@ export function AboutPage() {
               </Heading>
               <p className="lead mt-4">
                 Leidingwerk, plaatsing en afronding horen bij elkaar. We laten
-                zien wat we doen, zonder merkenlijst of scores die hier niet
-                onderbouwd zijn.
+                zien wat we doen en leggen het resultaat helder uit.
               </p>
             </div>
           </Reveal>

@@ -49,7 +49,7 @@ export const guidePosts: BlogPost[] = [
         heading: 'Signalen dat een beoordeling zinvol is',
         paragraphs: [
           'Terugkerende storingen, zichtbare lekkage of roest, een ketel die vaak opnieuw opstart, of twijfel over rookgasafvoer: dat zijn redenen om te laten kijken. Ook als u toch al nadenkt over een andere manier van verwarmen, is een nuchtere opname beter dan zelf een type kiezen.',
-          'Een beoordeling is geen opdracht tot vervanging. Soms is onderhoud of een gerichte reparatie voldoende. Soms is vervangen logischer. Dat onderscheid hoort u pas na het gesprek of het bezoek.',
+          'Soms is onderhoud of een gerichte reparatie voldoende. Soms is vervangen logischer. Dat onderscheid hoort u na het gesprek of het bezoek.',
         ],
         links: [
           { label: 'Dienst: cv-ketel installatie', href: '/cv-ketel' },
@@ -58,7 +58,7 @@ export const guidePosts: BlogPost[] = [
       },
       {
         id: 'veiligheid',
-        heading: 'Veiligheid: koolmonoxide is geen marketingonderwerp',
+        heading: 'Veiligheid rond koolmonoxide',
         paragraphs: [
           'Koolmonoxide is reukloos. Officiële uitleg over risico’s, melders en wat u kunt doen, staat bij de Rijksoverheid. Wij gebruiken die pagina als bron, niet als verkooppraatje.',
           'Twijfelt u over veiligheid, rookgas of een CO-melder? Zet dat bovenaan in uw bericht. Een offerteformulier is niet de plek voor een spoed-noodgeval; bel dan de hulpdiensten en daarna een vakman.',
@@ -91,7 +91,7 @@ export const guidePosts: BlogPost[] = [
     excerpt:
       'Wat u zelf kunt bijhouden aan filters en vrije ruimte, wat bij een vakman hoort, en waarom koudemiddelwerk geen doe-het-zelfklus is.',
     intro:
-      'Airconditioning blijft schoner en rustiger werken als filters en de buitenunit niet verstopt raken. Dat is geen garantie op “nooit meer storing”. Deze gids scheidt huishoudelijk onderhoud van werk dat bij een vakman hoort, vooral als het om koudemiddel gaat.',
+      'Airconditioning blijft schoner en rustiger werken als filters en de buitenunit niet verstopt raken. Deze gids scheidt huishoudelijk onderhoud van werk dat bij een vakman hoort, vooral als het om koudemiddel gaat.',
     category: 'onderhoud',
     tags: ['airco', 'onderhoud', 'filters', 'koudemiddel'],
     publishedAt: '2026-09-12',
@@ -117,8 +117,8 @@ export const guidePosts: BlogPost[] = [
         id: 'koudemiddel',
         heading: 'Koudemiddel en F-gassen: geen huis-tuin-en-keukenklus',
         paragraphs: [
-          'Bijvullen, aftappen of openen van het koudemiddelcircuit is gereguleerd werk. De Inspectie Leefomgeving en Transport legt uit hoe F-gassen wettelijk zijn omkaderd. Die regels bestaan om mens en milieu te beschermen, niet om een extra product te verkopen.',
-          'Wij publiceren hier geen STEK- of certificeringsclaim. Wel: laat koudemiddelwerk over aan iemand die daarvoor bevoegd is. Vraag gerust welke handelingen tijdens een servicebezoek wél en niet gebeuren.',
+          'Bijvullen, aftappen of openen van het koudemiddelcircuit is gereguleerd werk. De Inspectie Leefomgeving en Transport legt uit hoe F-gassen wettelijk zijn omkaderd.',
+          'Laat koudemiddelwerk over aan iemand die daarvoor bevoegd is. Vraag gerust welke handelingen tijdens een servicebezoek wel en niet gebeuren.',
         ],
         links: [
           {
@@ -144,11 +144,11 @@ export const guidePosts: BlogPost[] = [
   },
   {
     slug: 'gids-warmtepomp',
-    title: 'Gids: een warmtepomp overwegen zonder geschiktheidsmythe',
+    title: 'Gids: een warmtepomp overwegen',
     excerpt:
       'Welke woningvragen eerst komen, wat hybride versus volledig elektrisch betekent in grote lijnen, en waar u officiële informatie over subsidies vindt.',
     intro:
-      'Een warmtepomp is geen catalogusproduct dat “altijd past”. Isolatie, afgifte, buitenruimte en wat u met de bestaande ketel wilt, bepalen de route. Deze gids helpt u die vragen te verzamelen. Geschiktheid volgt pas na beoordeling, niet vanaf deze pagina.',
+      'Een warmtepomp vraagt om beoordeling van isolatie, afgifte, buitenruimte en de bestaande ketel. Deze gids helpt u die vragen te verzamelen. Geschiktheid volgt pas na beoordeling.',
     category: 'warmtepomp',
     tags: ['warmtepomp', 'gids', 'isolatie', 'subsidie'],
     publishedAt: '2026-09-12',
@@ -193,7 +193,7 @@ export const guidePosts: BlogPost[] = [
         heading: 'Hybride of volledig: twee verschillende keuzes',
         paragraphs: [
           'Hybride betekent vaak: de warmtepomp doet een deel, de cv-ketel springt bij. Volledig elektrisch betekent dat de ketel verdwijnt en de woning op de pomp (plus eventueel een boiler) moet kunnen. Dat zijn verschillende investeringen, geluids- en ruimtevragen, en verschillende verwachtingen in een koude week.',
-          'Wij zetten hier geen ranglijst. Vraag wat u wilt bereiken: minder gas, van het gas af, of vooral comfort. Het antwoord stuurt het advies, niet een slogan.',
+          'Vraag wat u wilt bereiken: minder gas, van het gas af, of vooral comfort. Het antwoord stuurt het advies.',
         ],
         links: [
           { label: 'Dienst: warmtepomp', href: '/warmtepomp' },
@@ -202,10 +202,10 @@ export const guidePosts: BlogPost[] = [
       },
       {
         id: 'subsidie',
-        heading: 'Subsidie: kijk bij RVO, niet bij een belofte op deze site',
+        heading: 'Subsidie: kijk bij RVO',
         paragraphs: [
-          'Voor sommige maatregelen bestaat de ISDE. Voorwaarden, bedragen en of úw situatie in aanmerking komt, staan bij de Rijksdienst voor Ondernemend Nederland. Wij noemen die regeling zodat u de officiële bron kent. We claimen hier geen bemiddeling, geen vast bedrag en geen “subsidiegarantie”.',
-          'Het energielabel van de woning is eveneens een officieel gegeven, geen verkoopargument. RVO beschrijft hoe labels werken. Neem een eventueel label mee naar het gesprek; het vervangt geen technische opname.',
+          'Voor sommige maatregelen bestaat de ISDE. Voorwaarden, bedragen en of úw situatie in aanmerking komt, staan bij de Rijksdienst voor Ondernemend Nederland.',
+          'Het energielabel van de woning is een officieel gegeven. RVO beschrijft hoe labels werken. Neem een eventueel label mee naar het gesprek; het vervangt geen technische opname.',
         ],
         links: [
           {
@@ -229,7 +229,7 @@ export const guidePosts: BlogPost[] = [
     excerpt:
       'Praktische punten voor cv-ketel, airco of warmtepomp: toegang, bestaande opstelling, beslissingen die u al kunt nemen, en vragen die in de offerte horen.',
     intro:
-      'Installatiewerk verloopt rustiger als de woning bereikbaar is en de belangrijkste keuzes al op papier staan. Deze checklist is geen toelatingseis. Hij voorkomt vooral heen-en-weer op de dag zelf.',
+      'Installatiewerk verloopt rustiger als de woning bereikbaar is en de belangrijkste keuzes al op papier staan. Deze checklist voorkomt vooral heen-en-weer op de dag zelf.',
     category: 'praktische-tips',
     tags: ['checklist', 'installatie', 'voorbereiding'],
     publishedAt: '2026-09-12',
@@ -264,8 +264,8 @@ export const guidePosts: BlogPost[] = [
         id: 'offerte',
         heading: 'Wat in het voorstel moet staan',
         paragraphs: [
-          'Vraag een opsomming van werkzaamheden, wat u zelf nog moet regelen, en wat ná plaatsing van u wordt verwacht (onderhoud, filters, instellingen). Prijzen publiceren we niet op de site; wél hoort het voorstel vergelijkbaar te zijn.',
-          'Een akkoord is pas een opdracht als dat schriftelijk is bevestigd. De afspraakmodule op deze site is een voorkeur, geen slot in de agenda.',
+          'Vraag een opsomming van werkzaamheden, wat u zelf nog moet regelen, en wat ná plaatsing van u wordt verwacht (onderhoud, filters, instellingen). De prijs volgt in het persoonlijke voorstel.',
+          'Een akkoord is pas een opdracht als dat schriftelijk is bevestigd. Een gekozen moment op de site is een voorkeur tot wij bevestigen.',
         ],
         links: [
           { label: 'Offerte aanvragen', href: '/offerte-aanvragen' },

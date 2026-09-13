@@ -1,6 +1,6 @@
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { blogPosts, featuredGuideSlugs } from '../../data/blog'
+import { blogCategoryLabels, blogPosts, featuredGuideSlugs } from '../../data/blog'
 import { Container } from '../Container'
 import { Heading } from '../Heading'
 import { Reveal } from '../Reveal'
@@ -18,41 +18,48 @@ export function KnowledgePreview() {
       <Container>
         <Reveal>
           <div className="flex flex-wrap items-end justify-between gap-4">
-            <div>
+            <div className="max-w-xl">
               <p className="eyebrow">Kennisbank</p>
-              <Heading as="h2" className="mt-3">
-                Eerst lezen, dan bellen
+              <Heading as="h2" className="mt-2.5 sm:mt-3">
+                Handig om te weten
               </Heading>
+              <p className="lead mt-2.5 sm:mt-3">
+                Praktische informatie over cv-ketels, warmtepompen en onderhoud.
+              </p>
             </div>
-            <Link to="/blog" className="text-link">
+            <Link to="/blog" className="text-link inline-flex min-h-11 items-center">
               Alle artikelen
               <ArrowRight size={15} strokeWidth={1.75} aria-hidden="true" />
             </Link>
           </div>
         </Reveal>
 
-        <Reveal className="mt-7 sm:mt-10">
-          <ul className="divide-y divide-line border-y border-line">
+        <Reveal className="mt-5 sm:mt-8">
+          <ul className="grid gap-2.5 sm:gap-3 lg:grid-cols-3 lg:gap-4">
             {posts.map((post) => (
-              <li key={post.slug}>
+              <li key={post.slug} className="h-full">
                 <Link
                   to={`/blog/${post.slug}`}
-                  className="group flex min-h-16 items-start justify-between gap-4 py-5"
+                  className="group flex h-full min-h-[8.5rem] flex-col border border-line bg-paper p-3.5 transition-[border-color,background-color] duration-[var(--duration-fast)] hover:border-ink/25 hover:bg-stone/30 min-[390px]:p-4 sm:min-h-[9.25rem] sm:p-5"
                 >
-                  <span>
-                    <span className="block font-semibold tracking-[-0.015em] group-hover:text-brand-dark">
-                      {post.title}
-                    </span>
-                    <span className="mt-1.5 block max-w-2xl text-sm leading-relaxed text-ink-muted">
-                      {post.excerpt}
-                    </span>
+                  <span className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-brand-dark">
+                    {blogCategoryLabels[post.category]}
                   </span>
-                  <ArrowRight
-                    size={16}
-                    strokeWidth={1.6}
-                    className="mt-1 shrink-0 text-ink-muted transition-transform motion-safe:group-hover:translate-x-1"
-                    aria-hidden="true"
-                  />
+                  <span className="mt-2.5 block font-semibold tracking-[-0.015em] group-hover:text-brand-dark">
+                    {post.title}
+                  </span>
+                  <span className="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-ink-muted">
+                    {post.excerpt}
+                  </span>
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-ink">
+                    Lees artikel
+                    <ArrowRight
+                      size={14}
+                      strokeWidth={1.7}
+                      className="transition-transform motion-safe:group-hover:translate-x-1"
+                      aria-hidden="true"
+                    />
+                  </span>
                 </Link>
               </li>
             ))}

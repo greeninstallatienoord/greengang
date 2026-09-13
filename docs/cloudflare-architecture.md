@@ -17,7 +17,7 @@ Do not rebuild this frontend. The Worker is an API beside it.
 
 ```
 Browser
-  → Worker `greengang` (development.greeninstallatienoord.nl)
+  → Worker `greengang` (greeninstallatienoord.nl)
        ├── /api/* → existing Worker API → D1 / Resend
        └── everything else → Vite dist/ (React Router SPA)
 ```

@@ -1,6 +1,7 @@
 import { ExperienceSection } from '../components/home/ExperienceSection'
 import { HomeFollow } from '../components/home/HomeFollow'
 import { HomeHero } from '../components/home/HomeHero'
+import { HomeMaintenanceTeaser } from '../components/home/HomeMaintenanceTeaser'
 import { HomeProjects } from '../components/home/HomeProjects'
 import { HomeQuickStart } from '../components/home/HomeQuickStart'
 import { KnowledgePreview } from '../components/home/KnowledgePreview'
@@ -25,6 +26,7 @@ export function HomePage() {
       <HomeQuickStart />
       <ExperienceSection />
       <ServiceList />
+      <HomeMaintenanceTeaser />
       <WhyHome />
       <ProcessSteps />
       <HomeProjects />

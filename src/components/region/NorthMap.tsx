@@ -35,7 +35,7 @@ export function NorthMap() {
       )}
       <figcaption className="flex flex-col gap-2 border-t border-line bg-paper px-4 py-3 text-sm text-ink-muted sm:flex-row sm:items-center sm:justify-between">
         <span>
-          {formatAddress()}. De kaart is een oriëntatie, geen belofte per postcode.
+          {formatAddress()}. Oriëntatiekaart van het werkgebied.
         </span>
         <span className="flex flex-wrap gap-x-4 gap-y-1 font-semibold text-ink">
           <a

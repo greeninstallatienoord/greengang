@@ -1,0 +1,135 @@
+{
+  "generatedAt": "2026-09-13T11:53:19.515Z",
+  "results": [
+    {
+      "id": "hero-airco-exterior-gevel-01",
+      "desktopEnabled": true,
+      "mobile": {
+        "width": 900,
+        "height": 1200,
+        "sizes": {
+          "webp": 177934,
+          "avif": 106701,
+          "jpg": 212124
+        }
+      },
+      "desktop": {
+        "width": 1273,
+        "height": 716,
+        "sizes": {
+          "webp": 88240,
+          "avif": 59133,
+          "jpg": 133641
+        }
+      }
+    },
+    {
+      "id": "hero-airco-indoor-attic-01",
+      "desktopEnabled": true,
+      "mobile": {
+        "width": 900,
+        "height": 1200,
+        "sizes": {
+          "webp": 46452,
+          "avif": 32825,
+          "jpg": 77812
+        }
+      },
+      "desktop": {
+        "width": 1273,
+        "height": 716,
+        "sizes": {
+          "webp": 18828,
+          "avif": 15755,
+          "jpg": 38842
+        }
+      }
+    },
+    {
+      "id": "hero-airco-exterior-duo-01",
+      "desktopEnabled": true,
+      "mobile": {
+        "width": 900,
+        "height": 1200,
+        "sizes": {
+          "webp": 146548,
+          "avif": 91295,
+          "jpg": 192931
+        }
+      },
+      "desktop": {
+        "width": 1273,
+        "height": 716,
+        "sizes": {
+          "webp": 75478,
+          "avif": 53904,
+          "jpg": 121869
+        }
+      }
+    },
+    {
+      "id": "hero-airco-indoor-kaisai-01",
+      "desktopEnabled": false,
+      "mobile": {
+        "width": 900,
+        "height": 1200,
+        "sizes": {
+          "webp": 102534,
+          "avif": 65464,
+          "jpg": 132982
+        }
+      },
+      "desktop": null
+    },
+    {
+      "id": "hero-airco-exterior-nok-01",
+      "desktopEnabled": true,
+      "mobile": {
+        "width": 900,
+        "height": 1200,
+        "sizes": {
+          "webp": 111554,
+          "avif": 72812,
+          "jpg": 153486
+        }
+      },
+      "desktop": {
+        "width": 1273,
+        "height": 716,
+        "sizes": {
+          "webp": 89934,
+          "avif": 60175,
+          "jpg": 129239
+        }
+      }
+    },
+    {
+      "id": "hero-warmtepomp-indoor-remeha-01",
+      "desktopEnabled": false,
+      "mobile": {
+        "width": 900,
+        "height": 1200,
+        "sizes": {
+          "webp": 64024,
+          "avif": 51748,
+          "jpg": 107894
+        }
+      },
+      "desktop": null
+    },
+    {
+      "id": "hero-airco-indoor-praktijk-01",
+      "desktopEnabled": false,
+      "mobile": {
+        "width": 900,
+        "height": 1200,
+        "sizes": {
+          "webp": 32180,
+          "avif": 26435,
+          "jpg": 63217
+        }
+      },
+      "desktop": null
+    }
+  ]
+}

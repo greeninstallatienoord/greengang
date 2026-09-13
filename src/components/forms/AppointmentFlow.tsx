@@ -73,6 +73,23 @@ function ReviewRow({
 export function AppointmentFlow() {
   const [params] = useSearchParams()
   const preset = params.get('dienst')
+  const systemPreset = params.get('systeem')
+  const gasPreset = params.get('gasverbruik')
+  const typePreset = params.get('type')
+  const prefillMessage = [
+    typePreset === 'adviesgesprek' ? 'Type: warmtepompadvies' : null,
+    systemPreset === 'hybrid' || systemPreset === 'hybride'
+      ? 'Voorkeur systeem: hybride'
+      : systemPreset === 'all-electric'
+        ? 'Voorkeur systeem: all-electric'
+        : null,
+    gasPreset && Number.isFinite(Number(gasPreset))
+      ? `Huidig gasverbruik: ${Number(gasPreset)} m³/jaar`
+      : null,
+  ]
+    .filter(Boolean)
+    .join('\n')
+
   const [step, setStep] = useState(isServiceSlug(preset) ? 1 : 0)
   const [status, setStatus] = useState<FormStatus>('idle')
   const [submitError, setSubmitError] = useState('')
@@ -87,6 +104,7 @@ export function AppointmentFlow() {
   const lock = useRef(false)
   const [form, setForm, clearDraft] = useSessionDraft<BookingRequest>('gin-booking-draft', {
     ...freshBooking(isServiceSlug(preset) ? preset : 'cv-ketel'),
+    message: prefillMessage,
   })
   const slotsLegend = useId()
 
@@ -95,6 +113,13 @@ export function AppointmentFlow() {
       current.idempotencyKey ? current : { ...current, idempotencyKey: newKey() },
     )
   }, [setForm])
+
+  useEffect(() => {
+    if (!prefillMessage) return
+    setForm((current) =>
+      current.message.trim() ? current : { ...current, message: prefillMessage },
+    )
+  }, [prefillMessage, setForm])
 
   useEffect(() => {
     void getSlotConfig().then(setSlotConfig)

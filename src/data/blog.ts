@@ -34,7 +34,7 @@ const corePosts: BlogPost[] = [
     slug: 'wanneer-cv-ketel-vervangen',
     title: 'Wanneer is het tijd om een cv-ketel te laten beoordelen?',
     excerpt:
-      'Geen harde levensduurclaim, wel signalen die aangeven dat een gesprek over vervanging zinvol kan zijn.',
+      'Signalen die aangeven dat een gesprek over vervanging zinvol kan zijn.',
     intro:
       'Een vast aantal jaren als “einde levensduur” is te grof. De staat van de ketel, storingen en wat u van de woning verwacht zeggen meer. Dit artikel helpt om te bepalen of een beoordeling zinvol is, niet om zelf een vervanging te forceren.',
     category: 'cv-ketel',
@@ -59,7 +59,7 @@ const corePosts: BlogPost[] = [
         heading: 'Wat u kunt voorbereiden',
         paragraphs: [
           'Noteer wat u merkt: geluid, drukverlies, wisselend warm water of een foutcode. Een foto van de opstelling helpt bij een eerste inschatting, maar is niet verplicht.',
-          'Via een offerteaanvraag voor cv-ketelinstallatie of een afspraak kan Green Installatie Noord de situatie met u doornemen. Een beoordeling is geen opdracht tot vervanging.',
+          'Via een offerteaanvraag voor cv-ketelinstallatie of een afspraak kan Green Installatie Noord de situatie met u doornemen.',
         ],
         links: [
           { label: 'Gids: cv-ketel beoordelen', href: '/blog/gids-cv-ketel' },
@@ -77,7 +77,7 @@ const corePosts: BlogPost[] = [
     slug: 'onderhoud-cv-ketel',
     title: 'Wat gebeurt er bij onderhoud van een cv-ketel?',
     excerpt:
-      'Onderhoud is controle en zorg, geen garantie op “nooit meer storing”. Zo kunt u het bezoek voorbereiden.',
+      'Wat er tijdens onderhoud gebeurt en hoe u het bezoek kunt voorbereiden.',
     intro:
       'Tijdens onderhoud wordt de installatie gecontroleerd en waar nodig schoongemaakt. Wat er precies gebeurt, hangt af van het toestel. Dit stuk beschrijft het doel van het bezoek, niet een vaste checklist die voor elk merk geldt.',
     category: 'onderhoud',
@@ -156,7 +156,7 @@ const corePosts: BlogPost[] = [
     excerpt:
       'Een warmtepomp is maatwerk. Deze vragen helpen om het gesprek inhoudelijk te beginnen.',
     intro:
-      'Of een warmtepomp past, hangt af van isolatie, afgifte, ruimte buiten en de huidige ketel. Dit artikel geeft geen geschiktheidsverklaring. Het helpt u wél om het adviesgesprek voor te bereiden.',
+      'Of een warmtepomp past, hangt af van isolatie, afgifte, ruimte buiten en de huidige ketel. Dit artikel helpt u om het adviesgesprek voor te bereiden.',
     category: 'warmtepomp',
     tags: ['warmtepomp', 'advies', 'woning'],
     publishedAt: '2026-09-01',
@@ -212,7 +212,7 @@ const corePosts: BlogPost[] = [
         id: 'kalender',
         heading: 'Volg het toestel, niet alleen de kalender',
         paragraphs: [
-          'Een vast jaartal op een website zegt weinig over úw ketel. Het toestel, het gebruik en de voorschriften van de fabrikant horen bij elkaar. Daarom publiceren wij geen termijn die voor iedereen zou gelden.',
+          'Het toestel, het gebruik en de voorschriften van de fabrikant horen bij elkaar. Daarom geven we geen vaste termijn die voor iedereen zou gelden.',
         ],
       },
       {
@@ -234,7 +234,7 @@ const corePosts: BlogPost[] = [
     slug: 'kiezen-tussen-systemen',
     title: 'CV-ketel, airco of warmtepomp: hoe begint u de keuze?',
     excerpt:
-      'Drie verschillende vragen, geen ranglijst. Een korte leidraad om de juiste dienst te openen.',
+      'Drie verschillende vragen. Een korte leidraad om de juiste dienst te openen.',
     intro:
       'Begin bij de vraag, niet bij het product. Vervanging van verwarming, koelen van één ruimte of een andere manier van verwarmen van de woning zijn drie verschillende startpunten.',
     category: 'praktische-tips',
@@ -276,7 +276,7 @@ const corePosts: BlogPost[] = [
     slug: 'comfort-in-huis',
     title: 'Comfort in huis: verwarmen, koelen of allebei?',
     excerpt:
-      'Comfort is geen synoniem voor één apparaat. Dit helpt om de vraag scherp te krijgen zonder energiebeloftes.',
+      'Comfort is meer dan één apparaat. Dit helpt om de vraag scherp te krijgen.',
     intro:
       'Een woning die ’s winters koud is, vraagt iets anders dan een zolder die in augustus onbruikbaar is. Energiegebruik hangt af van isolatie, gedrag en het systeem. Dat meten we hier niet; we helpen wél de vraag te ordenen.',
     category: 'energie-comfort',
@@ -316,7 +316,7 @@ const corePosts: BlogPost[] = [
     excerpt:
       'Een paar feiten over de woning maken het voorstel gerichter. Foto’s helpen, maar zijn niet verplicht.',
     intro:
-      'Installatiewerk is afhankelijk van de situatie. Hoe meer u van tevoren kunt aanduiden, hoe minder heen-en-weer er nodig is. Dit is geen checklist die u moet afvinken om “in aanmerking te komen”.',
+      'Installatiewerk is afhankelijk van de situatie. Hoe meer u van tevoren kunt aanduiden, hoe rustiger het gesprek verloopt.',
     category: 'praktische-tips',
     tags: ['offerte', 'voorbereiding'],
     publishedAt: '2026-09-12',

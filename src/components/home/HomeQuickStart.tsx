@@ -28,22 +28,22 @@ export function HomeQuickStart() {
 
   return (
     <Section className="bg-brand-deep text-white">
-      <Container className="grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:items-end">
+      <Container className="grid gap-5 sm:gap-7 lg:grid-cols-[1fr_1.1fr] lg:items-end lg:gap-8">
         <div className="max-w-xl">
           <p className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-white/70">
             Offerte
           </p>
-          <Heading as="h2" className="mt-3 text-white">
+          <Heading as="h2" className="mt-2.5 text-white sm:mt-3">
             Waar kunnen we u mee helpen?
           </Heading>
-          <p className="mt-3 max-w-md text-[0.95rem] leading-relaxed text-white/82">
+          <p className="mt-2.5 max-w-md text-[0.92rem] leading-relaxed text-white/82 sm:mt-3 sm:text-[0.95rem]">
             Kies de dienst en de situatie. U gaat daarna verder naar het
             offerteformulier met uw keuze al ingevuld.
           </p>
         </div>
 
         <form
-          className="grid gap-3 sm:grid-cols-[1fr_1fr_auto] sm:items-end"
+          className="grid gap-3.5 sm:grid-cols-[1fr_1fr_auto] sm:items-end sm:gap-3"
           onSubmit={(event) => {
             event.preventDefault()
             navigate(
@@ -51,10 +51,10 @@ export function HomeQuickStart() {
             )
           }}
         >
-          <label className="grid gap-1.5 text-sm">
+          <label className="grid gap-1.5 text-[0.9375rem]">
             <span className="font-semibold text-white">Dienst</span>
             <select
-              className="min-h-12 rounded-sm border border-white/20 bg-white px-3 text-ink"
+              className="min-h-12 touch-manipulation rounded-sm border border-white/20 bg-white px-3 text-base text-ink"
               value={service}
               onChange={(event) => {
                 const next = event.target.value as QuoteServiceOption
@@ -69,10 +69,10 @@ export function HomeQuickStart() {
               ))}
             </select>
           </label>
-          <label className="grid gap-1.5 text-sm">
+          <label className="grid gap-1.5 text-[0.9375rem]">
             <span className="font-semibold text-white">Situatie</span>
             <select
-              className="min-h-12 rounded-sm border border-white/20 bg-white px-3 text-ink"
+              className="min-h-12 touch-manipulation rounded-sm border border-white/20 bg-white px-3 text-base text-ink"
               value={selectedSituation}
               onChange={(event) => setSituation(event.target.value as QuoteSituation)}
             >
@@ -83,8 +83,11 @@ export function HomeQuickStart() {
               ))}
             </select>
           </label>
-          <Button type="submit" className="min-h-12 w-full sm:w-auto sm:px-6">
-            Verder
+          <Button
+            type="submit"
+            className="mt-0.5 min-h-12 w-full max-w-[12.5rem] justify-self-start touch-manipulation sm:mt-0 sm:w-auto sm:max-w-none sm:px-6"
+          >
+            Verder →
           </Button>
         </form>
       </Container>

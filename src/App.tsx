@@ -58,6 +58,11 @@ const QuotePage = lazy(() =>
 const ServicePage = lazy(() =>
   import('./pages/ServicePage').then((module) => ({ default: module.ServicePage })),
 )
+const WarmtepompPage = lazy(() =>
+  import('./pages/WarmtepompPage').then((module) => ({
+    default: module.WarmtepompPage,
+  })),
+)
 const WorkPage = lazy(() =>
   import('./pages/WorkPage').then((module) => ({ default: module.WorkPage })),
 )
@@ -76,7 +81,7 @@ function App() {
             <Route index element={<HomePage />} />
             <Route path="cv-ketel" element={<ServicePage slug="cv-ketel" />} />
             <Route path="airco" element={<ServicePage slug="airco" />} />
-            <Route path="warmtepomp" element={<ServicePage slug="warmtepomp" />} />
+            <Route path="warmtepomp" element={<WarmtepompPage />} />
             <Route
               path="service-onderhoud"
               element={<ServicePage slug="service-onderhoud" />}

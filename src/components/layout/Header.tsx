@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Menu } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import { headerNav } from '../../data/navigation'
 import { site } from '../../data/site'
@@ -57,17 +57,17 @@ export function Header() {
         <TopBar />
         <div
           className={cn(
-            'relative border-b border-line bg-paper/94 backdrop-blur-md',
+            'relative border-b border-line bg-paper/96 backdrop-blur-md',
             compact && 'shadow-header',
           )}
         >
           <Container
             className={cn(
-              'flex items-center justify-between gap-4 transition-[min-height] duration-200 sm:gap-6',
-              compact ? 'min-h-14' : 'min-h-16 sm:min-h-[4.35rem]',
+              'flex items-center justify-between gap-2.5 transition-[min-height] duration-200 sm:gap-6',
+              compact ? 'min-h-12 sm:min-h-14' : 'min-h-[3.25rem] sm:min-h-16 lg:min-h-[4.35rem]',
             )}
           >
-            <BrandLogo compact={compact} />
+            <BrandLogo compact={compact} className="min-w-0" />
 
             <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Hoofdnavigatie">
               <ServicesMenu />
@@ -100,14 +100,23 @@ export function Header() {
 
             <button
               type="button"
-              className="inline-flex size-11 touch-manipulation items-center justify-center border border-line lg:hidden"
+              className="inline-flex h-10 w-[6.35rem] shrink-0 touch-manipulation items-center justify-center gap-1.5 rounded-sm border border-line bg-paper text-[0.8125rem] font-semibold tracking-[-0.01em] text-ink transition-[border-color,background-color] duration-[var(--duration-fast)] hover:border-ink/30 hover:bg-stone lg:hidden"
               aria-expanded={menuOpen}
               aria-controls="mobile-navigatie"
               aria-haspopup="dialog"
-              onClick={() => setMenuOpen(true)}
+              onClick={() => setMenuOpen((current) => !current)}
             >
-              <Menu size={20} strokeWidth={1.75} aria-hidden="true" />
-              <span className="sr-only">Menu openen</span>
+              {menuOpen ? (
+                <>
+                  <span>Sluiten</span>
+                  <X size={15} strokeWidth={1.8} aria-hidden="true" />
+                </>
+              ) : (
+                <>
+                  <span>Menu</span>
+                  <Menu size={15} strokeWidth={1.8} aria-hidden="true" />
+                </>
+              )}
             </button>
           </Container>
         </div>

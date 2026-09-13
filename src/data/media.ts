@@ -168,7 +168,7 @@ export const workPhotos = {
     cvOpstelling,
     1350,
     1800,
-    'Technische opstelling met ketel, vat en leidingwerk',
+    'Hybride opstelling met Nefit-ketel, Remeha Elga Ace en leidingwerk',
     '55% 42%',
     '58% 40%',
   ),
@@ -176,7 +176,7 @@ export const workPhotos = {
     cvIntergas,
     1350,
     1800,
-    'Cv-ketel met rookgasafvoer in een technische ruimte',
+    'Hybride binnenopstelling met Intergas-ketel en warmtepompmodule',
     '36% 40%',
     '30% 38%',
   ),
@@ -184,7 +184,7 @@ export const workPhotos = {
     warmtepompIntergas,
     1350,
     1800,
-    'Warmtepomp-buitenunit bij de woning',
+    'Intergas warmtepomp-buitenunit bij de woning',
     '34% 68%',
     '28% 74%',
   ),
@@ -192,8 +192,9 @@ export const workPhotos = {
 
 export const pageImages = {
   homeHero: workPhotos.aircoTerras,
-  homeProjectFeatured: workPhotos.aircoPlatdak,
-  homeProjectCv: workPhotos.cvIntergas,
+  homeTrustPhoto: workPhotos.aircoZolder,
+  homeProjectFeatured: workPhotos.aircoGevel,
+  homeProjectSecondary: workPhotos.aircoZolder,
   homeProjectWp: workPhotos.warmtepompIntergas,
   aboutHero: workPhotos.aircoOmkasting,
   aboutHouse: workPhotos.aircoBeugel,
@@ -240,30 +241,38 @@ export type WorkShot = {
   featured?: boolean
 }
 
+/**
+ * Featured homepage project photographs.
+ * Labels are based on visual inspection of the assets + existing catalog.
+ * Prefer accuracy over forcing one card per service category.
+ */
 export const homeProjectShots: WorkShot[] = [
   {
-    id: 'platdak',
+    id: 'gevel-mitsubishi',
     asset: pageImages.homeProjectFeatured,
-    title: 'Buitenunit op dempers',
-    caption: 'Buitenunit op trillingsdempers op een plat dak.',
+    title: 'Mitsubishi buitenunit',
+    caption: 'Mitsubishi Electric buitenunit met net leidingwerk langs de gevel.',
     category: 'airco',
+    kind: 'buitenunit',
     href: '/airco',
     featured: true,
   },
   {
-    id: 'cv-intergas',
-    asset: pageImages.homeProjectCv,
-    title: 'Cv-ketel',
-    caption: 'Ketel en rookgasafvoer in de technische ruimte.',
-    category: 'cv-ketel',
-    href: '/cv-ketel',
+    id: 'zolder-binnenunit',
+    asset: pageImages.homeProjectSecondary,
+    title: 'Binnenunit op zolder',
+    caption: 'Mitsubishi Heavy Industries wandmodel met afgewerkte leidinggoot.',
+    category: 'airco',
+    kind: 'binnenunit',
+    href: '/airco',
   },
   {
-    id: 'warmtepomp',
+    id: 'warmtepomp-intergas',
     asset: pageImages.homeProjectWp,
-    title: 'Warmtepomp',
-    caption: 'Buitenunit van een warmtepomp bij de woning.',
+    title: 'Intergas buitenunit',
+    caption: 'Intergas warmtepomp-buitenunit op dempers bij de woning.',
     category: 'warmtepomp',
+    kind: 'buitenunit',
     href: '/warmtepomp',
   },
 ]

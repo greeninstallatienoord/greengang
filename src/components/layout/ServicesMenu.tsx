@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, Phone } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
+import { business } from '../../data/business'
 import { serviceIcons } from '../../data/serviceIcons'
 import { serviceNav } from '../../data/navigation'
 import { services } from '../../data/services'
@@ -82,6 +83,26 @@ export function ServicesMenu() {
               </NavLink>
             )
           })}
+          {business.emergencyService.available ? (
+            <a
+              href={business.emergencyService.phoneHref}
+              role="menuitem"
+              onClick={() => setOpen(false)}
+              className="mt-1 flex gap-3 border-t border-line px-3 py-2.5 hover:bg-stone"
+            >
+              <span className="mt-0.5 text-brand-dark">
+                <Phone size={18} strokeWidth={1.6} aria-hidden="true" />
+              </span>
+              <span>
+                <span className="block text-sm font-semibold">
+                  {business.emergencyService.label}
+                </span>
+                <span className="mt-0.5 block text-xs leading-snug text-ink-muted">
+                  {business.emergencyService.summary}
+                </span>
+              </span>
+            </a>
+          ) : null}
         </div>
       ) : null}
     </div>

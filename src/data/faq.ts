@@ -23,7 +23,7 @@ export const faqs: FaqItem[] = [
     category: 'Algemeen',
     question: 'Hoe werkt een aanvraag?',
     answer:
-      'U vraagt een offerte aan of plant een afspraak. Daarna volgt persoonlijk contact over de situatie. Pas daarna komt er een concreet voorstel. Reactietijden publiceren we hier niet; die volgen zodra ze vastliggen.',
+      'U vraagt een offerte aan of plant een afspraak. Daarna volgt persoonlijk contact over de situatie. Pas daarna komt er een concreet voorstel.',
   },
   {
     id: 'cv-wanneer-vervangen',
@@ -63,7 +63,7 @@ export const faqs: FaqItem[] = [
     relatedServiceSlug: 'warmtepomp',
     question: 'Past een warmtepomp bij elke woning?',
     answer:
-      'Nee. Isolatie, afgiftesysteem, beschikbare ruimte en de huidige installatie spelen mee. Een warmtepomp is maatwerk. We doen hier geen algemene geschiktheidsclaim.',
+      'Nee. Isolatie, afgiftesysteem, beschikbare ruimte en de huidige installatie spelen mee. Of een warmtepomp past, beoordelen we per woning.',
   },
   {
     id: 'wp-of-cv',
@@ -71,7 +71,71 @@ export const faqs: FaqItem[] = [
     relatedServiceSlug: 'warmtepomp',
     question: 'Kan een warmtepomp samen met een cv-ketel?',
     answer:
-      'In sommige situaties is een combinatie mogelijk. Of dat past, beoordelen we per woning. Vraag daarvoor een adviesgesprek of offerte aan.',
+      'In sommige situaties is een combinatie mogelijk (hybride). Of dat past, beoordelen we per woning. Vraag daarvoor een adviesgesprek of offerte aan.',
+  },
+  {
+    id: 'wp-hybride-all-electric',
+    category: 'Warmtepomp',
+    relatedServiceSlug: 'warmtepomp',
+    question: 'Wat is het verschil tussen hybride en all-electric?',
+    answer:
+      'Hybride werkt samen met de cv-ketel en verlaagt vooral het gasverbruik voor verwarming. All-electric laat de warmtepomp de ruimteverwarming (en vaak ook warm water) verzorgen. Welke oplossing past, hangt onder meer af van isolatie, afgifte en de woning.',
+  },
+  {
+    id: 'wp-stroomverbruik',
+    category: 'Warmtepomp',
+    relatedServiceSlug: 'warmtepomp',
+    question: 'Hoeveel stroom gebruikt een warmtepomp?',
+    answer:
+      'Dat hangt af van het warmteverbruik, het seizoensrendement (SCOP) en of u hybride of all-electric kiest. Op de warmtepomppagina vindt u een indicatie op basis van uw gasverbruik; de werkelijke waarden volgen na beoordeling.',
+  },
+  {
+    id: 'wp-subsidie',
+    category: 'Warmtepomp',
+    relatedServiceSlug: 'warmtepomp',
+    question: 'Hoeveel subsidie kan ik krijgen?',
+    answer:
+      'Voor veel warmtepompen is ISDE-subsidie beschikbaar. Het bedrag verschilt per type en RVO-meldcode. Bij een concreet voorstel controleren we welk bedrag voor de gekozen warmtepomp geldt. We garanderen geen toekenning.',
+  },
+  {
+    id: 'wp-vermogen',
+    category: 'Warmtepomp',
+    relatedServiceSlug: 'warmtepomp',
+    question: 'Hoe wordt bepaald welk vermogen ik nodig heb?',
+    answer:
+      'Vermogen hangt af van warmteverlies, afgifte, warmwatervraag en gebruik. Dat bepalen we niet alleen op basis van gasverbruik of woningtype, maar na beoordeling van de situatie.',
+  },
+  {
+    id: 'wp-vorst',
+    category: 'Warmtepomp',
+    relatedServiceSlug: 'warmtepomp',
+    question: 'Werkt een warmtepomp ook bij vorst?',
+    answer:
+      'Ja, moderne warmtepompen blijven bij lage temperaturen werken, al daalt het rendement. Bij hybride kan de cv-ketel bijspringen. Exacte grenzen hangen af van het gekozen systeem.',
+  },
+  {
+    id: 'wp-radiatoren',
+    category: 'Warmtepomp',
+    relatedServiceSlug: 'warmtepomp',
+    question: 'Kan een warmtepomp met bestaande radiatoren?',
+    answer:
+      'Soms wel, vooral bij hybride of als de radiatoren voldoende afgifte hebben. Lage-temperatuurverwarming maakt all-electric vaak makkelijker. We beoordelen afgifte per woning.',
+  },
+  {
+    id: 'wp-installatieduur',
+    category: 'Warmtepomp',
+    relatedServiceSlug: 'warmtepomp',
+    question: 'Hoe lang duurt een installatie?',
+    answer:
+      'Dat verschilt per woning, type systeem en voorbereiding. In het voorstel geven we een realistische planning; vaste doorlooptijden op de website beloven we niet.',
+  },
+  {
+    id: 'wp-onderhoud',
+    category: 'Warmtepomp',
+    relatedServiceSlug: 'warmtepomp',
+    question: 'Heeft een warmtepomp onderhoud nodig?',
+    answer:
+      'Ja. Periodieke controle houdt de installatie in beeld. Via service & onderhoud kunt u een abonnement of een eenmalige afspraak aanvragen. Bij storing is de storingsdienst 24/7 bereikbaar.',
   },
   {
     id: 'onderhoud-waarom',
@@ -85,16 +149,32 @@ export const faqs: FaqItem[] = [
     id: 'onderhoud-interval',
     category: 'Onderhoud',
     relatedServiceSlug: 'service-onderhoud',
-    question: 'Hoe vaak is onderhoud nodig?',
+    question: 'Hoe vaak vindt onderhoud plaats?',
     answer:
-      'Dat verschilt per toestel, gebruik en fabrikantvoorschrift. We noemen hier geen vaste termijn. Bij een aanvraag geven we advies dat bij uw situatie past.',
+      'Bij onze onderhoudspakketten is de standaardfrequentie eens per twee jaar. Liever elk jaar? Dan is jaarlijks onderhoud mogelijk voor €4,50 per maand extra.',
+  },
+  {
+    id: 'onderhoud-jaarlijks',
+    category: 'Onderhoud',
+    relatedServiceSlug: 'service-onderhoud',
+    question: 'Wat kost jaarlijks onderhoud extra?',
+    answer:
+      'Jaarlijks onderhoud kost €4,50 per maand bovenop het gekozen pakket (Basis, Comfort of All-in).',
+  },
+  {
+    id: 'onderhoud-storing',
+    category: 'Onderhoud',
+    relatedServiceSlug: 'service-onderhoud',
+    question: 'Hoe neem ik contact op bij een storing?',
+    answer:
+      'Onze storingsdienst is 24/7 bereikbaar via 06 28 73 91 34. Bel bij een storing en we kijken met u mee wat de vervolgstap is.',
   },
   {
     id: 'offerte-wat-nodig',
     category: 'Offerte',
     question: 'Wat gebeurt er na een offerteaanvraag?',
     answer:
-      'Uw aanvraag komt binnen via het formulier. Daarna nemen we contact op om de vraag scherp te krijgen. Een offerte is een voorstel, geen automatische opdracht.',
+      'Uw aanvraag komt binnen via het formulier. Daarna nemen we contact op om de vraag scherp te krijgen. Daarna volgt een voorstel dat u rustig kunt bekijken.',
   },
   {
     id: 'offerte-prijs',
@@ -116,7 +196,7 @@ export const faqs: FaqItem[] = [
     relatedServiceSlug: 'cv-ketel',
     question: 'Wat moet ik doen bij twijfel over koolmonoxide?',
     answer:
-      'Koolmonoxide is reukloos. Officiële uitleg staat bij de Rijksoverheid. Bij acute klachten of een CO-alarm: volg dat advies en schakel hulpdiensten in. Voor een niet-spoedeisende beoordeling van de ketel kunt u contact of een afspraak aanvragen. Wij publiceren geen eigen medische of meetclaims.',
+      'Koolmonoxide is reukloos. Officiële uitleg staat bij de Rijksoverheid. Bij acute klachten of een CO-alarm: volg dat advies en schakel hulpdiensten in. Voor een beoordeling van de ketel buiten spoed kunt u contact of een afspraak aanvragen.',
     sources: [
       {
         label: 'Rijksoverheid over koolmonoxide',
@@ -139,7 +219,7 @@ export const faqs: FaqItem[] = [
     category: 'Algemeen',
     question: 'Hoe bereid ik een installatie of onderhoudsbezoek voor?',
     answer:
-      'Maak de opstelling bereikbaar, noteer wat u merkt, en zet vragen over scope en planning op papier. Foto’s helpen. Checklists staan in de kennisbank; ze zijn geen toelatingseis.',
+      'Maak de opstelling bereikbaar, noteer wat u merkt, en zet vragen over scope en planning op papier. Foto’s helpen. In de kennisbank staan handige checklists.',
     sources: [{ label: 'Kennisbank', href: '/blog' }],
   },
   {

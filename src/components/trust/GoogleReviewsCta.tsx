@@ -17,8 +17,7 @@ export function GoogleReviewsCta() {
         Google
       </h3>
       <p className="mt-2 text-sm text-ink-muted">
-        We zetten hier geen sterren of aantallen. Bekijk ervaringen op het
-        officiële profiel.
+        Bekijk ons profiel of deel uw ervaring na een installatie of servicebezoek.
       </p>
       <p className="mt-4 text-sm">
         <a
@@ -27,7 +26,7 @@ export function GoogleReviewsCta() {
           rel="noopener noreferrer"
           target="_blank"
         >
-          Bekijk ons op Google
+          Bekijk ons Google-profiel
         </a>
       </p>
     </Card>

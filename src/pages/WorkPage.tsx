@@ -95,7 +95,7 @@ export function WorkPage() {
 
       <CTASection
         title="Een vergelijkbare installatie?"
-        text="Deze foto’s laten de afwerking zien, geen merkenlijst of standaardprijs. Voor een voorstel kijken we naar uw woning."
+        text="Een selectie uit recente plaatsingen. Voor een voorstel kijken we naar uw woning."
         image={null}
       />
     </>

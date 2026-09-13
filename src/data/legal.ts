@@ -148,9 +148,9 @@ export const legalDocs: {
         ],
       },
       {
-        heading: 'Geen verzonnen garanties',
+        heading: 'Prijzen en termijnen',
         paragraphs: [
-          'Op deze pagina staan geen standaardprijzen, levertijden of garantieperiodes. Die horen bij het voorstel voor uw situatie.',
+          'Standaardprijzen, levertijden of garantieperiodes staan niet op deze pagina. Die horen bij het voorstel voor uw situatie.',
         ],
       },
       {
@@ -174,9 +174,9 @@ export const legalDocs: {
         ],
       },
       {
-        heading: 'Geen scores of erkenningen',
+        heading: 'Beoordelingen en erkenningen',
         paragraphs: [
-          'We tonen geen sterren, aantallen installaties of erkenningsclaims die we hier niet kunnen onderbouwen. Logo’s van branchekaders zijn herkenning, geen bewijs van een actuele registratie op deze pagina.',
+          'Op deze website staan geen reviewscores of aantallen installaties. Informatie over certificering of lidmaatschappen tonen we alleen als die voor Green Installatie Noord zijn vastgesteld.',
         ],
       },
       {

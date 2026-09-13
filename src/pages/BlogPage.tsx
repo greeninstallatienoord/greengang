@@ -80,7 +80,7 @@ export function BlogPage() {
         ]}
         eyebrow="Kennisbank"
         title="Kennisbank"
-        intro="Nuchtere artikelen om een gesprek over cv-ketel, airconditioning, warmtepomp of onderhoud voor te bereiden. Geen vultekst, geen verzonnen cijfers."
+        intro="Praktische artikelen om een gesprek over cv-ketel, airconditioning, warmtepomp of onderhoud voor te bereiden."
         actions={<CtaPair equal />}
       />
 

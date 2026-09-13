@@ -8,20 +8,20 @@ export const services: ServiceRecord[] = [
     navLabel: 'CV-ketel',
     href: '/cv-ketel',
     summary:
-      'Installatie van een nieuwe of vervangende cv-ketel, afgestemd op de woning.',
+      'Nieuwe cv-ketel of vervanging van een bestaande ketel, inclusief advies over de juiste opstelling.',
     benefit: 'Betrouwbare warmte en warm water, vakkundig geïnstalleerd.',
     heroEyebrow: 'Centrale verwarming',
     heroTitle: 'CV-ketel installatie',
     heroText:
-      'Van vervanging tot nieuwe installatie: Green Installatie Noord installeert cv-ketels en denkt mee over een passende oplossing voor uw woning.',
+      'Van vervanging tot nieuwe installatie: Green Installatie Noord plaatst cv-ketels en denkt mee over wat bij uw woning past.',
     explanation: [
-      'Een cv-ketel verzorgt verwarming en vaak ook warm tapwater. Of het nu gaat om vervanging van een bestaande ketel of een nieuwe situatie: een goede installatie begint bij de juiste afstemming op de woning.',
-      'Op deze pagina leest u wat wij doen, voor wie deze dienst bedoeld is en hoe het traject verloopt. Concrete merken, prijzen en planning volgen in het persoonlijke advies.',
+      'Een cv-ketel verzorgt verwarming en vaak ook warm tapwater. Of het om vervanging of een nieuwe situatie gaat: de installatie moet goed aansluiten op uw woning.',
+      'Hier leest u wat wij doen en hoe het traject verloopt. Merk, type en planning bespreken we in het persoonlijke advies.',
     ],
     benefits: [
       {
         title: 'Duidelijk advies',
-        text: 'We kijken naar de huidige situatie en wat u nodig heeft, zonder onnodige extra’s.',
+        text: 'We bekijken de huidige ketel of situatie en wat u nodig heeft.',
       },
       {
         title: 'Nette installatie',
@@ -62,8 +62,8 @@ export const services: ServiceRecord[] = [
       'Uitleg over gebruik en vervolgstappen',
     ],
     technicalNotes: [
-      'Het vermogen en de opstelling hangen af van de woning en de bestaande leidingen.',
-      'Merk- en typekeuze volgen in het advies, niet als vaste lijst op deze pagina.',
+      'Het vermogen en de opstelling hangen af van uw woning en de bestaande leidingen.',
+      'Merk en type kiezen we samen in het advies.',
       'Rookgasafvoer, condensafvoer en ventilatie moeten bij de situatie passen.',
     ],
     relatedSlugs: ['service-onderhoud', 'warmtepomp', 'airco'],
@@ -77,19 +77,19 @@ export const services: ServiceRecord[] = [
     navLabel: 'Airco',
     href: '/airco',
     summary:
-      'Installatie van airconditioning voor koelen en, waar van toepassing, verwarmen.',
-    benefit: 'Een rustig binnenklimaat, afgestemd op de ruimte.',
+      'Airconditioning voor koelen en, waar dat past, bijverwarmen in huis of op kantoor.',
+    benefit: 'Een aangenamer binnenklimaat in de ruimte die u wilt verbeteren.',
     heroEyebrow: 'Klimaat in huis',
     heroTitle: 'Airconditioning installatie',
     heroText:
       'Green Installatie Noord installeert airconditioning. We kijken naar de ruimte, het gebruik en een nette plaatsing binnen en buiten.',
     explanation: [
       'Airconditioning kan een woning of werkruimte koelen en, afhankelijk van het systeem, ook verwarmen. Belangrijk is dat het toestel past bij de ruimte en dat binnen- en buitenunit zorgvuldig worden geplaatst.',
-      'Wij helpen met advies en installatie. Welk type het beste past, hangt af van de situatie. Dat bespreken we in het voortraject, zonder merken of beloftes die we hier niet kunnen onderbouwen.',
+      'Welk type het beste past, hangt af van uw situatie. Dat bespreken we in het voortraject, voordat er een voorstel komt.',
     ],
     benefits: [
       {
-        title: 'Passend bij de ruimte',
+        title: 'Gericht op de ruimte',
         text: 'We kijken naar de ruimte en het gewenste gebruik voordat we een voorstel doen.',
       },
       {
@@ -117,7 +117,7 @@ export const services: ServiceRecord[] = [
       },
       {
         title: 'Offerte',
-        text: 'U krijgt een duidelijk voorstel voor de installatie.',
+        text: 'U krijgt een overzichtelijk voorstel voor de installatie.',
       },
       {
         title: 'Montage',
@@ -132,8 +132,8 @@ export const services: ServiceRecord[] = [
     ],
     technicalNotes: [
       'Binnenunit, buitenunit, leidingweg en condensafvoer bepalen of plaatsing netjes mogelijk is.',
-      'Het vermogen volgt de ruimte en het gebruik, niet een standaardmaat.',
-      'Koelen en verwarmen zijn niet automatisch in elke situatie even zinvol.',
+      'Het vermogen volgt de ruimte en het gebruik.',
+      'Koelen en verwarmen zijn niet in elke situatie even zinvol; dat bespreken we vooraf.',
     ],
     relatedSlugs: ['warmtepomp', 'cv-ketel', 'service-onderhoud'],
     faqIds: ['airco-verwarmen', 'airco-plaatsing', 'airco-onderhoud'],
@@ -146,19 +146,19 @@ export const services: ServiceRecord[] = [
     navLabel: 'Warmtepomp',
     href: '/warmtepomp',
     summary:
-      'Advies en installatie van een warmtepomp, passend bij de woning en de vraag.',
+      'Advies en installatie van een warmtepomp, na beoordeling van woning en huidige installatie.',
     benefit: 'Een doordachte stap naar een andere manier van verwarmen.',
     heroEyebrow: 'Duurzame verwarming',
     heroTitle: 'Warmtepomp installatie',
     heroText:
-      'Een warmtepomp vraagt om een goede beoordeling van de woning. Green Installatie Noord helpt met advies en installatie, zonder overhaaste beloftes.',
+      'Een warmtepomp vraagt om een goede beoordeling van de woning. Green Installatie Noord helpt met advies en, als het past, met de installatie.',
     explanation: [
-      'Een warmtepomp haalt warmte uit lucht, bodem of water en kan een woning (deels) verwarmen. Of een warmtepomp past, hangt af van de woning, de afgifte en de wensen. Dat is maatwerk.',
-      'Op deze pagina vindt u wat wij kunnen betekenen. Concrete geschiktheid, type systeem en investering volgen pas na een persoonlijke beoordeling.',
+      'Een warmtepomp haalt warmte uit lucht, bodem of water en kan een woning (deels) verwarmen. Of een warmtepomp past, hangt af van isolatie, afgifte, ruimte en uw wensen.',
+      'Op deze pagina vindt u wat wij kunnen betekenen. Type systeem en investering volgen na een persoonlijke beoordeling.',
     ],
     benefits: [
       {
-        title: 'Eerst de woning',
+        title: 'Eerst beoordelen',
         text: 'We kijken of een warmtepomp logisch is voordat er een keuze wordt gemaakt.',
       },
       {
@@ -182,7 +182,7 @@ export const services: ServiceRecord[] = [
       },
       {
         title: 'Beoordeling',
-        text: 'We kijken naar de woning en de mogelijke aanpak.',
+        text: 'We bekijken uw woning en de mogelijke aanpak.',
       },
       {
         title: 'Voorstel',
@@ -201,11 +201,22 @@ export const services: ServiceRecord[] = [
     ],
     technicalNotes: [
       'Isolatie, afgiftesysteem en beschikbare ruimte bepalen of een warmtepomp past.',
-      'Er is geen algemene “past altijd”-conclusie op deze pagina.',
+      'Geschiktheid beoordelen we per woning, niet met een algemene regel.',
       'Combinatie met een bestaande cv-ketel is alleen aan de orde na beoordeling.',
     ],
     relatedSlugs: ['cv-ketel', 'service-onderhoud', 'airco'],
-    faqIds: ['wp-past-woning', 'wp-of-cv', 'offerte-wat-nodig'],
+    faqIds: [
+      'wp-past-woning',
+      'wp-hybride-all-electric',
+      'wp-of-cv',
+      'wp-stroomverbruik',
+      'wp-subsidie',
+      'wp-vermogen',
+      'wp-vorst',
+      'wp-radiatoren',
+      'wp-installatieduur',
+      'wp-onderhoud',
+    ],
     blogSlugs: ['gids-warmtepomp', 'warmtepomp-waar-op-letten', 'checklist-installatie'],
   },
   {
@@ -215,15 +226,15 @@ export const services: ServiceRecord[] = [
     navLabel: 'Service & Onderhoud',
     href: '/service-onderhoud',
     summary:
-      'Onderhoud en service van cv-ketels en andere klimaatinstallaties.',
+      'Onderhoud, service en 24/7 hulp bij storingen aan klimaatinstallaties.',
     benefit: 'Tijdig onderhoud helpt storingen voorkomen en houdt de installatie in beeld.',
-    heroEyebrow: 'Onderhoud & service',
-    heroTitle: 'Service en onderhoud',
+    heroEyebrow: 'Service & onderhoud',
+    heroTitle: 'Kies het onderhoud dat bij u past',
     heroText:
-      'Green Installatie Noord verzorgt service en onderhoud van cv-ketels en andere door ons geïnstalleerde of te beoordelen klimaatinstallaties.',
+      'Periodiek onderhoud duidelijk geregeld. Kies een pakket en bepaal zelf of u onderhoud eens per twee jaar of jaarlijks wilt.',
     explanation: [
-      'Onderhoud is bedoeld om een installatie te controleren, schoon te maken waar nodig en aandachtspunten vroeg te signaleren. Service is er voor storingen of vragen tijdens het gebruik.',
-      'Hoe vaak onderhoud nodig is, hangt af van het toestel, het gebruik en de voorschriften van de fabrikant. We geven geen algemene termijnen als harde belofte; dat stemmen we af op uw situatie.',
+      'Met een onderhoudspakket blijft periodiek onderhoud overzichtelijk. Standaard plannen we onderhoud eens per twee jaar. Liever ieder jaar? Dat kan voor €4,50 per maand extra.',
+      'De exacte dekking per pakket bespreken we bij de aanvraag. Bij storing is onze storingsdienst 24/7 bereikbaar.',
     ],
     benefits: [
       {
@@ -270,11 +281,16 @@ export const services: ServiceRecord[] = [
     ],
     technicalNotes: [
       'Welke controles nodig zijn, hangt af van het toestel en de staat ervan.',
-      'We noemen geen vaste onderhoudstermijn als algemene belofte.',
-      'Storingen beoordelen we eerst; een bezoek is geen automatische reparatiegarantie.',
+      'Het onderhoudsinterval volgt het toestel, het gebruik en de fabrikantvoorschriften.',
+      'Bij een storing beoordelen we eerst de oorzaak en bespreken we de vervolgstappen.',
     ],
     relatedSlugs: ['cv-ketel', 'airco', 'warmtepomp'],
-    faqIds: ['onderhoud-waarom', 'afspraak-hoe', 'cv-wanneer-vervangen'],
+    faqIds: [
+      'onderhoud-interval',
+      'onderhoud-jaarlijks',
+      'onderhoud-storing',
+      'onderhoud-waarom',
+    ],
     blogSlugs: ['checklist-onderhoud', 'gids-airco-onderhoud', 'onderhoud-cv-ketel'],
   },
 ]

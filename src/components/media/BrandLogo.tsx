@@ -12,7 +12,7 @@ export function BrandLogo({ className, compact = false }: BrandLogoProps) {
   return (
     <Link
       to="/"
-      className={cn('inline-flex items-center', className)}
+      className={cn('inline-flex max-w-[min(11.5rem,52vw)] items-center sm:max-w-none', className)}
       aria-label={`${site.name}, naar home`}
     >
       <img
@@ -21,7 +21,7 @@ export function BrandLogo({ className, compact = false }: BrandLogoProps) {
         width={compact ? 168 : 210}
         height={compact ? 56 : 70}
         className={cn(
-          'max-w-[46vw] w-auto object-contain object-left sm:max-w-[220px]',
+          'h-auto w-auto max-w-full object-contain object-left',
           compact ? 'h-8 sm:h-9' : 'h-9 sm:h-10',
         )}
         decoding="async"

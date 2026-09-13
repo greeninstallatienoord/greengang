@@ -46,12 +46,12 @@ export function AppointmentPage() {
           {
             href: '/offerte-aanvragen',
             label: 'Offerte aanvragen',
-            note: 'Als u eerst een voorstel wilt, geen moment.',
+            note: 'Liever eerst een voorstel? Vraag een offerte aan.',
           },
           {
             href: '/veelgestelde-vragen',
             label: 'Vragen over afspraken',
-            note: 'Een voorkeur is nog geen bevestigde afspraak.',
+            note: 'Een gekozen moment is een voorkeur tot wij bevestigen.',
           },
         ]}
       />

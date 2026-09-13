@@ -8,7 +8,11 @@ import { RelatedArticles } from '../components/page/RelatedArticles'
 import { RelatedServices } from '../components/page/RelatedServices'
 import { ButtonLink } from '../components/ButtonLink'
 import { MediaImage } from '../components/media/MediaImage'
+import { BrandShowcase } from '../components/service/BrandShowcase'
+import { EmergencyServiceBanner } from '../components/service/EmergencyServiceBanner'
+import { MaintenancePlans } from '../components/service/MaintenancePlans'
 import { pageImages, serviceImage, type MediaAsset } from '../data/media'
+import { aircoBrands } from '../data/brands'
 import { CTASection } from '../components/sections/CTASection'
 import { Section } from '../components/Section'
 import { PageMeta } from '../components/seo/PageMeta'
@@ -44,7 +48,7 @@ const serviceStory: Record<
   'cv-ketel': {
     contextTitle: 'Wanneer een cv-ketel aan de beurt is',
     context:
-      'Vervanging speelt als de ketel storingen geeft, het einde van de levensduur nadert, of de woning een andere opstelling vraagt. We kijken eerst naar de bestaande situatie, niet naar een standaardtoestel.',
+      'Vervanging speelt als de ketel storingen geeft, het einde van de levensduur nadert, of de woning een andere opstelling vraagt. We beginnen bij de bestaande situatie.',
     photos: [],
   },
   airco: {
@@ -61,13 +65,13 @@ const serviceStory: Record<
   warmtepomp: {
     contextTitle: 'Eerst toetsen of het past',
     context:
-      'Een warmtepomp is geen automatische vervanger van elke cv-ketel. Isolatie, afgifte en beschikbare ruimte bepalen of het zinvol is. Op deze pagina geen algemene geschiktheidsclaim.',
+      'Een warmtepomp past niet bij elke cv-ketel of woning. Isolatie, afgifte en beschikbare ruimte bepalen of het zinvol is. Dat beoordelen we per situatie.',
     photos: [],
   },
   'service-onderhoud': {
     contextTitle: 'Onderhoud, storing of twijfel',
     context:
-      'Soms is een controle genoeg. Soms is er een storing. En soms is vervanging logischer dan nog een reparatie. U hoort wat we zien, zonder een vaste onderhoudstermijn als algemene belofte.',
+      'Soms is een controle genoeg. Soms is er een storing. En soms is vervanging logischer dan nog een reparatie. U hoort wat we zien en wat de vervolgstap is.',
     photos: [],
   },
 }
@@ -112,20 +116,25 @@ export function ServicePage({ slug }: ServicePageProps) {
       />
 
       {slug === 'airco' ? (
-        <Section className="bg-paper py-10 sm:py-12">
-          <Container className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-            <p className="max-w-xl text-ink-muted">
-              Binnenunits, buitenunits en omkastingen uit eigen werk staan op de
-              werkpagina.
-            </p>
-            <ButtonLink to="/werk" variant="secondary" size="sm">
-              Bekijk al het werk
-            </ButtonLink>
-          </Container>
-        </Section>
+        <>
+          <Section className="bg-paper py-10 sm:py-12">
+            <Container className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+              <p className="max-w-xl text-ink-muted">
+                Binnenunits, buitenunits en omkastingen uit eigen werk staan op de
+                werkpagina.
+              </p>
+              <ButtonLink to="/werk" variant="secondary" size="sm">
+                Bekijk al het werk
+              </ButtonLink>
+            </Container>
+          </Section>
+          <BrandShowcase category="airco" brands={aircoBrands} />
+        </>
       ) : null}
 
-      <Section className={slug === 'service-onderhoud' ? 'bg-paper' : undefined}>
+      {slug === 'service-onderhoud' ? <MaintenancePlans /> : null}
+
+      <Section className={slug === 'service-onderhoud' ? 'bg-surface' : undefined}>
         <Container
           className={
             story.photos.length > 0
@@ -267,6 +276,9 @@ export function ServicePage({ slug }: ServicePageProps) {
           },
         ]}
       />
+      {slug === 'service-onderhoud' || slug === 'cv-ketel' ? (
+        <EmergencyServiceBanner />
+      ) : null}
       <TrustSection />
       <PageFaq items={faqItems} />
       <RelatedServices services={related} />

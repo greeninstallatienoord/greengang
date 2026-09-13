@@ -20,7 +20,7 @@ export function QuotePage() {
         ]}
         eyebrow="Offerte"
         title="Offerte aanvragen"
-        intro="Vier stappen: wat u wilt laten doen, de situatie, uw gegevens, en een controle voordat u verstuurt. Een aanvraag is een verzoek om contact, geen opdracht."
+        intro="Vier stappen: wat u wilt laten doen, de situatie, uw gegevens, en een controle voordat u verstuurt."
         narrow
       >
         <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm">
@@ -38,8 +38,8 @@ export function QuotePage() {
           <div className="mb-8 border border-line bg-paper p-6">
             <h2 className="font-semibold">Hoe we met uw aanvraag omgaan</h2>
             <p className="mt-2 text-sm text-ink-muted">
-              Een offerteaanvraag is een verzoek om contact, geen opdracht. We
-              gebruiken alleen de gegevens die nodig zijn om u te bereiken. De
+              Na het versturen nemen we contact op om de vraag scherp te krijgen.
+              We gebruiken alleen de gegevens die nodig zijn om u te bereiken. De
               privacytoelichting staat bij de laatste stap.
             </p>
           </div>
@@ -56,7 +56,7 @@ export function QuotePage() {
           {
             href: '/veelgestelde-vragen',
             label: 'Veelgestelde vragen',
-            note: 'Wat er na een aanvraag gebeurt, en waarom er geen websiteprijzen staan.',
+            note: 'Wat er na een aanvraag gebeurt en hoe een offerte tot stand komt.',
           },
           {
             href: '/blog/offerte-voorbereiden',

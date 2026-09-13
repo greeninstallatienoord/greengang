@@ -1,14 +1,12 @@
 import { useRef } from 'react'
-import { Clock3, Mail, Phone, X } from 'lucide-react'
+import { AlertTriangle, Clock3, Phone } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
+import { business } from '../../data/business'
 import { cn } from '../../lib/cn'
 import { useFocusTrap } from '../../hooks/useFocusTrap'
-import { headerNav, mobileExtraNav, serviceNav } from '../../data/navigation'
-import { serviceIcons } from '../../data/serviceIcons'
-import { services } from '../../data/services'
+import { headerNav, serviceNav } from '../../data/navigation'
 import { site } from '../../data/site'
 import { ButtonLink } from '../ButtonLink'
-import { BrandLogo } from '../media/BrandLogo'
 
 type MobileMenuProps = {
   open: boolean
@@ -23,7 +21,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
     <div className="lg:hidden">
       <div
         className={cn(
-          'fixed inset-0 z-[65] bg-ink/45 transition-opacity duration-[var(--duration-base)] motion-reduce:transition-none',
+          'fixed inset-0 z-[65] bg-ink/40 transition-opacity duration-[200ms] motion-reduce:transition-none',
           open ? 'opacity-100' : 'pointer-events-none opacity-0',
         )}
         onClick={onClose}
@@ -38,66 +36,58 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
         aria-hidden={!open}
         inert={!open}
         className={cn(
-          'fixed inset-y-0 right-0 z-[70] flex w-[min(22rem,92vw)] flex-col bg-paper shadow-lift transition-transform duration-[var(--duration-base)] motion-reduce:transition-none',
+          'fixed inset-y-0 right-0 z-[70] flex w-[min(20.5rem,100vw)] flex-col bg-paper shadow-lift transition-transform duration-[200ms] motion-reduce:transition-none',
           open ? 'translate-x-0' : 'translate-x-full',
         )}
       >
-        <div className="flex items-center justify-between border-b border-line px-4 py-3">
-          <BrandLogo compact />
-          <button
-            type="button"
-            className="inline-flex size-11 touch-manipulation items-center justify-center border border-line"
-            onClick={onClose}
-          >
-            <X size={20} strokeWidth={1.75} aria-hidden="true" />
-            <span className="sr-only">Menu sluiten</span>
-          </button>
+        <div className="border-b border-line px-4 py-3.5">
+          <p className="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-ink-muted">
+            Navigatie
+          </p>
         </div>
 
-        <div className="min-h-0 flex-1 overflow-auto px-4 py-5">
+        <div className="min-h-0 flex-1 overflow-auto overscroll-contain px-4 py-2">
           <nav aria-label="Mobiel menu">
-            <p className="eyebrow">Diensten</p>
-            <ul className="mt-2 grid">
-              {serviceNav.map((item) => {
-                const service = services.find((entry) => entry.href === item.href)
-                const Icon = service ? serviceIcons[service.slug] : null
-                return (
-                  <li key={item.href}>
-                    <NavLink
-                      to={item.href}
-                      className={({ isActive }) =>
-                        cn(
-                          'flex min-h-12 items-center gap-3 border-b border-line text-[1.05rem] font-semibold',
-                          isActive && 'text-brand-dark',
-                        )
-                      }
-                      tabIndex={open ? undefined : -1}
-                      onClick={onClose}
+            <ul className="grid">
+              <li>
+                <details className="group border-b border-line" open>
+                  <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between text-[1.02rem] font-semibold tracking-[-0.01em] marker:content-none [&::-webkit-details-marker]:hidden">
+                    Diensten
+                    <span
+                      className="text-ink-muted transition-transform duration-[var(--duration-fast)] group-open:rotate-45"
+                      aria-hidden="true"
                     >
-                      {Icon ? (
-                        <Icon
-                          size={18}
-                          strokeWidth={1.6}
-                          className="text-brand-dark"
-                          aria-hidden="true"
-                        />
-                      ) : null}
-                      {item.label}
-                    </NavLink>
-                  </li>
-                )
-              })}
-            </ul>
-
-            <p className="eyebrow mt-6">Pagina’s</p>
-            <ul className="mt-2 grid">
-              {[...headerNav, ...mobileExtraNav].map((item) => (
+                      +
+                    </span>
+                  </summary>
+                  <ul className="pb-1.5">
+                    {serviceNav.map((item) => (
+                      <li key={item.href}>
+                        <NavLink
+                          to={item.href}
+                          className={({ isActive }) =>
+                            cn(
+                              'flex min-h-11 items-center pl-3 text-[0.95rem] font-medium text-ink-muted',
+                              isActive && 'text-brand-dark',
+                            )
+                          }
+                          tabIndex={open ? undefined : -1}
+                          onClick={onClose}
+                        >
+                          {item.label}
+                        </NavLink>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              </li>
+              {headerNav.map((item) => (
                 <li key={item.href}>
                   <NavLink
                     to={item.href}
                     className={({ isActive }) =>
                       cn(
-                        'flex min-h-11 items-center text-base font-medium',
+                        'flex min-h-12 items-center border-b border-line text-[1.02rem] font-semibold tracking-[-0.01em]',
                         isActive && 'text-brand-dark',
                       )
                     }
@@ -111,35 +101,37 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
             </ul>
           </nav>
 
-          <ul className="mt-6 grid gap-1 border-t border-line pt-4 text-sm">
+          <ul className="mt-4 grid gap-0 border-t border-line pt-3 text-sm text-ink-muted">
             <li>
               <a
                 href={site.contact.phoneHref}
-                className="inline-flex min-h-11 items-center gap-2 font-medium"
+                className="inline-flex min-h-11 items-center gap-2 font-medium text-ink"
                 tabIndex={open ? undefined : -1}
               >
-                <Phone size={16} strokeWidth={1.75} aria-hidden="true" />
+                <Phone size={15} strokeWidth={1.75} aria-hidden="true" />
                 {site.contact.phone}
               </a>
             </li>
-            <li>
-              <a
-                href={site.contact.emailHref}
-                className="inline-flex min-h-11 items-center gap-2 font-medium"
-                tabIndex={open ? undefined : -1}
-              >
-                <Mail size={16} strokeWidth={1.75} aria-hidden="true" />
-                {site.contact.email}
-              </a>
-            </li>
-            <li className="inline-flex min-h-11 items-center gap-2 text-ink-muted">
-              <Clock3 size={16} strokeWidth={1.75} aria-hidden="true" />
+            {business.emergencyService.available ? (
+              <li>
+                <a
+                  href={business.emergencyService.phoneHref}
+                  className="inline-flex min-h-11 items-center gap-2 font-semibold text-brand-dark"
+                  tabIndex={open ? undefined : -1}
+                >
+                  <AlertTriangle size={15} strokeWidth={1.75} aria-hidden="true" />
+                  {business.emergencyService.label}
+                </a>
+              </li>
+            ) : null}
+            <li className="inline-flex min-h-10 items-center gap-2">
+              <Clock3 size={15} strokeWidth={1.75} aria-hidden="true" />
               {site.contact.openingHours}
             </li>
           </ul>
         </div>
 
-        <div className="grid gap-2 border-t border-line px-4 py-3 pb-[max(0.85rem,env(safe-area-inset-bottom))]">
+        <div className="border-t border-line px-4 py-3 pb-[max(0.85rem,env(safe-area-inset-bottom))]">
           <ButtonLink
             to="/offerte-aanvragen"
             className="w-full min-h-12"
@@ -150,22 +142,12 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
           </ButtonLink>
           <ButtonLink
             to="/afspraak-maken"
-            variant="secondary"
-            className="w-full min-h-12"
+            variant="ghost"
+            className="mt-1 w-full min-h-11 justify-center font-semibold text-ink-muted hover:bg-transparent hover:text-ink"
             tabIndex={open ? undefined : -1}
             onClick={onClose}
           >
             {site.copy.ctaAppointment}
-          </ButtonLink>
-          <ButtonLink
-            to={site.contact.phoneHref}
-            variant="ghost"
-            className="w-full min-h-11"
-            external
-            tabIndex={open ? undefined : -1}
-            onClick={onClose}
-          >
-            Bel {site.contact.phone}
           </ButtonLink>
         </div>
       </div>

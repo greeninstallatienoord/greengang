@@ -109,8 +109,8 @@ export function ArticleTemplate({ post }: ArticleTemplateProps) {
                 <aside className="mt-10 border border-line bg-paper p-5">
                   <h2 className="text-xl font-semibold">Officiële bronnen</h2>
                   <p className="mt-2 text-sm text-ink-muted">
-                    Uitgaande citaties naar overheids- of vakbronnen. Geen
-                    partnerpagina’s en geen bewijs van een backlink naar ons.
+                    Handige verwijzingen naar overheids- of vakbronnen bij dit
+                    onderwerp.
                   </p>
                   <ContentLinks items={post.resources} />
                 </aside>

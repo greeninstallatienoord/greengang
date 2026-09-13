@@ -1,13 +1,70 @@
 /**
  * Hash an admin password with the same PBKDF2 settings as the Worker.
- * Usage: node scripts/hash-password.mjs "your-password"
- * Then insert the printed salt + hash into D1. Do not commit real hashes
- * that belong to a production password if the password is also stored elsewhere.
+ *
+ * Interactive (preferred):
+ *   node scripts/hash-password.mjs
+ *
+ * Non-interactive (avoid if password may leak into shell history):
+ *   node scripts/hash-password.mjs "<password>"
+ *
+ * Prints salt/hash + UPSERT SQL for D1. Does not store plaintext.
  */
 
-const password = process.argv[2]
+import readline from 'node:readline'
+import { stdin as input, stdout as output, stderr } from 'node:process'
+
+async function readPasswordHidden(prompt) {
+  return new Promise((resolve, reject) => {
+    const rl = readline.createInterface({ input, output: stderr })
+    const wasRaw = input.isRaw
+    stderr.write(prompt)
+    const chars = []
+
+    const onData = (chunk) => {
+      const text = chunk.toString('utf8')
+      for (const char of text) {
+        if (char === '\n' || char === '\r' || char === '\u0004') {
+          cleanup()
+          stderr.write('\n')
+          resolve(chars.join(''))
+          return
+        }
+        if (char === '\u0003') {
+          cleanup()
+          reject(new Error('Cancelled'))
+          return
+        }
+        if (char === '\u007f' || char === '\b') {
+          chars.pop()
+          continue
+        }
+        chars.push(char)
+      }
+    }
+
+    function cleanup() {
+      input.off('data', onData)
+      if (input.setRawMode) input.setRawMode(Boolean(wasRaw))
+      rl.close()
+    }
+
+    if (input.setRawMode) input.setRawMode(true)
+    input.on('data', onData)
+  })
+}
+
+let password = process.argv[2]
 if (!password) {
-  console.error('Usage: node scripts/hash-password.mjs "<password>"')
+  try {
+    password = await readPasswordHidden('Choose admin password (hidden): ')
+  } catch {
+    stderr.write('\nPassword entry cancelled.\n')
+    process.exit(1)
+  }
+}
+
+if (!password || password.length < 8) {
+  console.error('Password must be at least 8 characters.')
   process.exit(1)
 }
 
@@ -33,9 +90,17 @@ const saltHex = hex(salt)
 const hashHex = hex(bits)
 const id = crypto.randomUUID()
 const now = new Date().toISOString()
+const email = 'info@greeninstallatienoord.nl'
 
-console.log('Use this SQL on D1 (replace the email):')
-console.log(
-  `INSERT INTO admins (id, email, password_hash, password_salt, created_at, updated_at)
-VALUES ('${id}', 'info@greeninstallatienoord.nl', '${hashHex}', '${saltHex}', '${now}', '${now}');`,
-)
+password = ''
+
+console.log('Generated hash for', email)
+console.log('Use this UPSERT on D1 (remote):')
+console.log(`
+INSERT INTO admins (id, email, password_hash, password_salt, created_at, updated_at)
+VALUES ('${id}', '${email}', '${hashHex}', '${saltHex}', '${now}', '${now}')
+ON CONFLICT(email) DO UPDATE SET
+  password_hash = excluded.password_hash,
+  password_salt = excluded.password_salt,
+  updated_at = excluded.updated_at;
+`.trim())

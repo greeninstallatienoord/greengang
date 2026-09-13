@@ -46,13 +46,14 @@ export const site = {
     heroTitleSupport: '',
     heroTitleSupportRest: '',
     heroText:
-      'Een passende installatie voor uw woning, vakkundig uitgevoerd. Actief in Noord-Nederland, gevestigd in Oude Pekela.',
+      'Installatie en onderhoud voor woningen in Noord-Nederland. Gevestigd in Oude Pekela.',
     heroTrust: 'Ervaring met cv-ketels, airco en warmtepompen.',
-    introTitle: 'Ervaring uit de praktijk',
+    introTitle: 'Installaties in woningen door heel Noord-Nederland',
     introText:
-      'Verschillende woningtypen, nette technische uitvoering. Eerst de woning, daarna een voorstel.',
+      'Van cv-ketel tot airconditioning en warmtepomp: we beoordelen eerst wat bij de woning en situatie past.',
     workTitle: 'Werk uit de praktijk',
-    workText: 'Een selectie van recente plaatsingen. Meer foto’s staan op de werkpagina.',
+    workText:
+      'Een selectie van recente installaties. Meer projecten vindt u op onze werkpagina.',
     localTitle: 'Actief in Noord-Nederland',
     localText: serviceArea.intro,
     ctaTitle: 'Een installatievraag?',
@@ -63,49 +64,43 @@ export const site = {
     ctaCall: tokens.cta.tertiary,
     ctaContact: 'Contact',
     ctaMore: 'Meer informatie',
+    whyIntro:
+      'Persoonlijk advies, nette montage en service na oplevering — zonder omwegen.',
     trust: [
       {
-        title: 'Professioneel advies',
-        text: 'Eerst luisteren, dan een voorstel dat past bij de woning en de vraag.',
+        title: 'Persoonlijk advies',
+        text: 'U hoort wat technisch past en wat niet. Geen standaardpakket.',
       },
       {
-        title: 'Vakkundige installatie',
-        text: 'Zorgvuldige montage van cv-ketels, airco’s en warmtepompen.',
+        title: 'Zorgvuldige installatie',
+        text: 'Nette montage en een oplevering die u kunt volgen.',
       },
       {
         title: 'Service & onderhoud',
-        text: 'Onderhoud en service zodat installaties betrouwbaar blijven werken.',
+        text: 'Ook na plaatsing bereikbaar voor onderhoud, vragen en storingen.',
       },
       {
-        title: 'Persoonlijk contact',
-        text: 'Korte lijnen: u weet waar u aan toe bent en wat de volgende stap is.',
+        title: 'Regionaal bereikbaar',
+        text: 'Werk vanuit Oude Pekela voor klanten in Noord-Nederland.',
       },
     ],
+    processIntro:
+      'Van advies tot installatie en service: duidelijk en zonder onnodige stappen.',
     process: [
       {
         step: '01',
-        title: 'Situatie begrijpen',
-        text: 'U vertelt wat er speelt. Wij luisteren eerst, voordat er een voorstel komt.',
+        title: 'Advies',
+        text: 'We bekijken uw situatie, woning en wensen en bespreken wat technisch passend is.',
       },
       {
         step: '02',
-        title: 'Duidelijk advies',
-        text: 'We kijken naar de woning en de wens, en zeggen wat wel en niet zinvol is.',
+        title: 'Installatie',
+        text: 'Na een duidelijk voorstel plannen we de werkzaamheden en voeren we de installatie netjes uit.',
       },
       {
         step: '03',
-        title: 'Voorstel',
-        text: 'U krijgt een overzichtelijk voorstel. Dat is nog geen opdracht.',
-      },
-      {
-        step: '04',
-        title: 'Nette installatie',
-        text: 'Na akkoord plannen we het werk en ronden we het netjes af, met uitleg.',
-      },
-      {
-        step: '05',
-        title: 'Service wanneer nodig',
-        text: 'Voor onderhoud of een vraag blijft u ons gewoon bellen of mailen.',
+        title: 'Service',
+        text: 'Na plaatsing kunt u bij ons terecht voor onderhoud, vragen en storingen.',
       },
     ],
   },

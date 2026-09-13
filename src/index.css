@@ -52,22 +52,23 @@
   html {
     overflow-x: clip;
     scroll-behavior: smooth;
+    scrollbar-gutter: stable;
     --cookie-banner-offset: 0px;
   }
 
   html[data-cookie-banner='on'] {
-    --cookie-banner-offset: 13.5rem;
+    --cookie-banner-offset: 7.75rem;
   }
 
   @media (min-width: 24rem) {
     html[data-cookie-banner='on'] {
-      --cookie-banner-offset: 12rem;
+      --cookie-banner-offset: 7rem;
     }
   }
 
   @media (min-width: 40rem) {
     html[data-cookie-banner='on'] {
-      --cookie-banner-offset: 9.5rem;
+      --cookie-banner-offset: 6rem;
     }
   }
 
@@ -91,7 +92,7 @@
   }
 
   body {
-    @apply m-0 min-h-dvh overflow-x-clip bg-surface font-sans text-[1.0625rem] leading-[1.65] text-ink antialiased;
+    @apply m-0 min-h-dvh overflow-x-clip bg-surface font-sans text-[1rem] leading-[1.65] text-ink antialiased sm:text-[1.0625rem];
     text-rendering: optimizeLegibility;
     overflow-wrap: break-word;
     word-spacing: normal;
@@ -118,7 +119,7 @@
 
 @layer components {
   .container-page {
-    @apply mx-auto w-full max-w-[80rem] px-4 sm:px-6 lg:px-8;
+    @apply mx-auto w-full max-w-[80rem] px-3.5 min-[375px]:px-4 sm:px-6 lg:px-8;
   }
 
   .container-narrow {
@@ -126,11 +127,11 @@
   }
 
   .section-y {
-    @apply py-10 sm:py-14 lg:py-20;
+    @apply py-7 min-[390px]:py-8 sm:py-12 lg:py-16;
   }
 
   .lead {
-    @apply max-w-[38rem] text-base leading-[1.65] text-ink-muted sm:text-[1.125rem] sm:leading-[1.7];
+    @apply max-w-[38rem] text-[0.95rem] leading-[1.65] text-ink-muted min-[390px]:text-base sm:text-[1.125rem] sm:leading-[1.7];
   }
 
   .eyebrow {
@@ -150,7 +151,7 @@
   }
 
   .text-link {
-    @apply inline-flex items-center gap-1.5 text-sm font-semibold text-ink transition-colors duration-[var(--duration-fast)] hover:text-brand-dark;
+    @apply inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-ink transition-colors duration-[var(--duration-fast)] hover:text-brand-dark;
   }
 
   .fade-up {
@@ -183,23 +184,23 @@
 
   .hero-slide {
     opacity: 0;
-    transition: opacity 1.6s ease;
+    transition: opacity 1.5s ease-in-out;
+    will-change: opacity;
+    pointer-events: none;
   }
 
   .hero-slide.is-active {
     opacity: 1;
   }
 
-  .hero-bg {
-    transform: scale(1.06);
-    transform-origin: 72% 54%;
-    will-change: transform;
+  @media (prefers-reduced-motion: reduce) {
+    .hero-slide {
+      transition: none;
+    }
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    .hero-bg {
-      animation: hero-kenburns 32s ease-in-out infinite alternate;
-    }
+  .hero-bg {
+    transform: none;
   }
 
   .scheme-mark {
@@ -264,15 +265,6 @@
   }
   to {
     opacity: 1;
-  }
-}
-
-@keyframes hero-kenburns {
-  from {
-    transform: scale(1.06) translate3d(0, 0, 0);
-  }
-  to {
-    transform: scale(1.16) translate3d(-2.4%, -1.2%, 0);
   }
 }
 

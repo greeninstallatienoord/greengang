@@ -65,7 +65,7 @@ export function FaqPage() {
         ]}
         eyebrow="Vragen"
         title="Veelgestelde vragen"
-        intro="Antwoorden over installatie, onderhoud, offertes en afspraken. Zonder beloftes die we niet kunnen onderbouwen."
+        intro="Antwoorden over installatie, onderhoud, offertes en afspraken bij Green Installatie Noord."
         actions={<CtaPair equal />}
       />
 

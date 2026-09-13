@@ -11,25 +11,25 @@ export const pageSeo = {
   cvKetel: {
     title: 'CV-ketel installeren of vervangen',
     description:
-      'CV-ketel installatie of vervanging in Groningen en de rest van Noord-Nederland. Advies en offerte door Green Installatie Noord, zonder standaardprijzen op de site.',
+      'CV-ketel laten installeren of vervangen in Groningen en de rest van Noord-Nederland. Advies en offerte door Green Installatie Noord.',
     path: '/cv-ketel',
   },
   airco: {
     title: 'Airconditioning laten installeren',
     description:
-      'Airco laten installeren in Groningen, Drenthe of Friesland. Green Installatie Noord bekijkt de ruimte voordat er een voorstel komt.',
+      'Airco laten installeren van merken als Mitsubishi, Kaisai, LG, Haier en Daikin. Green Installatie Noord bekijkt de ruimte voordat er een voorstel komt.',
     path: '/airco',
   },
   warmtepomp: {
-    title: 'Warmtepomp advies en installatie',
+    title: 'Warmtepomp Groningen, Drenthe en Friesland',
     description:
-      'Warmtepomp advies en installatie in Noord-Nederland, afgestemd op de woning. Geen algemene geschiktheidsclaim; wel een duidelijk voortraject.',
+      'Hybride of all-electric warmtepomp laten adviseren en installeren. Indicatie van besparing en ISDE-subsidie, daarna beoordeling van uw woning door Green Installatie Noord.',
     path: '/warmtepomp',
   },
   onderhoud: {
-    title: 'CV-ketel onderhoud en service',
+    title: 'Service, onderhoud en 24/7 storingsdienst',
     description:
-      'Onderhoud en service van cv-ketels en klimaatinstallaties in Noord-Nederland. Plan een controle of meld een storing bij Green Installatie Noord.',
+      'Onderhoudsabonnementen vanaf €7,99 per maand en 24/7 storingsdienst voor cv-ketels en klimaatinstallaties in Noord-Nederland.',
     path: '/service-onderhoud',
   },
   about: {
@@ -41,19 +41,19 @@ export const pageSeo = {
   work: {
     title: 'Werk uit de praktijk',
     description:
-      'Werk uit de praktijk: foto’s van cv-ketel-, airco- en warmtepompinstallaties door Green Installatie Noord. Gevestigd in Oude Pekela, actief in Noord-Nederland.',
+      'Foto’s van cv-ketel-, airco- en warmtepompinstallaties door Green Installatie Noord. Gevestigd in Oude Pekela, actief in Noord-Nederland.',
     path: '/werk',
   },
   areas: {
     title: 'Werkgebied Noord-Nederland',
     description:
-      'Green Installatie Noord werkt in Noord-Nederland: Groningen, Drenthe en Friesland. Gevestigd in Oude Pekela. Geen verzonnen plaatsnamen.',
+      'Green Installatie Noord werkt in Noord-Nederland: Groningen, Drenthe en Friesland. Gevestigd in Oude Pekela.',
     path: '/werkgebied',
   },
   blog: {
     title: 'Kennisbank over cv-ketel, airco en warmtepomp',
     description:
-      'Artikelen over cv-ketel, airconditioning, warmtepomp en onderhoud in Noord-Nederland. Officiële bronnen erbij, zonder verzonnen cijfers of gekochte backlinks.',
+      'Artikelen over cv-ketel, airconditioning, warmtepomp en onderhoud. Praktische uitleg voor woningeigenaren in Noord-Nederland.',
     path: '/blog',
   },
   contact: {
@@ -77,7 +77,7 @@ export const pageSeo = {
   faq: {
     title: 'Vragen over cv-ketel, airco, warmtepomp en onderhoud',
     description:
-      'Antwoorden over installatie, onderhoud, offertes en afspraken bij Green Installatie Noord. Zonder beloftes die we niet kunnen onderbouwen.',
+      'Antwoorden over installatie, onderhoud, offertes en afspraken bij Green Installatie Noord.',
     path: '/veelgestelde-vragen',
   },
 } as const satisfies Record<string, SeoRecord>
@@ -96,7 +96,7 @@ export const blogCategorySeo: Record<
   'cv-ketel': {
     title: 'Artikelen over cv-ketels',
     description:
-      'Artikelen over beoordelen, vervangen en onderhouden van een cv-ketel. Geen standaardleeftijd als harde waarheid.',
+      'Artikelen over beoordelen, vervangen en onderhouden van een cv-ketel.',
     intro:
       'Stukken over de cv-ketel: wanneer beoordeling zinvol is, wat onderhoud inhoudt, en hoe u een gesprek voorbereidt.',
   },
@@ -105,28 +105,28 @@ export const blogCategorySeo: Record<
     description:
       'Artikelen over airconditioning in huis: koelen, soms verwarmen, en vragen vóór installatie.',
     intro:
-      'Korte stukken over airconditioning per ruimte. Geen merkenlijst, wel de vragen die het advies scherp maken.',
+      'Korte stukken over airconditioning per ruimte en de vragen die het advies scherp maken.',
   },
   warmtepomp: {
     title: 'Artikelen over warmtepompen',
     description:
-      'Artikelen over het overwegen van een warmtepomp. Maatwerk, geen algemene “past altijd”-boodschap.',
+      'Artikelen over het overwegen van een warmtepomp en wat u vooraf kunt voorbereiden.',
     intro:
       'Oriëntatie op de warmtepomp: wat u kunt verzamelen en waarom de woning eerst beoordeeld moet worden.',
   },
   onderhoud: {
     title: 'Artikelen over onderhoud en service',
     description:
-      'Artikelen over onderhoud van cv-ketels en klimaatinstallaties, zonder vaste termijnen als belofte.',
+      'Artikelen over onderhoud van cv-ketels en klimaatinstallaties.',
     intro:
-      'Onderhoud is controle, geen garantie op “nooit meer storing”. Deze stukken helpen het bezoek voor te bereiden.',
+      'Praktische uitleg over onderhoud en hoe u een servicebezoek kunt voorbereiden.',
   },
   'energie-comfort': {
     title: 'Artikelen over energie en comfort',
     description:
-      'Artikelen over comfort in huis: verwarmen, koelen en de keuze tussen systemen, zonder energieclaims.',
+      'Artikelen over comfort in huis: verwarmen, koelen en de keuze tussen systemen.',
     intro:
-      'Comfort en energiegebruik hangen af van de woning. We schrijven wat u kunt vragen, niet wat we niet kunnen meten.',
+      'Korte stukken over comfort en energiegebruik, gericht op vragen die u kunt stellen.',
   },
   'praktische-tips': {
     title: 'Praktische tips voor installatiewerk',

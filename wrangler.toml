@@ -4,9 +4,9 @@ compatibility_date = "2026-09-01"
 compatibility_flags = ["nodejs_compat"]
 workers_dev = true
 
+# Single production Worker + public domain.
 routes = [
   { pattern = "greeninstallatienoord.nl", custom_domain = true },
-  { pattern = "development.greeninstallatienoord.nl", custom_domain = true },
 ]
 
 [assets]
@@ -16,7 +16,7 @@ not_found_handling = "single-page-application"
 run_worker_first = ["/api/*"]
 
 [vars]
-ENVIRONMENT = "development"
+ENVIRONMENT = "production"
 PUBLIC_SITE_URL = "https://greeninstallatienoord.nl"
 ADMIN_BASE_PATH = "/blackberry97"
 
@@ -28,25 +28,3 @@ migrations_dir = "migrations"
 
 [observability]
 enabled = true
-
-[env.preview.vars]
-ENVIRONMENT = "preview"
-PUBLIC_SITE_URL = "https://greeninstallatienoord.nl"
-ADMIN_BASE_PATH = "/blackberry97"
-
-[[env.preview.d1_databases]]
-binding = "DB"
-database_name = "greeninstallatie"
-database_id = "f0728db7-edb9-438c-9a64-5d04ee828137"
-migrations_dir = "migrations"
-
-[env.production.vars]
-ENVIRONMENT = "production"
-PUBLIC_SITE_URL = "https://greeninstallatienoord.nl"
-ADMIN_BASE_PATH = "/blackberry97"
-
-[[env.production.d1_databases]]
-binding = "DB"
-database_name = "greeninstallatie"
-database_id = "f0728db7-edb9-438c-9a64-5d04ee828137"
-migrations_dir = "migrations"

@@ -25,7 +25,7 @@ export async function hashPassword(password: string, saltHex: string): Promise<s
 export function randomHex(bytes = 16): string {
   const view = new Uint8Array(bytes)
   crypto.getRandomValues(view)
-  return bytesToHex(view.buffer)
+  return bytesToHex(view.buffer.slice(view.byteOffset, view.byteOffset + view.byteLength))
 }
 
 async function hmacHex(secret: string, value: string): Promise<string> {

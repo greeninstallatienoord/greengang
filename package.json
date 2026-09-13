@@ -7,13 +7,14 @@
     "dev": "vite",
     "dev:api": "wrangler dev --port 8787",
     "build": "tsc -b && vite build",
-    "deploy": "npm run build && wrangler deploy --env=\"\"",
+    "deploy": "npm run build && wrangler deploy",
     "lint": "eslint .",
     "preview": "vite preview",
     "typecheck:api": "tsc -p worker/tsconfig.json",
     "db:migrate:local": "wrangler d1 migrations apply greeninstallatie --local",
     "db:migrate:remote": "wrangler d1 migrations apply greeninstallatie --remote",
-    "hash-admin-password": "node scripts/hash-password.mjs"
+    "hash-admin-password": "node scripts/hash-password.mjs",
+    "hero:build": "npx tsx scripts/build-hero-images.ts"
   },
   "dependencies": {
     "@fontsource/manrope": "^5.3.0",
@@ -35,6 +36,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.6",
     "globals": "^17.12.0",
+    "sharp": "^0.35.4",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.70.0",

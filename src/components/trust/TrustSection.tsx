@@ -39,8 +39,8 @@ export function TrustSection() {
           Vakmanschap en kwaliteit
         </Heading>
         <p className="lead mt-4">
-          Alleen wat we kunnen onderbouwen. Certificaten, garanties, merken en
-          recensies verschijnen hier pas na controle. Geen verzonnen scores.
+          Informatie over vestiging, werkwijze en ervaringen. Meer details volgen
+          wanneer die beschikbaar zijn.
         </p>
 
         {notes.length > 0 || trustContent.yearsOfExperience !== null ? (
@@ -113,8 +113,7 @@ export function TrustSection() {
               <Card key={item.id}>
                 <h3 className="font-semibold">{item.name}</h3>
                 <p className="mt-2 text-sm text-ink-muted">
-                  Ervaringen staan op het bronplatform. We nemen de tekst hier
-                  niet over zolang hergebruik niet is afgestemd.
+                  Ervaringen van klanten vindt u op het bronplatform.
                 </p>
                 <p className="mt-4 text-sm">
                   <a

@@ -69,8 +69,7 @@ export function AreaIndexPage() {
               </Heading>
               <p className="lead mt-4">
                 De marker staat bij de vestiging in Oude Pekela. Groningen,
-                Drenthe en Friesland vallen binnen het werkgebied. Geen
-                postcodelijst en geen extra plaatsnamen zonder eigen tekst.
+                Drenthe en Friesland vallen binnen het werkgebied.
               </p>
             </div>
           </Reveal>
@@ -85,13 +84,12 @@ export function AreaIndexPage() {
           <Reveal className="lg:col-span-7">
             <Heading as="h2">Plaatsnamen</Heading>
             <p className="lead mt-4">
-              Afzonderlijke plaatsnamen publiceren we pas als daar eigen,
-              gecontroleerde tekst voor is. Geen dunne deurenpagina’s.
+              Afzonderlijke plaatspagina’s volgen wanneer daar eigen tekst voor
+              beschikbaar is. Het werkgebied blijft Noord-Nederland.
             </p>
             {areas.length === 0 ? (
               <p className="mt-5 text-ink-muted">
-                Er zijn nog geen plaatsnamen gepubliceerd. Het werkgebied is
-                Noord-Nederland, met vestiging in Oude Pekela.
+                Het werkgebied is Noord-Nederland, met vestiging in Oude Pekela.
               </p>
             ) : (
               <ul className="mt-6 grid gap-3 sm:grid-cols-2">
