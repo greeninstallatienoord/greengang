@@ -39,9 +39,9 @@ export function HomeProjects() {
               <Link to={featured.href ?? '/werk'} className="group block">
                 <MediaImage
                   asset={featured.asset}
+                  variant="card"
                   className="rounded-none"
                   imgClassName="transition-transform duration-500 motion-safe:group-hover:scale-[1.02]"
-                  ratio="4 / 3"
                   sizes="100vw"
                 />
                 <span className="mt-2.5 block text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-brand-dark">
@@ -60,9 +60,9 @@ export function HomeProjects() {
                   >
                     <MediaImage
                       asset={shot.asset}
+                      variant="card"
                       className="rounded-none"
                       imgClassName="transition-transform duration-500 motion-safe:group-hover:scale-[1.02]"
-                      ratio="4 / 3"
                       sizes="78vw"
                     />
                     <span className="mt-2 block text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-brand-dark">
@@ -81,9 +81,9 @@ export function HomeProjects() {
               <Link key={shot.id} to={shot.href ?? '/werk'} className="group min-w-0">
                 <MediaImage
                   asset={shot.asset}
+                  variant="card"
                   className="rounded-none"
                   imgClassName="transition-transform duration-500 motion-safe:group-hover:scale-[1.02]"
-                  ratio="4 / 3"
                   sizes="(min-width: 1024px) 32vw, 100vw"
                 />
                 <span className="mt-2.5 block text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-brand-dark">

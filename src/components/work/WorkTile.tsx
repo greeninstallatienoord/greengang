@@ -5,7 +5,8 @@ type WorkTileProps = {
   shot: WorkShot
   onOpen: () => void
   priority?: boolean
-  ratio: string
+  /** Optional override; defaults to near-native portrait/landscape frame. */
+  ratio?: string
   sizes: string
   className?: string
 }
@@ -19,6 +20,9 @@ export function WorkTile({
   className,
 }: WorkTileProps) {
   const category = workCategoryLabels[shot.category]
+  const frame =
+    ratio ??
+    (shot.asset.height >= shot.asset.width ? '3 / 4' : '4 / 3')
 
   return (
     <button
@@ -33,7 +37,7 @@ export function WorkTile({
     >
       <span
         className="relative block overflow-hidden rounded-md bg-stone"
-        style={{ aspectRatio: ratio }}
+        style={{ aspectRatio: frame }}
       >
         <img
           src={shot.asset.src}

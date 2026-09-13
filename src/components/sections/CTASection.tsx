@@ -1,10 +1,11 @@
 import { Phone } from 'lucide-react'
 import { business } from '../../data/business'
-import { mediaPositionStyle, type MediaAsset } from '../../data/media'
+import type { MediaAsset } from '../../data/media'
 import { site } from '../../data/site'
 import { ButtonLink } from '../ButtonLink'
 import { Container } from '../Container'
 import { Heading } from '../Heading'
+import { MediaImage } from '../media/MediaImage'
 
 type CTASectionProps = {
   title?: string
@@ -92,15 +93,11 @@ export function CTASection({
         </div>
         {image ? (
           <div className="lg:col-span-6">
-            <img
-              src={image.src}
-              alt={image.alt}
-              width={image.width}
-              height={image.height}
-              className="media-photo aspect-[4/3] w-full object-cover"
-              style={mediaPositionStyle(image)}
-              loading="lazy"
-              decoding="async"
+            <MediaImage
+              asset={image}
+              variant="card"
+              className="rounded-none"
+              sizes="(min-width: 1024px) 42vw, 100vw"
             />
           </div>
         ) : null}

@@ -15,6 +15,7 @@ export function ServiceCard({ service }: ServiceCardProps) {
     <article className="group flex h-full flex-col overflow-hidden border border-line bg-paper">
       <MediaImage
         asset={serviceImage(service.slug)}
+        variant="card"
         className="rounded-none"
         sizes="(min-width: 1024px) 33vw, 100vw"
       />

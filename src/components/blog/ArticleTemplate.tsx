@@ -88,8 +88,8 @@ export function ArticleTemplate({ post }: ArticleTemplateProps) {
                 <MediaImage
                   asset={postImage(post)}
                   alt={post.imageAlt}
-                  className="mb-8"
-                  ratio="16 / 10"
+                  variant="project"
+                  className="mb-8 mx-auto w-fit max-h-[22rem] max-w-full sm:max-h-[26rem] lg:max-h-[28rem]"
                   sizes="(min-width: 768px) 42rem, 100vw"
                   priority
                 />

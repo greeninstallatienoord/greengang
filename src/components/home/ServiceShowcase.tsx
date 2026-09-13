@@ -39,8 +39,8 @@ export function ServiceShowcase() {
           <Link to={featured.href} className="group lg:col-span-7">
             <MediaImage
               asset={serviceImage(featured.slug)}
+              variant="card"
               className="rounded-none min-h-64 lg:min-h-[28rem]"
-              ratio="4 / 5"
               sizes="(min-width: 1024px) 50vw, 100vw"
             />
           </Link>
@@ -71,8 +71,8 @@ export function ServiceShowcase() {
                 >
                   <MediaImage
                     asset={serviceImage(service.slug)}
+                    variant="card"
                     className="rounded-none"
-                    ratio="5 / 4"
                     sizes="120px"
                   />
                   <span>

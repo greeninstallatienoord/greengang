@@ -58,6 +58,7 @@ export function AboutPage() {
         intro="Betrouwbaar werk, eerlijk advies en snelle opvolging. We installeren en onderhouden cv-ketels, airconditioning en warmtepompen — met ervaring uit de praktijk en duidelijke afspraken."
         image={pageImages.aboutHero}
         imageClassName="rounded-md shadow-[0_10px_28px_-14px_rgba(20,40,28,0.32)]"
+        imageVariant="project"
         actions={<CtaPair />}
       />
 
@@ -85,12 +86,12 @@ export function AboutPage() {
               <figure>
                 <MediaImage
                   asset={pageImages.aboutHouse}
-                  className="rounded-md"
-                  ratio="5 / 4"
+                  variant="project"
+                  className="mx-auto w-fit max-w-full max-h-[20rem] rounded-md sm:max-h-[22rem] lg:max-h-[24rem]"
                   sizes="(min-width: 640px) 42vw, 100vw"
                 />
                 <figcaption className="mt-2.5 text-sm text-ink-muted">
-                  Plaatsing aan de gevel. Foto uit eigen werk.
+                  Buitenunit aan de gevel op een beugel, met leidinggoot. Foto uit eigen werk.
                 </figcaption>
               </figure>
             </Reveal>
@@ -98,12 +99,12 @@ export function AboutPage() {
               <figure>
                 <MediaImage
                   asset={pageImages.aboutCraft}
-                  className="rounded-md"
-                  ratio="5 / 4"
+                  variant="project"
+                  className="mx-auto w-fit max-w-full max-h-[20rem] rounded-md sm:max-h-[22rem] lg:max-h-[24rem]"
                   sizes="(min-width: 640px) 42vw, 100vw"
                 />
                 <figcaption className="mt-2.5 text-sm text-ink-muted">
-                  Afgewerkte buitenunit en leiding. Foto uit eigen werk.
+                  Afgewerkte buitenunit met leidinggoot en elektra aan de gevel. Foto uit eigen werk.
                 </figcaption>
               </figure>
             </Reveal>

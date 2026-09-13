@@ -28,6 +28,12 @@ type PageHeroProps = {
   imageClassName?: string
   /** Slightly tighter vertical rhythm for long headlines + CTAs above the fold. */
   compact?: boolean
+  /**
+   * hero = marketing cover crop; project = full install documentation.
+   * Prefer `imageVariant`. `imageFit` remains for older call sites.
+   */
+  imageVariant?: 'hero' | 'project'
+  imageFit?: 'cover' | 'contain'
 }
 
 export function PageHero({
@@ -45,7 +51,12 @@ export function PageHero({
   titleClassName,
   imageClassName,
   compact = false,
+  imageVariant,
+  imageFit,
 }: PageHeroProps) {
+  const variant = imageVariant ?? (imageFit === 'contain' ? 'project' : 'hero')
+  const documentPhoto = variant === 'project'
+
   return (
     <section
       className={cn(
@@ -85,13 +96,20 @@ export function PageHero({
             <MediaImage
               asset={image}
               alt={imageAlt}
+              variant={variant}
               className={cn(
-                compact
-                  ? 'max-h-[15rem] sm:max-h-[17rem] lg:max-h-[19rem]'
-                  : 'max-h-[16.5rem] sm:max-h-[18rem] lg:max-h-[21rem]',
+                documentPhoto
+                  ? cn(
+                      'mx-auto w-fit max-w-full',
+                      compact
+                        ? 'max-h-[17.5rem] sm:max-h-[20rem] lg:max-h-[24rem]'
+                        : 'max-h-[18.5rem] sm:max-h-[22rem] lg:max-h-[26rem]',
+                    )
+                  : compact
+                    ? 'max-h-[15rem] sm:max-h-[17rem] lg:max-h-[19rem]'
+                    : 'max-h-[16.5rem] sm:max-h-[18rem] lg:max-h-[21rem]',
                 imageClassName ?? 'rounded-none',
               )}
-              ratio="16 / 10"
               sizes="(min-width: 1024px) 38vw, 100vw"
               priority
             />

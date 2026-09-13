@@ -34,8 +34,8 @@ export function ExperienceSection() {
           <Reveal className="lg:col-span-5">
             <MediaImage
               asset={pageImages.homeTrustPhoto}
-              className="max-h-[18rem] overflow-hidden rounded-none sm:max-h-[22rem] lg:max-h-none"
-              ratio="4 / 3"
+              variant="project"
+              className="mx-auto w-fit max-w-full max-h-[18rem] rounded-none sm:max-h-[22rem] lg:max-h-[26rem]"
               sizes="(min-width: 1024px) 38vw, 100vw"
             />
           </Reveal>

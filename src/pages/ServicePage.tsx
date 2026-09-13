@@ -110,6 +110,7 @@ export function ServicePage({ slug }: ServicePageProps) {
         title={service.heroTitle}
         intro={service.heroText}
         image={serviceImage(slug)}
+        imageVariant="project"
         actions={
           <CtaPair quoteTo={quoteTo} appointmentTo={appointmentTo} showCall />
         }
@@ -160,8 +161,8 @@ export function ServicePage({ slug }: ServicePageProps) {
                 <figure key={shot.caption}>
                   <MediaImage
                     asset={shot.asset}
-                    className="rounded-none"
-                    ratio="4 / 5"
+                    variant="project"
+                    className="mx-auto w-fit max-w-full max-h-[22rem] rounded-none sm:max-h-[24rem] lg:max-h-[26rem]"
                     sizes="(min-width: 1024px) 42vw, 100vw"
                   />
                   <figcaption className="mt-3 text-sm text-ink-muted">

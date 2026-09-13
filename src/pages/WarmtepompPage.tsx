@@ -55,6 +55,7 @@ export function WarmtepompPage() {
         title={service.heroTitle}
         intro={service.heroText}
         image={serviceImage('warmtepomp')}
+        imageVariant="project"
         actions={
           <CtaPair quoteTo={quoteTo} appointmentTo={appointmentTo} showCall />
         }

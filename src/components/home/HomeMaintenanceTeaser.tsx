@@ -25,9 +25,9 @@ export function HomeMaintenanceTeaser() {
             <div className="lg:col-span-6">
               <MediaImage
                 asset={pageImages.serviceHero}
-                className="max-h-[17.5rem] overflow-hidden rounded-none sm:max-h-[22rem] lg:max-h-none"
+                variant="card"
+                className="max-h-[17.5rem] rounded-none sm:max-h-[22rem] lg:max-h-[28rem]"
                 imgClassName="opacity-95"
-                ratio="16 / 10"
                 sizes="(min-width: 1024px) 48vw, 100vw"
               />
             </div>

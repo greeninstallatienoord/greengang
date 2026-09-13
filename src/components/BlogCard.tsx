@@ -20,8 +20,8 @@ export function BlogCard({ post, priority = false }: BlogCardProps) {
         <MediaImage
           asset={postImage(post)}
           alt={post.imageAlt}
+          variant="card"
           className="rounded-none"
-          ratio="16 / 10"
           sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
           priority={priority}
         />

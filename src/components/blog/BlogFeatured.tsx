@@ -21,8 +21,8 @@ export function BlogFeatured({ post }: BlogFeaturedProps) {
         <MediaImage
           asset={postImage(post)}
           alt={post.imageAlt}
-          className="rounded-none"
-          ratio="16 / 10"
+          variant="project"
+          className="mx-auto w-fit max-h-[18rem] max-w-full rounded-none bg-paper sm:max-h-[22rem] lg:max-h-[26rem]"
           sizes="(min-width: 1024px) 55vw, 100vw"
           priority
         />

@@ -38,8 +38,8 @@ export function WorkGallery({ shots = homeProjectShots }: WorkGalleryProps) {
             >
               <MediaImage
                 asset={featured.asset}
+                variant="card"
                 className="rounded-none min-h-80 lg:min-h-[34rem]"
-                ratio="4 / 5"
                 sizes="(min-width: 1024px) 62vw, 100vw"
               />
               <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/75 via-ink/20 to-transparent p-5 text-white sm:p-7">
@@ -60,8 +60,8 @@ export function WorkGallery({ shots = homeProjectShots }: WorkGalleryProps) {
                 >
                   <MediaImage
                     asset={shot.asset}
+                    variant="card"
                     className="rounded-none"
-                    ratio="4 / 3"
                     sizes="(min-width: 1024px) 28vw, 50vw"
                   />
                   <span className="mt-2 block text-sm font-semibold">{shot.title}</span>
@@ -81,8 +81,8 @@ export function WorkGallery({ shots = homeProjectShots }: WorkGalleryProps) {
             >
               <MediaImage
                 asset={shot.asset}
+                variant="card"
                 className="rounded-none"
-                ratio="4 / 5"
                 sizes="(min-width: 1024px) 16vw, 45vw"
               />
               <span className="mt-2 block text-sm font-semibold">{shot.title}</span>
