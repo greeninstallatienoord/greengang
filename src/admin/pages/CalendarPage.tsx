@@ -5,7 +5,7 @@ import { api } from '../../lib/api'
 import { EmptyState } from '../components/EmptyState'
 import { Notice } from '../components/Notice'
 import { PageHeader } from '../components/PageHeader'
-import { Skeleton } from '../components/Skeleton'
+import { SkeletonTable } from '../components/Skeleton'
 import { StatusBadge } from '../components/StatusBadge'
 import {
   appointmentStatusLabel,
@@ -228,7 +228,7 @@ export function CalendarPage() {
       </div>
 
       {error ? <Notice tone="error">{error}</Notice> : null}
-      {loading ? <Skeleton /> : null}
+      {loading ? <SkeletonTable rows={6} /> : null}
 
       {/* Desktop month */}
       {!loading && view === 'month' ? (

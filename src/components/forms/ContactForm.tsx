@@ -247,7 +247,7 @@ export function ContactForm() {
         <Button
           type="submit"
           className="w-full min-[400px]:w-auto"
-          disabled={status === 'submitting'}
+          loading={status === 'submitting'}
         >
           {status === 'submitting' ? 'Bericht versturen…' : 'Bericht versturen'}
         </Button>

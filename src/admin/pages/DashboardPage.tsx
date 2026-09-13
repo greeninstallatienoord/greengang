@@ -6,7 +6,7 @@ import { api } from '../../lib/api'
 import { EmptyState } from '../components/EmptyState'
 import { Notice } from '../components/Notice'
 import { PageHeader } from '../components/PageHeader'
-import { Skeleton } from '../components/Skeleton'
+import { SkeletonCards } from '../components/Skeleton'
 import { StatusBadge } from '../components/StatusBadge'
 import {
   activityLabel,
@@ -156,7 +156,7 @@ export function DashboardPage() {
     )
   }
 
-  if (!data) return <Skeleton rows={7} />
+  if (!data) return <SkeletonCards count={4} />
 
   const metrics = [
     {

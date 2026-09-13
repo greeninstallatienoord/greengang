@@ -6,7 +6,7 @@ import { FilterTabs } from '../components/FilterTabs'
 import { Notice } from '../components/Notice'
 import { PageHeader } from '../components/PageHeader'
 import { SearchField } from '../components/SearchField'
-import { Skeleton } from '../components/Skeleton'
+import { SkeletonTable } from '../components/Skeleton'
 import { StatusBadge } from '../components/StatusBadge'
 import { formatDateTime, formatDayMonth, matchesQuery, quoteStatusLabel, serviceLabel } from '../labels'
 import { adminUrl } from '../adminPath'
@@ -128,7 +128,7 @@ export function QuotesPage() {
         ) : null}
       </div>
       {error ? <Notice tone="error">{error}</Notice> : null}
-      {loading ? <Skeleton /> : null}
+      {loading ? <SkeletonTable rows={6} /> : null}
       {!loading && visible.length === 0 && !error ? (
         <EmptyState
           title={items.length === 0 ? 'Geen offerteaanvragen' : 'Geen resultaten'}

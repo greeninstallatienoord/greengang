@@ -5,7 +5,7 @@ import { EmailCenterNav } from '../email/EmailCenterNav'
 import { EmptyState } from '../components/EmptyState'
 import { Notice } from '../components/Notice'
 import { PageHeader } from '../components/PageHeader'
-import { Skeleton } from '../components/Skeleton'
+import { SkeletonTable } from '../components/Skeleton'
 import { StatusBadge } from '../components/StatusBadge'
 import { emailStatusLabel, formatDateTime } from '../labels'
 import { adminUrl } from '../adminPath'
@@ -46,7 +46,7 @@ export function EmailLogsPage() {
       />
       <EmailCenterNav />
       {error ? <Notice tone="error">{error}</Notice> : null}
-      {loading ? <Skeleton /> : null}
+      {loading ? <SkeletonTable rows={6} /> : null}
       {!loading && items.length === 0 && !error ? (
         <EmptyState
           title="Nog geen e-mails"

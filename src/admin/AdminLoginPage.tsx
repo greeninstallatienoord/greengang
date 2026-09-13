@@ -160,7 +160,8 @@ export function AdminLoginPage() {
 
           <Button
             type="submit"
-            disabled={busy || !turnstileToken}
+            loading={busy}
+            disabled={!turnstileToken}
             className="min-h-11 w-full rounded-[var(--admin-radius)] bg-[var(--admin-accent)] hover:bg-[#157a2d] disabled:hover:translate-y-0"
           >
             {busy ? 'Inloggen…' : 'Inloggen'}

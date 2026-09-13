@@ -612,8 +612,8 @@ export function AppointmentFlow() {
             Volgende
           </Button>
         ) : (
-          <Button type="submit" disabled={status === 'submitting'}>
-            {status === 'submitting' ? 'Versturen…' : 'Afspraak aanvragen'}
+          <Button type="submit" loading={status === 'submitting'}>
+            {status === 'submitting' ? 'Aanvraag verzenden…' : 'Afspraak aanvragen'}
           </Button>
         )}
       </div>

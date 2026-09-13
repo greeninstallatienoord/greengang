@@ -1,6 +1,7 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import { cn } from '../lib/cn'
 import type { ButtonSize, ButtonVariant } from '../types'
+import { InlineLoader } from './loading/BrandLoader'
 
 const variantClass: Record<ButtonVariant, string> = {
   primary: 'bg-brand text-white hover:bg-brand-dark',
@@ -19,6 +20,8 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: ButtonVariant
   size?: ButtonSize
   children: ReactNode
+  /** Shows inline spinner and disables the button without changing width. */
+  loading?: boolean
 }
 
 export function Button({
@@ -27,11 +30,15 @@ export function Button({
   className,
   type = 'button',
   children,
+  loading = false,
+  disabled,
   ...props
 }: ButtonProps) {
   return (
     <button
       type={type}
+      disabled={disabled || loading}
+      aria-busy={loading || undefined}
       className={cn(
         'inline-flex touch-manipulation items-center justify-center gap-2 rounded-sm font-semibold tracking-[-0.01em] transition-[color,background-color,border-color,transform] duration-[var(--duration-base)] motion-safe:hover:-translate-y-px disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0',
         className?.includes('text-')
@@ -42,6 +49,7 @@ export function Button({
       )}
       {...props}
     >
+      {loading ? <InlineLoader label="Bezig" /> : null}
       {children}
     </button>
   )

@@ -5,6 +5,7 @@ import { CookiePreferences } from '../components/consent/CookiePreferences'
 import { FloatingContactMenu } from '../components/layout/FloatingContactMenu'
 import { Footer } from '../components/layout/Footer'
 import { Header } from '../components/layout/Header'
+import { LoadingScreen } from '../components/loading/BrandLoader'
 import { useConsent } from '../hooks/useConsent'
 
 export function RootLayout() {
@@ -26,13 +27,7 @@ export function RootLayout() {
       </a>
       <Header />
       <main id="main-content" className="flex-1">
-        <Suspense
-          fallback={
-            <div className="container-page py-16 text-ink-muted" role="status">
-              Pagina wordt geladen…
-            </div>
-          }
-        >
+        <Suspense fallback={<LoadingScreen variant="section" />}>
           <Outlet />
         </Suspense>
       </main>

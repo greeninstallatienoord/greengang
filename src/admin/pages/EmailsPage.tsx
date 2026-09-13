@@ -409,8 +409,8 @@ export function EmailsPage() {
           <Button variant="secondary" disabled={busy} onClick={() => setStep('compose')}>
             Terug
           </Button>
-          <Button disabled={busy} onClick={() => void send()}>
-            {busy ? 'Versturen…' : 'E-mail versturen'}
+          <Button loading={busy} onClick={() => void send()}>
+            {busy ? 'E-mail versturen…' : 'E-mail versturen'}
           </Button>
         </div>
         {mobilePreview && html ? (

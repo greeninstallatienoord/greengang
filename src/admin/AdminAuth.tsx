@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import { Navigate } from 'react-router-dom'
+import { LoadingScreen } from '../components/loading/BrandLoader'
 import { api } from '../lib/api'
 import { adminUrl } from './adminPath'
 
@@ -13,14 +14,6 @@ export function useAdminAuth(): AdminAuthValue {
   const value = useContext(AdminAuthContext)
   if (!value) throw new Error('AdminAuth ontbreekt.')
   return value
-}
-
-function AuthLoading() {
-  return (
-    <div className="admin-app flex min-h-dvh items-center justify-center px-6">
-      <p className="text-sm text-[var(--admin-muted)]">Beheer wordt geladen…</p>
-    </div>
-  )
 }
 
 export function AdminGuard({ children }: { children: ReactNode }) {
@@ -38,7 +31,7 @@ export function AdminGuard({ children }: { children: ReactNode }) {
     })
   }, [])
 
-  if (state === 'loading') return <AuthLoading />
+  if (state === 'loading') return <LoadingScreen variant="admin" label="Even laden…" />
   if (state === 'out') return <Navigate to={adminUrl('login')} replace />
   return <AdminAuthContext.Provider value={{ email }}>{children}</AdminAuthContext.Provider>
 }

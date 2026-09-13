@@ -45,7 +45,12 @@
     <link rel="manifest" href="/site.webmanifest" />
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="boot-loader" role="status" aria-live="polite" aria-busy="true">
+        <span class="boot-loader__ring" aria-hidden="true"></span>
+        <span>Even laden…</span>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

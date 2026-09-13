@@ -1,5 +1,6 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { lazy, useEffect, useState } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
+import { LoadingScreen } from '../components/loading/BrandLoader'
 import { api } from '../lib/api'
 import { AdminGuard } from './AdminAuth'
 import { AdminLayout } from './AdminLayout'
@@ -63,14 +64,6 @@ const WebsiteInfoPage = lazy(() =>
   import('./pages/WebsiteInfoPage').then((module) => ({ default: module.WebsiteInfoPage })),
 )
 
-function Fallback() {
-  return (
-    <div className="admin-app flex min-h-dvh items-center justify-center px-6">
-      <p className="text-sm text-[var(--admin-muted)]">Beheerpagina wordt geladen…</p>
-    </div>
-  )
-}
-
 function LoginGate() {
   const [ready, setReady] = useState(false)
   const [inSession, setInSession] = useState(false)
@@ -82,45 +75,43 @@ function LoginGate() {
     })
   }, [])
 
-  if (!ready) return <Fallback />
+  if (!ready) return <LoadingScreen variant="admin" label="Even laden…" />
   if (inSession) return <Navigate to={adminUrl('dashboard')} replace />
   return <AdminLoginPage />
 }
 
 export function AdminApp() {
   return (
-    <Suspense fallback={<Fallback />}>
-      <Routes>
-        <Route path="login" element={<LoginGate />} />
-        <Route
-          element={
-            <AdminGuard>
-              <AdminLayout />
-            </AdminGuard>
-          }
-        >
-          <Route index element={<Navigate to={adminUrl('dashboard')} replace />} />
-          <Route path="dashboard" element={<DashboardPage />} />
-          <Route path="appointments" element={<AppointmentsPage />} />
-          <Route path="appointments/new" element={<AppointmentNewPage />} />
-          <Route path="appointments/:id" element={<AppointmentDetailPage />} />
-          <Route path="calendar" element={<CalendarPage />} />
-          <Route path="customers" element={<CustomersPage />} />
-          <Route path="customers/:id" element={<CustomerDetailPage />} />
-          <Route path="quotes" element={<QuotesPage />} />
-          <Route path="quotes/:id" element={<QuoteDetailPage />} />
-          <Route path="contact" element={<ContactListPage />} />
-          <Route path="contact/:id" element={<ContactDetailPage />} />
-          <Route path="emails" element={<EmailsPage />} />
-          <Route path="emails/logs" element={<EmailLogsPage />} />
-          <Route path="emails/logs/:id" element={<EmailLogDetailPage />} />
-          <Route path="templates" element={<TemplatesPage />} />
-          <Route path="templates/:id" element={<TemplateDetailPage />} />
-          <Route path="settings" element={<SettingsPage />} />
-          <Route path="website-info" element={<WebsiteInfoPage />} />
-        </Route>
-        <Route path="*" element={<Navigate to={adminUrl('dashboard')} replace />} />
-      </Routes>
-    </Suspense>
+    <Routes>
+      <Route path="login" element={<LoginGate />} />
+      <Route
+        element={
+          <AdminGuard>
+            <AdminLayout />
+          </AdminGuard>
+        }
+      >
+        <Route index element={<Navigate to={adminUrl('dashboard')} replace />} />
+        <Route path="dashboard" element={<DashboardPage />} />
+        <Route path="appointments" element={<AppointmentsPage />} />
+        <Route path="appointments/new" element={<AppointmentNewPage />} />
+        <Route path="appointments/:id" element={<AppointmentDetailPage />} />
+        <Route path="calendar" element={<CalendarPage />} />
+        <Route path="customers" element={<CustomersPage />} />
+        <Route path="customers/:id" element={<CustomerDetailPage />} />
+        <Route path="quotes" element={<QuotesPage />} />
+        <Route path="quotes/:id" element={<QuoteDetailPage />} />
+        <Route path="contact" element={<ContactListPage />} />
+        <Route path="contact/:id" element={<ContactDetailPage />} />
+        <Route path="emails" element={<EmailsPage />} />
+        <Route path="emails/logs" element={<EmailLogsPage />} />
+        <Route path="emails/logs/:id" element={<EmailLogDetailPage />} />
+        <Route path="templates" element={<TemplatesPage />} />
+        <Route path="templates/:id" element={<TemplateDetailPage />} />
+        <Route path="settings" element={<SettingsPage />} />
+        <Route path="website-info" element={<WebsiteInfoPage />} />
+      </Route>
+      <Route path="*" element={<Navigate to={adminUrl('dashboard')} replace />} />
+    </Routes>
   )
 }

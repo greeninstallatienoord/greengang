@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react'
+import { Suspense, useEffect, useId, useRef, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import {
   CalendarDays,
@@ -18,6 +18,7 @@ import {
 import logo from '../assets/images/branding/logo.png'
 import { business } from '../data/business'
 import { api } from '../lib/api'
+import { AdminRouteFallback } from '../components/loading/BrandLoader'
 import { useAdminAuth } from './AdminAuth'
 import { adminUrl } from './adminPath'
 
@@ -199,7 +200,9 @@ export function AdminLayout() {
           </div>
 
           <main className="admin-main mx-auto w-full max-w-[76rem] px-3.5 py-4 min-[360px]:px-4 sm:px-6 sm:py-6">
-            <Outlet />
+            <Suspense fallback={<AdminRouteFallback />}>
+              <Outlet />
+            </Suspense>
           </main>
         </div>
       </div>

@@ -567,8 +567,8 @@ export function QuoteForm() {
             Volgende
           </Button>
         ) : (
-          <Button type="submit" disabled={status === 'submitting' || Boolean(photoError)}>
-            {status === 'submitting' ? 'Versturen…' : 'Offerte aanvragen'}
+          <Button type="submit" loading={status === 'submitting'} disabled={Boolean(photoError)}>
+            {status === 'submitting' ? 'Offerte versturen…' : 'Offerte aanvragen'}
           </Button>
         )}
       </div>

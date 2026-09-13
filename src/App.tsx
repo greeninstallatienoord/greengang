@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { ADMIN_BASE_PATH } from './admin/adminPath'
+import { LoadingScreen } from './components/loading/BrandLoader'
 import { ScrollToTop } from './components/ScrollToTop'
 import { legalDocs } from './data/legal'
 import { RootLayout } from './layouts/RootLayout'
@@ -74,7 +75,7 @@ function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <Suspense fallback={<p className="p-6 text-sm text-ink-muted">Laden…</p>}>
+      <Suspense fallback={<LoadingScreen variant="page" />}>
       <Routes>
           <Route path={`${ADMIN_BASE_PATH.slice(1)}/*`} element={<AdminApp />} />
           <Route element={<RootLayout />}>
