@@ -15,6 +15,8 @@ function shot(
  *   A narrower nevenunit sits beside it; we do not claim a specific hybrid model.
  * - cv-opstelling: Nefit ketel + Remeha Elga Ace (visible) → warmtepomp (hybride).
  * - warmtepomp-intergas: Intergas outdoor heat-pump unit (visible logo) → warmtepomp.
+ * - airco-platdak: outdoor heat-pump unit on spring dampers (not airco) → warmtepomp.
+ * - airco-terras: Midea outdoor airco unit on terrace dampers → airco.
  */
 export const workShots: WorkShot[] = [
   shot(
@@ -77,8 +79,8 @@ export const workShots: WorkShot[] = [
     {
       id: 'terras',
       asset: workPhotos.aircoTerras,
-      title: 'Airco-buitenunit op plat dak',
-      caption: 'Buitenunit op een plat dak, naast de gevel.',
+      title: 'Midea airco-buitenunit op dakterras',
+      caption: 'Midea buitenunit op dempers op een plat dakterras.',
       category: 'airco',
       href: '/airco',
     },
@@ -154,10 +156,10 @@ export const workShots: WorkShot[] = [
     {
       id: 'platdak',
       asset: workPhotos.aircoPlatdak,
-      title: 'Airco-buitenunit op dempers',
-      caption: 'Buitenunit op trillingsdempers op een plat dak.',
-      category: 'airco',
-      href: '/airco',
+      title: 'Warmtepomp-buitenunit op dempers',
+      caption: 'Warmtepomp-buitenunit op trillingsdempers op een plat dak.',
+      category: 'warmtepomp',
+      href: '/warmtepomp',
     },
     { kind: 'buitenunit' },
   ),
