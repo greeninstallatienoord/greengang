@@ -24,7 +24,7 @@ export const guidePosts: BlogPost[] = [
     publishedAt: '2026-09-12',
     updatedAt: '2026-09-12',
     imageKey: 'cvIntergas',
-    imageAlt: 'Cv-ketel in een technische ruimte, ter illustratie van deze gids',
+    imageAlt: 'Intergas cv-ketel van Green Installatie Noord met leidingwerk in een technische ruimte',
     relatedServiceSlugs: ['cv-ketel', 'service-onderhoud'],
     relatedArticleSlugs: [
       'wanneer-cv-ketel-vervangen',

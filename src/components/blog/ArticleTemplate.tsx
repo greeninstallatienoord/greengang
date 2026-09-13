@@ -89,7 +89,7 @@ export function ArticleTemplate({ post }: ArticleTemplateProps) {
                   asset={postImage(post)}
                   alt={post.imageAlt}
                   variant="project"
-                  className="mb-8 mx-auto w-fit max-h-[22rem] max-w-full sm:max-h-[26rem] lg:max-h-[28rem]"
+                  className="mb-8 mx-auto w-fit max-h-[min(70vw,22rem)] max-w-full sm:max-h-[26rem] lg:max-h-[30rem]"
                   sizes="(min-width: 768px) 42rem, 100vw"
                   priority
                 />

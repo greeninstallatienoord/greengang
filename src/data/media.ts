@@ -182,11 +182,11 @@ export const workPhotos = {
   ),
   cvIntergas: photo(
     cvIntergas,
-    1350,
-    1800,
-    'Intergas-ketel met nevenunit en leidingwerk in een technische ruimte',
-    '42% 40%',
-    '40% 38%',
+    1086,
+    1448,
+    'Intergas cv-ketel van Green Installatie Noord met leidingwerk en rookgasafvoer in een technische ruimte',
+    '50% 42%',
+    '50% 40%',
   ),
 } as const satisfies Record<string, MediaAsset>
 
