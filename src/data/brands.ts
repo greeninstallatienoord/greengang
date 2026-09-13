@@ -8,6 +8,11 @@ import vaillantLogo from '../assets/images/brands/vaillant.svg'
 import remehaLogo from '../assets/images/brands/remeha.svg'
 import intergasLogo from '../assets/images/brands/intergas.svg'
 import nefitLogo from '../assets/images/brands/nefit.svg'
+import mitsubishiLogo from '../assets/images/brands/mitsubishi.svg'
+import kaisaiLogo from '../assets/images/brands/kaisai.png'
+import lgLogo from '../assets/images/brands/lg.svg'
+import haierLogo from '../assets/images/brands/haier.png'
+import daikinLogo from '../assets/images/brands/daikin.svg'
 
 export type BrandCategory = 'airco' | 'warmtepomp' | 'cv-ketel'
 
@@ -22,11 +27,46 @@ export type InstallBrand = {
 }
 
 export const aircoBrands: InstallBrand[] = [
-  { id: 'mitsubishi', name: 'Mitsubishi', category: 'airco' },
-  { id: 'kaisai', name: 'Kaisai', category: 'airco' },
-  { id: 'lg-airco', name: 'LG', category: 'airco' },
-  { id: 'haier', name: 'Haier', category: 'airco' },
-  { id: 'daikin', name: 'Daikin', category: 'airco' },
+  {
+    id: 'mitsubishi',
+    name: 'Mitsubishi',
+    category: 'airco',
+    logoSrc: mitsubishiLogo,
+    logoWidth: 109,
+    logoHeight: 46,
+  },
+  {
+    id: 'kaisai',
+    name: 'Kaisai',
+    category: 'airco',
+    logoSrc: kaisaiLogo,
+    logoWidth: 148,
+    logoHeight: 29,
+  },
+  {
+    id: 'lg-airco',
+    name: 'LG',
+    category: 'airco',
+    logoSrc: lgLogo,
+    logoWidth: 225,
+    logoHeight: 99,
+  },
+  {
+    id: 'haier',
+    name: 'Haier',
+    category: 'airco',
+    logoSrc: haierLogo,
+    logoWidth: 263,
+    logoHeight: 85,
+  },
+  {
+    id: 'daikin',
+    name: 'Daikin',
+    category: 'airco',
+    logoSrc: daikinLogo,
+    logoWidth: 298,
+    logoHeight: 63,
+  },
 ]
 
 export const heatPumpBrands: InstallBrand[] = [

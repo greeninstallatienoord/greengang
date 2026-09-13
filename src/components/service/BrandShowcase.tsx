@@ -9,9 +9,26 @@ type BrandShowcaseProps = {
   brands: InstallBrand[]
 }
 
+function logoClass(brand: InstallBrand) {
+  const ratio = (brand.logoWidth ?? 1) / (brand.logoHeight ?? 1)
+  if (ratio > 8) {
+    return 'max-h-8 max-w-[min(100%,13.5rem)] sm:max-h-9 sm:max-w-[min(100%,14.5rem)]'
+  }
+  if (ratio > 4.5) {
+    // Wide wordmarks (Daikin, Kaisai, Haier)
+    return 'max-h-8 max-w-[min(100%,11.5rem)] sm:max-h-9 sm:max-w-[min(100%,12.5rem)]'
+  }
+  if (ratio < 1.6) {
+    // More compact marks (LG circle + word)
+    return 'max-h-10 max-w-[min(100%,8.5rem)] sm:max-h-11 sm:max-w-[min(100%,9.5rem)]'
+  }
+  return 'max-h-9 max-w-[min(100%,10.5rem)] sm:max-h-10 sm:max-w-[min(100%,11.5rem)]'
+}
+
 export function BrandShowcase({ category, brands }: BrandShowcaseProps) {
   const copy = brandCopy[category]
   const withLogos = brands.every((brand) => Boolean(brand.logoSrc))
+  const fiveUp = brands.length === 5
 
   return (
     <Section className="bg-paper">
@@ -24,11 +41,16 @@ export function BrandShowcase({ category, brands }: BrandShowcaseProps) {
           <p className="lead mt-3 sm:mt-4">{copy.text}</p>
         </div>
         <ul
-          className={
+          className={cn(
+            'mt-6 gap-2.5 min-[390px]:gap-3 sm:mt-7 sm:gap-3.5',
             brands.length <= 4
-              ? 'mt-6 grid grid-cols-2 gap-2.5 min-[390px]:gap-3 sm:mt-7 sm:gap-3.5 md:grid-cols-4'
-              : 'mt-6 grid grid-cols-2 gap-2.5 min-[390px]:gap-3 sm:mt-8 sm:grid-cols-3 lg:grid-cols-5'
-          }
+              ? 'grid grid-cols-2 md:grid-cols-4'
+              : fiveUp
+                ? 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5'
+                : 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5',
+            fiveUp &&
+              'max-sm:[&>li:last-child]:col-span-2 max-sm:[&>li:last-child]:mx-auto max-sm:[&>li:last-child]:w-[calc(50%-0.3125rem)]',
+          )}
         >
           {brands.map((brand) => (
             <li key={brand.id}>
@@ -48,12 +70,7 @@ export function BrandShowcase({ category, brands }: BrandShowcaseProps) {
                       width={brand.logoWidth}
                       height={brand.logoHeight}
                       decoding="async"
-                      className={cn(
-                        'h-auto w-auto object-contain object-center',
-                        (brand.logoWidth ?? 1) / (brand.logoHeight ?? 1) > 8
-                          ? 'max-h-8 max-w-[min(100%,13.5rem)] sm:max-h-9 sm:max-w-[min(100%,14.5rem)]'
-                          : 'max-h-9 max-w-[min(100%,10.5rem)] sm:max-h-10 sm:max-w-[min(100%,11.5rem)]',
-                      )}
+                      className={cn('h-auto w-auto object-contain object-center', logoClass(brand))}
                     />
                     {(brand.logoWidth ?? 1) / (brand.logoHeight ?? 1) > 8 ? (
                       <span className="text-[0.7rem] font-medium tracking-[0.04em] text-ink-muted">
