@@ -16,7 +16,7 @@ export function HomeHero() {
         Achtergrondfoto’s van eigen installaties van Green Installatie Noord.
       </p>
 
-      <Container className="relative flex min-h-[clamp(22rem,68svh,28rem)] flex-col justify-end pb-7 pt-10 min-[375px]:min-h-[clamp(23rem,66svh,29rem)] min-[375px]:pb-8 sm:min-h-[26rem] sm:pb-11 sm:pt-12 lg:min-h-[min(30rem,62dvh)] lg:justify-center lg:py-14 xl:min-h-[min(32rem,58dvh)]">
+      <Container className="relative flex min-h-[clamp(22rem,68svh,28rem)] flex-col justify-end pb-7 pt-10 min-[375px]:min-h-[clamp(23rem,66svh,29rem)] min-[375px]:pb-8 sm:min-h-[26rem] sm:pb-11 sm:pt-12 lg:min-h-[min(36rem,72dvh)] lg:justify-center lg:py-14 xl:min-h-[min(42rem,76dvh)] 2xl:min-h-[min(46rem,78dvh)]">
         <div className="max-w-xl pb-1 sm:pb-0">
           <p className="text-[0.65rem] font-semibold tracking-[0.16em] text-white/72 uppercase min-[390px]:text-[0.68rem] min-[390px]:tracking-[0.18em]">
             {site.copy.eyebrow}

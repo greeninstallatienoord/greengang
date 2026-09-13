@@ -30,21 +30,22 @@ const plans: SourcePlan[] = [
     file: 'WhatsApp Image 2026-09-13 at 13.07.44.jpeg',
     mobileFocus: { x: 0.58, y: 0.62 },
     desktopEnabled: true,
-    desktopFocus: { x: 0.62, y: 0.58 },
+    // Soften desktop focus slightly toward more surrounding context (less “zoomed”).
+    desktopFocus: { x: 0.58, y: 0.55 },
   },
   {
     id: 'hero-airco-indoor-attic-01',
     file: '4532.jpeg',
     mobileFocus: { x: 0.48, y: 0.32 },
     desktopEnabled: true,
-    desktopFocus: { x: 0.55, y: 0.28 },
+    desktopFocus: { x: 0.5, y: 0.32 },
   },
   {
     id: 'hero-airco-exterior-duo-01',
     file: 'WhatsApp Image 2026-09-13 at 13.08.01.jpeg',
     mobileFocus: { x: 0.52, y: 0.7 },
     desktopEnabled: true,
-    desktopFocus: { x: 0.55, y: 0.68 },
+    desktopFocus: { x: 0.52, y: 0.62 },
   },
   {
     id: 'hero-airco-indoor-kaisai-01',
@@ -57,7 +58,7 @@ const plans: SourcePlan[] = [
     file: 'WhatsApp Image 2026-09-13 at 13.08.59.jpeg',
     mobileFocus: { x: 0.38, y: 0.52 },
     desktopEnabled: true,
-    desktopFocus: { x: 0.36, y: 0.7 },
+    desktopFocus: { x: 0.36, y: 0.58 },
   },
   {
     id: 'hero-warmtepomp-indoor-remeha-01',
@@ -74,7 +75,11 @@ const plans: SourcePlan[] = [
 ]
 
 const MOBILE = { width: 900, height: 1200 }
-const DESKTOP = { width: 1600, height: 900 }
+/** Desktop outputs stay ≤ source width (no soft upscale). Taller than 16:9 so more install context remains. */
+const DESKTOP_ASPECT = 3 / 2 // width / height → extract is 3:2
+const DESKTOP_MAX_WIDTH = 1920
+const DESKTOP_QUALITY = { webp: 84, avif: 62, jpg: 86 } as const
+const MOBILE_QUALITY = { webp: 78, avif: 55, jpg: 82 } as const
 
 async function detectContentBox(input: Buffer) {
   const { data, info } = await sharp(input)
@@ -156,6 +161,7 @@ async function encodeVariants(
   basename: string,
   width: number,
   height: number,
+  quality: { webp: number; avif: number; jpg: number },
 ) {
   const webpPath = path.join(OUT_DIR, `${basename}.webp`)
   const avifPath = path.join(OUT_DIR, `${basename}.avif`)
@@ -163,15 +169,15 @@ async function encodeVariants(
 
   await pipeline
     .clone()
-    .webp({ quality: 78, effort: 5 })
+    .webp({ quality: quality.webp, effort: 5 })
     .toFile(webpPath)
   await pipeline
     .clone()
-    .avif({ quality: 55, effort: 4 })
+    .avif({ quality: quality.avif, effort: 4 })
     .toFile(avifPath)
   await pipeline
     .clone()
-    .jpeg({ quality: 82, mozjpeg: true })
+    .jpeg({ quality: quality.jpg, mozjpeg: true, chromaSubsampling: '4:4:4' })
     .toFile(jpgPath)
 
   const sizes = {
@@ -180,7 +186,7 @@ async function encodeVariants(
     jpg: fs.statSync(jpgPath).size,
   }
   console.log(
-    `  ${basename}: avif ${(sizes.avif / 1024).toFixed(0)}KB · webp ${(sizes.webp / 1024).toFixed(0)}KB · jpg ${(sizes.jpg / 1024).toFixed(0)}KB`,
+    `  ${basename}: ${width}×${height} · avif ${(sizes.avif / 1024).toFixed(0)}KB · webp ${(sizes.webp / 1024).toFixed(0)}KB · jpg ${(sizes.jpg / 1024).toFixed(0)}KB`,
   )
   return { width, height, sizes }
 }
@@ -214,7 +220,7 @@ async function processOne(plan: SourcePlan) {
   )
   let mobilePipe = sharp(contentBuf)
     .extract(mobileExtract)
-    .resize(MOBILE.width, MOBILE.height, { fit: 'fill' })
+    .resize(MOBILE.width, MOBILE.height, { fit: 'fill', kernel: 'lanczos3' })
   if (plan.modulate) {
     mobilePipe = mobilePipe.modulate({
       brightness: plan.modulate.brightness ?? 1,
@@ -226,13 +232,14 @@ async function processOne(plan: SourcePlan) {
     `${plan.id}-mobile`,
     MOBILE.width,
     MOBILE.height,
+    MOBILE_QUALITY,
   )
 
   let desktopMeta: typeof mobileMeta | null = null
   if (plan.desktopEnabled && plan.desktopFocus) {
-    // Prefer landscape crop without extreme upscale: cap width to content width * 1.2
-    const targetW = Math.min(DESKTOP.width, Math.max(1200, Math.round(cw * 1.35)))
-    const targetH = Math.round((targetW * 9) / 16)
+    /* Never upscale past source width — WhatsApp masters are ~945px wide. */
+    const targetW = Math.min(DESKTOP_MAX_WIDTH, cw)
+    const targetH = Math.round(targetW / DESKTOP_ASPECT)
     const desktopExtract = coverExtract(
       cw,
       ch,
@@ -242,7 +249,11 @@ async function processOne(plan: SourcePlan) {
     )
     let desktopPipe = sharp(contentBuf)
       .extract(desktopExtract)
-      .resize(targetW, targetH, { fit: 'fill' })
+      .resize(targetW, targetH, {
+        fit: 'fill',
+        kernel: 'lanczos3',
+        withoutEnlargement: true,
+      })
     if (plan.modulate) {
       desktopPipe = desktopPipe.modulate({
         brightness: plan.modulate.brightness ?? 1,
@@ -254,6 +265,7 @@ async function processOne(plan: SourcePlan) {
       `${plan.id}-desktop`,
       targetW,
       targetH,
+      DESKTOP_QUALITY,
     )
   }
 

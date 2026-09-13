@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-13T11:53:19.515Z",
+  "generatedAt": "2026-09-13T21:56:22.192Z",
   "results": [
     {
       "id": "hero-airco-exterior-gevel-01",
@@ -9,17 +9,17 @@
         "height": 1200,
         "sizes": {
           "webp": 177934,
-          "avif": 106701,
-          "jpg": 212124
+          "avif": 105708,
+          "jpg": 236134
         }
       },
       "desktop": {
-        "width": 1273,
-        "height": 716,
+        "width": 943,
+        "height": 629,
         "sizes": {
-          "webp": 88240,
-          "avif": 59133,
-          "jpg": 133641
+          "webp": 105828,
+          "avif": 71395,
+          "jpg": 143975
         }
       }
     },
@@ -31,17 +31,17 @@
         "height": 1200,
         "sizes": {
           "webp": 46452,
-          "avif": 32825,
-          "jpg": 77812
+          "avif": 32417,
+          "jpg": 91293
         }
       },
       "desktop": {
-        "width": 1273,
-        "height": 716,
+        "width": 943,
+        "height": 629,
         "sizes": {
-          "webp": 18828,
-          "avif": 15755,
-          "jpg": 38842
+          "webp": 22662,
+          "avif": 17901,
+          "jpg": 48027
         }
       }
     },
@@ -53,17 +53,17 @@
         "height": 1200,
         "sizes": {
           "webp": 146548,
-          "avif": 91295,
-          "jpg": 192931
+          "avif": 90666,
+          "jpg": 218454
         }
       },
       "desktop": {
-        "width": 1273,
-        "height": 716,
+        "width": 943,
+        "height": 629,
         "sizes": {
-          "webp": 75478,
-          "avif": 53904,
-          "jpg": 121869
+          "webp": 94856,
+          "avif": 66773,
+          "jpg": 135284
         }
       }
     },
@@ -75,8 +75,8 @@
         "height": 1200,
         "sizes": {
           "webp": 102534,
-          "avif": 65464,
-          "jpg": 132982
+          "avif": 65173,
+          "jpg": 147404
         }
       },
       "desktop": null
@@ -89,17 +89,17 @@
         "height": 1200,
         "sizes": {
           "webp": 111554,
-          "avif": 72812,
-          "jpg": 153486
+          "avif": 72256,
+          "jpg": 180593
         }
       },
       "desktop": {
-        "width": 1273,
-        "height": 716,
+        "width": 943,
+        "height": 629,
         "sizes": {
-          "webp": 89934,
-          "avif": 60175,
-          "jpg": 129239
+          "webp": 110976,
+          "avif": 73134,
+          "jpg": 150291
         }
       }
     },
@@ -111,8 +111,8 @@
         "height": 1200,
         "sizes": {
           "webp": 64024,
-          "avif": 51748,
-          "jpg": 107894
+          "avif": 51336,
+          "jpg": 130736
         }
       },
       "desktop": null
@@ -125,8 +125,8 @@
         "height": 1200,
         "sizes": {
           "webp": 32180,
-          "avif": 26435,
-          "jpg": 63217
+          "avif": 26091,
+          "jpg": 72118
         }
       },
       "desktop": null
