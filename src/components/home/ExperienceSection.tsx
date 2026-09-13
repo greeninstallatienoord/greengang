@@ -1,4 +1,4 @@
-import { ClipboardCheck, Headphones, ShieldCheck } from 'lucide-react'
+import { ArrowRight, ClipboardCheck, Headphones, ShieldCheck } from 'lucide-react'
 import { pageImages } from '../../data/media'
 import { site } from '../../data/site'
 import { ButtonLink } from '../ButtonLink'
@@ -27,35 +27,71 @@ const trustPoints = [
   },
 ] as const
 
+function PracticeStoryList() {
+  return (
+    <Reveal className="sm:hidden">
+      <ol className="home-practice-list" aria-label="Werkwijze uit de praktijk">
+        {trustPoints.map((point, index) => {
+          const Icon = point.icon
+          return (
+            <li
+              key={point.title}
+              className="home-practice-list__item"
+              style={{ ['--practice-delay' as string]: `${80 + index * 70}ms` }}
+            >
+              <span className="home-practice-list__icon" aria-hidden="true">
+                <Icon size={18} strokeWidth={1.65} />
+              </span>
+              <div className="min-w-0">
+                <h3 className="text-[0.98rem] font-semibold tracking-[-0.015em] text-ink">
+                  {point.title}
+                </h3>
+                <p className="mt-1 text-sm leading-relaxed text-ink-muted">{point.text}</p>
+              </div>
+            </li>
+          )
+        })}
+      </ol>
+    </Reveal>
+  )
+}
+
 export function ExperienceSection() {
   return (
     <GreenFlowSection variant="thermal" ambient mask="left" className="bg-paper">
       <Section className="!bg-transparent">
         <Container>
-          <div className="grid items-center gap-6 lg:grid-cols-12 lg:gap-10 xl:gap-12">
+          <div className="grid items-center gap-5 min-[390px]:gap-6 lg:grid-cols-12 lg:gap-10 xl:gap-12">
             <Reveal className="lg:col-span-5" image>
               <MediaImage
                 asset={pageImages.homeTrustPhoto}
                 variant="project"
-                className="mx-auto w-fit max-w-full max-h-[18rem] rounded-none sm:max-h-[22rem] lg:max-h-[26rem]"
+                className="mx-auto w-fit max-w-full max-h-[14.5rem] rounded-none min-[390px]:max-h-[16.5rem] sm:max-h-[22rem] lg:max-h-[26rem]"
                 sizes="(min-width: 1024px) 38vw, 100vw"
               />
             </Reveal>
 
-            <Reveal className="lg:col-span-7">
-              <p className="eyebrow">Uit de praktijk</p>
-              <Heading as="h2" className="mt-2.5 sm:mt-3">
-                {site.copy.introTitle}
-              </Heading>
-              <p className="lead mt-3 sm:mt-4">{site.copy.introText}</p>
+            <div className="lg:col-span-7">
+              <Reveal>
+                <p className="eyebrow">Uit de praktijk</p>
+                <Heading
+                  as="h2"
+                  className="mt-2.5 text-balance text-[clamp(1.35rem,5.2vw,2.15rem)] sm:mt-3 sm:text-[clamp(1.4rem,2.8vw,2.15rem)]"
+                >
+                  {site.copy.introTitle}
+                </Heading>
+                <p className="lead mt-3 sm:mt-4">{site.copy.introText}</p>
+              </Reveal>
 
-              <ul className="mt-6 grid gap-3.5 sm:mt-7 sm:grid-cols-3 sm:gap-4">
+              <PracticeStoryList />
+
+              <ul className="mt-6 hidden gap-4 sm:mt-7 sm:grid sm:grid-cols-3">
                 {trustPoints.map((point) => {
                   const Icon = point.icon
                   return (
                     <li
                       key={point.title}
-                      className="min-w-0 border-t border-line pt-3 first:border-t-0 first:pt-0 sm:border-t-0 sm:border-l sm:pl-4 sm:pt-0 first:sm:border-l-0 first:sm:pl-0"
+                      className="min-w-0 border-l border-line pl-4 first:border-l-0 first:pl-0"
                     >
                       <span className="inline-flex text-brand-dark">
                         <Icon size={18} strokeWidth={1.6} aria-hidden="true" />
@@ -71,12 +107,18 @@ export function ExperienceSection() {
                 })}
               </ul>
 
-              <div className="mt-6 sm:mt-7">
-                <ButtonLink to="/werk" variant="secondary" size="sm">
+              <Reveal delay={280} className="mt-6 sm:mt-7">
+                <ButtonLink
+                  to="/werk"
+                  variant="secondary"
+                  size="sm"
+                  className="min-h-11 gap-1.5"
+                >
                   Bekijk meer werk
+                  <ArrowRight size={15} strokeWidth={2} aria-hidden="true" />
                 </ButtonLink>
-              </div>
-            </Reveal>
+              </Reveal>
+            </div>
           </div>
         </Container>
       </Section>
