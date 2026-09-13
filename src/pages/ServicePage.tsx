@@ -12,7 +12,7 @@ import { BrandShowcase } from '../components/service/BrandShowcase'
 import { EmergencyServiceBanner } from '../components/service/EmergencyServiceBanner'
 import { MaintenancePlans } from '../components/service/MaintenancePlans'
 import { pageImages, serviceImage, type MediaAsset } from '../data/media'
-import { aircoBrands } from '../data/brands'
+import { aircoBrands, cvBoilerBrands } from '../data/brands'
 import { CTASection } from '../components/sections/CTASection'
 import { Section } from '../components/Section'
 import { PageMeta } from '../components/seo/PageMeta'
@@ -175,7 +175,11 @@ export function ServicePage({ slug }: ServicePageProps) {
         </Container>
       </Section>
 
-      <Section className={slug === 'warmtepomp' || slug === 'cv-ketel' ? 'bg-paper' : undefined}>
+      {slug === 'cv-ketel' ? (
+        <BrandShowcase category="cv-ketel" brands={cvBoilerBrands} />
+      ) : null}
+
+      <Section className={slug === 'warmtepomp' ? 'bg-paper' : undefined}>
         <Container className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-6">
             <Heading as="h2">Wat Green Installatie Noord doet</Heading>

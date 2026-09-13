@@ -1,11 +1,11 @@
-import { brandCopy, type InstallBrand } from '../../data/brands'
+import { brandCopy, type BrandCategory, type InstallBrand } from '../../data/brands'
 import { Container } from '../Container'
 import { Heading } from '../Heading'
 import { Section } from '../Section'
 import { cn } from '../../lib/cn'
 
 type BrandShowcaseProps = {
-  category: 'airco' | 'warmtepomp'
+  category: BrandCategory
   brands: InstallBrand[]
 }
 
