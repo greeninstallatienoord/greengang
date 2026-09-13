@@ -1,5 +1,5 @@
 import { isProduction, type WorkerEnv } from './env'
-import { HttpError } from './http'
+import { HttpError, logSafe } from './http'
 
 const SITEVERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'
 const VERIFY_TIMEOUT_MS = 8_000
@@ -69,10 +69,19 @@ export async function verifyTurnstileToken(
   }
 
   if (!payload.success) {
+    logSafe(env, 'turnstile.verify_failed', {
+      hostname: payload.hostname ?? null,
+      action: payload.action ?? null,
+      errorCodes: (payload['error-codes'] ?? []).join(','),
+    })
     throw new HttpError(400, 'Beveiligingscontrole mislukt. Vernieuw de pagina en probeer opnieuw.')
   }
 
   if (payload.action && payload.action !== TURNSTILE_ACTION) {
+    logSafe(env, 'turnstile.action_mismatch', {
+      action: payload.action ?? null,
+      expected: TURNSTILE_ACTION,
+    })
     throw new HttpError(400, 'Beveiligingscontrole mislukt. Vernieuw de pagina en probeer opnieuw.')
   }
 
@@ -80,6 +89,9 @@ export async function verifyTurnstileToken(
     const hostname = (payload.hostname ?? '').toLowerCase()
     const allowed = expectedHostnames(env)
     if (!hostname || !allowed.some((item) => hostname === item || hostname.endsWith(`.${item}`))) {
+      logSafe(env, 'turnstile.hostname_mismatch', {
+        hostname: hostname || null,
+      })
       throw new HttpError(400, 'Beveiligingscontrole mislukt. Vernieuw de pagina en probeer opnieuw.')
     }
   }

@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react'
+import { TURNSTILE_SITE_KEY } from '../../config/turnstilePublic'
 import { TURNSTILE_ACTION } from '../turnstileAction'
 
 type TurnstileApi = {
@@ -60,7 +61,9 @@ export function TurnstileField({ onToken, resetSignal = 0 }: TurnstileFieldProps
   const onTokenRef = useRef(onToken)
   const [error, setError] = useState('')
   const labelId = useId()
-  const siteKey = (import.meta.env.VITE_TURNSTILE_SITE_KEY ?? '').trim()
+  // Prefer Vite env when present; fall back to committed public site key so
+  // production builds never ship without a client Turnstile configuration.
+  const siteKey = (import.meta.env.VITE_TURNSTILE_SITE_KEY ?? TURNSTILE_SITE_KEY).trim()
 
   useEffect(() => {
     onTokenRef.current = onToken
