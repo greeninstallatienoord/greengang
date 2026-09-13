@@ -49,13 +49,13 @@ export function RelatedServices({
                 key={item.slug}
                 to={item.href}
                 className={cn(
-                  'group flex h-full flex-col rounded-md border border-line bg-paper p-5 shadow-[0_1px_2px_rgba(20,40,28,0.05)] sm:p-6',
-                  'transition-[transform,box-shadow,border-color,background-color] duration-200',
-                  'hover:-translate-y-0.5 hover:border-brand/35 hover:bg-brand-soft/40 hover:shadow-[0_10px_28px_-14px_rgba(20,40,28,0.35)]',
+                  'group flex h-full flex-col border border-line bg-white p-5 sm:p-6',
+                  'transition-[transform,border-color,background-color] duration-[var(--duration-base)]',
+                  'hover:-translate-y-0.5 hover:border-brand/40 hover:bg-brand-soft/25',
                   'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
                 )}
               >
-                <span className="inline-flex size-10 items-center justify-center rounded-md bg-brand-soft text-brand-dark transition-colors group-hover:bg-paper">
+                <span className="inline-flex size-10 items-center justify-center bg-brand-soft text-brand-dark transition-colors group-hover:bg-paper">
                   <Icon size={20} strokeWidth={1.7} aria-hidden="true" />
                 </span>
                 <h3 className="mt-4 text-[1.05rem] font-semibold tracking-[-0.015em] text-ink sm:text-[1.125rem]">
@@ -69,7 +69,7 @@ export function RelatedServices({
                   <ArrowRight
                     size={15}
                     strokeWidth={2}
-                    className="transition-transform duration-200 group-hover:translate-x-0.5"
+                    className="transition-transform duration-[var(--duration-base)] group-hover:translate-x-1"
                     aria-hidden="true"
                   />
                 </span>

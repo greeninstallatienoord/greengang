@@ -1,4 +1,4 @@
-export { CrossLinks } from './CrossLinks'
+export { CrossLinks, RelatedResources } from './CrossLinks'
 export { PageFaq } from './PageFaq'
 export { PageHero } from './PageHero'
 export { PhoneFallback } from './PhoneFallback'

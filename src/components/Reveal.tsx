@@ -6,9 +6,11 @@ type RevealProps = {
   className?: string
   children: ReactNode
   delay?: number
+  /** Soft scale on nested images when the block enters view. */
+  image?: boolean
 }
 
-export function Reveal({ className, children, delay = 0 }: RevealProps) {
+export function Reveal({ className, children, delay = 0, image = false }: RevealProps) {
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -26,7 +28,7 @@ export function Reveal({ className, children, delay = 0 }: RevealProps) {
           observer.disconnect()
         }
       },
-      { threshold: 0.16, rootMargin: '0px 0px -8% 0px' },
+      { threshold: 0.14, rootMargin: '0px 0px -6% 0px' },
     )
     observer.observe(node)
     return () => observer.disconnect()
@@ -35,7 +37,7 @@ export function Reveal({ className, children, delay = 0 }: RevealProps) {
   return (
     <div
       ref={ref}
-      className={cn('reveal-block', className)}
+      className={cn('reveal-block', image && 'reveal-image', className)}
       style={delay ? ({ '--reveal-delay': `${delay}ms` } as CSSProperties) : undefined}
     >
       {children}

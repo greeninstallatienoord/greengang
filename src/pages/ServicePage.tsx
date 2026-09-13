@@ -15,6 +15,7 @@ import { pageImages, serviceImage, type MediaAsset } from '../data/media'
 import { aircoBrands, cvBoilerBrands } from '../data/brands'
 import { CTASection } from '../components/sections/CTASection'
 import { Section } from '../components/Section'
+import { Reveal } from '../components/Reveal'
 import { PageMeta } from '../components/seo/PageMeta'
 import { TrustSection } from '../components/trust/TrustSection'
 import { blogPosts } from '../data/blog'
@@ -49,7 +50,12 @@ const serviceStory: Record<
     contextTitle: 'Wanneer een cv-ketel aan de beurt is',
     context:
       'Vervanging speelt als de ketel storingen geeft, het einde van de levensduur nadert, of de woning een andere opstelling vraagt. We beginnen bij de bestaande situatie.',
-    photos: [],
+    photos: [
+      {
+        asset: pageImages.cvHero,
+        caption: 'Cv-ketelopstelling uit eigen installatiewerk.',
+      },
+    ],
   },
   airco: {
     contextTitle: 'Comfort begint bij de ruimte',
@@ -72,7 +78,12 @@ const serviceStory: Record<
     contextTitle: 'Onderhoud, storing of twijfel',
     context:
       'Soms is een controle genoeg. Soms is er een storing. En soms is vervanging logischer dan nog een reparatie. U hoort wat we zien en wat de vervolgstap is.',
-    photos: [],
+    photos: [
+      {
+        asset: pageImages.serviceHero,
+        caption: 'Service en onderhoud aan een bestaande installatie. Foto uit eigen werk.',
+      },
+    ],
   },
 }
 
@@ -158,17 +169,19 @@ export function ServicePage({ slug }: ServicePageProps) {
           {story.photos.length > 0 ? (
             <div className="grid gap-8 lg:col-span-6">
               {story.photos.map((shot) => (
-                <figure key={shot.caption}>
-                  <MediaImage
-                    asset={shot.asset}
-                    variant="project"
-                    className="mx-auto w-fit max-w-full max-h-[22rem] rounded-none sm:max-h-[24rem] lg:max-h-[26rem]"
-                    sizes="(min-width: 1024px) 42vw, 100vw"
-                  />
-                  <figcaption className="mt-3 text-sm text-ink-muted">
-                    {shot.caption}
-                  </figcaption>
-                </figure>
+                <Reveal key={shot.caption} image>
+                  <figure>
+                    <MediaImage
+                      asset={shot.asset}
+                      variant="project"
+                      className="mx-auto w-fit max-w-full max-h-[22rem] rounded-none sm:max-h-[24rem] lg:max-h-[26rem]"
+                      sizes="(min-width: 1024px) 42vw, 100vw"
+                    />
+                    <figcaption className="mt-3 text-sm text-ink-muted">
+                      {shot.caption}
+                    </figcaption>
+                  </figure>
+                </Reveal>
               ))}
             </div>
           ) : null}
@@ -179,7 +192,7 @@ export function ServicePage({ slug }: ServicePageProps) {
         <BrandShowcase category="cv-ketel" brands={cvBoilerBrands} />
       ) : null}
 
-      <Section className={slug === 'warmtepomp' ? 'bg-paper' : undefined}>
+      <Section className={slug === 'warmtepomp' ? 'bg-paper' : 'section-soft'}>
         <Container className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-6">
             <Heading as="h2">Wat Green Installatie Noord doet</Heading>
@@ -208,7 +221,7 @@ export function ServicePage({ slug }: ServicePageProps) {
         </Container>
       </Section>
 
-      <Section>
+      <Section className="bg-paper">
         <Container className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <p className="eyebrow">Aanpak</p>
@@ -220,15 +233,20 @@ export function ServicePage({ slug }: ServicePageProps) {
               persoonlijke voorstel, niet als vaste belofte op deze pagina.
             </p>
           </div>
-          <ol className="grid gap-6 lg:col-span-7">
+          <ol className="process-rail process-rail--vertical lg:col-span-7">
             {service.process.map((item, index) => (
-              <li key={item.title} className="grid grid-cols-[2.75rem_1fr] gap-4 border-b border-line pb-6">
-                <p className="font-display text-2xl text-brand-dark">
-                  {String(index + 1).padStart(2, '0')}
-                </p>
-                <div>
-                  <h3 className="font-semibold tracking-[-0.015em]">{item.title}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-ink-muted">{item.text}</p>
+              <li key={item.title} className="process-rail__item">
+                <div className="process-rail__marker" aria-hidden="true">
+                  <span className="process-rail__dot" />
+                </div>
+                <div className="grid grid-cols-[2.75rem_1fr] gap-4 border-b border-line pb-6">
+                  <p className="font-display text-2xl text-brand-dark">
+                    {String(index + 1).padStart(2, '0')}
+                  </p>
+                  <div>
+                    <h3 className="font-semibold tracking-[-0.015em]">{item.title}</h3>
+                    <p className="mt-1 text-sm leading-relaxed text-ink-muted">{item.text}</p>
+                  </div>
                 </div>
               </li>
             ))}
@@ -236,7 +254,7 @@ export function ServicePage({ slug }: ServicePageProps) {
         </Container>
       </Section>
 
-      <Section className="bg-paper">
+      <Section className="section-grain">
         <Container className="grid gap-8 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
             <p className="eyebrow">Werkgebied</p>
@@ -250,7 +268,9 @@ export function ServicePage({ slug }: ServicePageProps) {
           </div>
           <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold lg:col-span-5 lg:justify-end">
             {serviceArea.provinces.map((province) => (
-              <li key={province.name}>{province.name}</li>
+              <li key={province.name} className="border-b border-brand/25 pb-1">
+                {province.name}
+              </li>
             ))}
           </ul>
         </Container>
@@ -263,16 +283,22 @@ export function ServicePage({ slug }: ServicePageProps) {
             href: '/veelgestelde-vragen',
             label: 'Veelgestelde vragen',
             note: 'Antwoorden over installatie, onderhoud en aanvragen.',
+            cta: 'Bekijk vragen',
+            icon: 'faq',
           },
           {
             href: `/blog/categorie/${serviceBlogCategory[slug]}`,
             label: 'Artikelen bij deze dienst',
             note: 'Gidsen en checklists bij Advies & kennis.',
+            cta: 'Lees artikelen',
+            icon: 'articles',
           },
           {
             href: '/werk',
             label: 'Werk uit de praktijk',
             note: 'Foto’s van vergelijkbare installaties.',
+            cta: 'Bekijk projecten',
+            icon: 'work',
           },
         ]}
       />

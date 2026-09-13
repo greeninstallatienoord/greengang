@@ -19,6 +19,7 @@ import { pageImages } from '../data/media'
 import { MediaImage } from '../components/media/MediaImage'
 import { Heading } from '../components/Heading'
 import { Reveal } from '../components/Reveal'
+import { RegionGlance } from '../components/region/RegionGlance'
 import { business } from '../data/business'
 import { serviceArea } from '../data/region'
 import { site } from '../data/site'
@@ -62,32 +63,39 @@ export function AboutPage() {
         actions={<CtaPair />}
       />
 
-      <Section className={aboutSection}>
+      <Section className={cn(aboutSection, 'section-grain')}>
         <Container>
-          <Reveal>
-            <div className="max-w-xl">
-              <p className="eyebrow">Het bedrijf</p>
-              <Heading as="h2" className="mt-2.5 sm:mt-3">
-                Vanuit Oude Pekela actief in Noord-Nederland
-              </Heading>
-              <p className="lead mt-4">
-                De werkplaats en het adres liggen in Oude Pekela. Het werkgebied is
-                Noord-Nederland, met Groningen als thuisprovincie en daarnaast
-                Drenthe en Friesland.
-              </p>
-              <p className="mt-4 max-w-md text-sm leading-relaxed text-ink-muted sm:text-[0.95rem]">
-                Cv-ketel, airco, warmtepomp en onderhoud: bereikbaar vanuit Oude
-                Pekela.
-              </p>
-            </div>
-          </Reveal>
-          <div className="mt-7 grid items-start gap-5 sm:mt-8 sm:grid-cols-2 sm:gap-6 lg:gap-7">
-            <Reveal delay={40}>
+          <div className="grid gap-7 lg:grid-cols-12 lg:items-start lg:gap-10">
+            <Reveal className="lg:col-span-6">
+              <div className="max-w-xl">
+                <p className="eyebrow">Het bedrijf</p>
+                <Heading as="h2" className="mt-2.5 sm:mt-3">
+                  Vanuit Oude Pekela actief in Noord-Nederland
+                </Heading>
+                <p className="lead mt-4">
+                  De werkplaats en het adres liggen in Oude Pekela. Het werkgebied is
+                  Noord-Nederland, met Groningen als thuisprovincie en daarnaast
+                  Drenthe en Friesland.
+                </p>
+                <p className="mt-4 max-w-md text-sm leading-relaxed text-ink-muted sm:text-[0.95rem]">
+                  Cv-ketel, airco, warmtepomp en onderhoud: bereikbaar vanuit Oude
+                  Pekela.
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal className="lg:col-span-6" delay={70}>
+              <RegionGlance />
+            </Reveal>
+          </div>
+
+          <div className="mt-8 grid items-start gap-5 sm:mt-10 sm:grid-cols-2 sm:gap-6 lg:gap-7">
+            <Reveal delay={40} image>
               <figure>
                 <MediaImage
                   asset={pageImages.aboutHouse}
                   variant="project"
-                  className="mx-auto w-fit max-w-full max-h-[20rem] rounded-md sm:max-h-[22rem] lg:max-h-[24rem]"
+                  className="mx-auto w-fit max-w-full max-h-[18rem] rounded-md sm:max-h-[20rem] lg:max-h-[22rem]"
                   sizes="(min-width: 640px) 42vw, 100vw"
                 />
                 <figcaption className="mt-2.5 text-sm text-ink-muted">
@@ -95,12 +103,12 @@ export function AboutPage() {
                 </figcaption>
               </figure>
             </Reveal>
-            <Reveal delay={90} className="sm:pt-8 lg:pt-12">
+            <Reveal delay={90} image className="sm:pt-6 lg:pt-10">
               <figure>
                 <MediaImage
                   asset={pageImages.aboutCraft}
                   variant="project"
-                  className="mx-auto w-fit max-w-full max-h-[20rem] rounded-md sm:max-h-[22rem] lg:max-h-[24rem]"
+                  className="mx-auto w-fit max-w-full max-h-[18rem] rounded-md sm:max-h-[20rem] lg:max-h-[22rem]"
                   sizes="(min-width: 640px) 42vw, 100vw"
                 />
                 <figcaption className="mt-2.5 text-sm text-ink-muted">
@@ -114,7 +122,7 @@ export function AboutPage() {
 
       <ProcessSteps numbered className={cn(aboutSection, 'bg-paper')} />
 
-      <Section className={aboutSection}>
+      <Section className={cn(aboutSection, 'section-soft')}>
         <Container>
           <Reveal>
             <div className="max-w-xl">
@@ -130,7 +138,7 @@ export function AboutPage() {
           </Reveal>
           <ul className="mt-7 grid gap-6 sm:mt-8 sm:grid-cols-3 sm:gap-8">
             {expect.map((item, index) => (
-              <Reveal key={item.title} delay={index * 50}>
+              <Reveal key={item.title} delay={index * 60}>
                 <li className="border-t border-brand/25 pt-4">
                   <p
                     className="font-display text-[1.15rem] leading-none tracking-[-0.02em] text-brand-dark/65"
@@ -273,12 +281,12 @@ function InfoCard({
   return (
     <article
       className={cn(
-        'flex h-full flex-col rounded-md border border-line bg-paper p-4 sm:p-5',
+        'flex h-full flex-col border border-line bg-white p-4 sm:p-5',
         className,
       )}
     >
       <div className="flex items-center gap-2.5">
-        <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-md bg-brand-soft text-brand-dark">
+        <span className="inline-flex size-9 shrink-0 items-center justify-center bg-brand-soft text-brand-dark">
           <Icon size={18} strokeWidth={1.7} aria-hidden="true" />
         </span>
         <h3 className="text-sm font-semibold tracking-[-0.01em] text-ink">{title}</h3>
