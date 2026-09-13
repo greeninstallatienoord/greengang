@@ -137,7 +137,7 @@ export const cookies: LegalDocument = {
         },
         {
           type: 'p',
-          text: 'De sessiecookie gin_admin_session is uitsluitend bedoeld voor beveiligde toegang tot het beheerscherm (maximaal 12 uur, idle-timeout 2 uur). Cloudflare Turnstile wordt alleen bij admin-login gebruikt, niet op openbare formulieren.',
+          text: 'De sessiecookie gin_admin_session is uitsluitend bedoeld voor beveiligde toegang tot het beheerscherm (maximaal 12 uur, idle-timeout 2 uur).',
         },
       ],
     },

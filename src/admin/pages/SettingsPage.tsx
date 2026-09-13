@@ -23,7 +23,6 @@ export function SettingsPage() {
   const [fromEmail, setFromEmail] = useState<string>(business.email)
   const [emailConfigured, setEmailConfigured] = useState<boolean | null>(null)
   const [sessionConfigured, setSessionConfigured] = useState<boolean | null>(null)
-  const [turnstileConfigured, setTurnstileConfigured] = useState<boolean | null>(null)
   const [environment, setEnvironment] = useState('')
   const [siteUrl, setSiteUrl] = useState('')
   const [adminPath, setAdminPath] = useState('')
@@ -50,7 +49,6 @@ export function SettingsPage() {
       setFromEmail(result.data.email.from_email ?? business.email)
       setEmailConfigured(result.data.email.configured)
       setSessionConfigured(result.data.system?.sessionConfigured ?? null)
-      setTurnstileConfigured(result.data.system?.turnstileConfigured ?? null)
       setEnvironment(result.data.system?.environment ?? '')
       setSiteUrl(result.data.system?.siteUrl ?? '')
       setAdminPath(result.data.system?.adminPath ?? '')
@@ -152,15 +150,10 @@ export function SettingsPage() {
             label="Sessiebeveiliging"
             value={sessionConfigured === null ? '-' : presence(sessionConfigured)}
           />
-          <Info
-            label="Turnstile"
-            value={turnstileConfigured === null ? '-' : presence(turnstileConfigured)}
-          />
           <Info label="Ingelogd als" value={email} />
         </dl>
         <p className="mt-4 text-sm text-[var(--admin-muted)]">
-          Wachtwoorden staan gehashed in D1. Er is geen wachtwoord of Turnstile-secret in de
-          frontendbron.
+          Wachtwoorden staan gehashed in D1. Er is geen wachtwoord in de frontendbron.
         </p>
       </section>
 

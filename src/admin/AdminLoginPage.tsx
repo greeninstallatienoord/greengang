@@ -6,15 +6,12 @@ import logo from '../assets/images/branding/logo.png'
 import { business } from '../data/business'
 import { api } from '../lib/api'
 import { Notice } from './components/Notice'
-import { TurnstileField } from './components/TurnstileField'
 import { adminUrl } from './adminPath'
 
 export function AdminLoginPage() {
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
-  const [resetSignal, setResetSignal] = useState(0)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
 
@@ -31,20 +28,14 @@ export function AdminLoginPage() {
 
   async function onSubmit() {
     if (busy) return
-    if (!turnstileToken) {
-      setError('Rond de beveiligingscontrole af en probeer opnieuw.')
-      return
-    }
 
     setBusy(true)
     setError('')
-    const result = await api.admin.login(email, password, turnstileToken)
+    const result = await api.admin.login(email, password)
     setBusy(false)
 
     if (!result.ok) {
       setError(result.message)
-      setTurnstileToken(null)
-      setResetSignal((value) => value + 1)
       return
     }
 
@@ -94,9 +85,8 @@ export function AdminLoginPage() {
               className="min-h-11"
             />
           </Field>
-          <TurnstileField onToken={setTurnstileToken} resetSignal={resetSignal} />
           {error ? <Notice tone="error">{error}</Notice> : null}
-          <Button type="submit" disabled={busy || !turnstileToken} className="min-h-11">
+          <Button type="submit" disabled={busy} className="min-h-11">
             {busy ? 'Bezig…' : 'Inloggen'}
           </Button>
         </div>

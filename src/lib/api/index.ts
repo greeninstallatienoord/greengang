@@ -35,10 +35,10 @@ export const api = {
       body: JSON.stringify(payload),
     }),
   admin: {
-    login: (email: string, password: string, turnstileToken: string) =>
+    login: (email: string, password: string) =>
       apiRequest<{ ok: boolean }>('/api/admin/login', {
         method: 'POST',
-        body: JSON.stringify({ email, password, turnstileToken }),
+        body: JSON.stringify({ email, password }),
       }),
     logout: () => apiRequest<{ ok: boolean }>('/api/admin/logout', { method: 'POST' }),
     session: () => apiRequest<{ email: string }>('/api/admin/session'),
@@ -205,7 +205,6 @@ export const api = {
           siteUrl: string
           adminPath: string
           sessionConfigured: boolean
-          turnstileConfigured?: boolean
         }
       }>('/api/admin/settings'),
     updateSettings: (values: Record<string, string>) =>

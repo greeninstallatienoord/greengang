@@ -19,8 +19,6 @@ run_worker_first = ["/api/*"]
 ENVIRONMENT = "production"
 PUBLIC_SITE_URL = "https://greeninstallatienoord.nl"
 ADMIN_BASE_PATH = "/blackberry97"
-# Public hostname check for Turnstile siteverify (secret stays in `wrangler secret`).
-TURNSTILE_EXPECTED_HOSTNAME = "greeninstallatienoord.nl"
 
 [[d1_databases]]
 binding = "DB"
