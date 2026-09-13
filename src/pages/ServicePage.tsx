@@ -16,6 +16,7 @@ import { aircoBrands, cvBoilerBrands } from '../data/brands'
 import { CTASection } from '../components/sections/CTASection'
 import { Section } from '../components/Section'
 import { Reveal } from '../components/Reveal'
+import { GreenFlowSection, type GreenFlowVariant } from '../components/greenflow/TechnicalBackdrop'
 import { PageMeta } from '../components/seo/PageMeta'
 import { TrustSection } from '../components/trust/TrustSection'
 import { blogPosts } from '../data/blog'
@@ -31,6 +32,13 @@ const serviceBlogCategory: Record<ServiceSlug, BlogCategorySlug> = {
   airco: 'airco',
   warmtepomp: 'warmtepomp',
   'service-onderhoud': 'onderhoud',
+}
+
+const serviceFlow: Record<ServiceSlug, GreenFlowVariant> = {
+  airco: 'airflow',
+  'cv-ketel': 'hydronic',
+  warmtepomp: 'thermal',
+  'service-onderhoud': 'service',
 }
 
 type ServiceShot = {
@@ -100,6 +108,7 @@ export function ServicePage({ slug }: ServicePageProps) {
   const articles = blogPosts.filter((post) => service.blogSlugs.includes(post.slug))
   const quoteTo = `/offerte-aanvragen?dienst=${service.slug}`
   const appointmentTo = `/afspraak-maken?dienst=${service.slug}`
+  const flow = serviceFlow[slug]
 
   return (
     <>
@@ -221,60 +230,64 @@ export function ServicePage({ slug }: ServicePageProps) {
         </Container>
       </Section>
 
-      <Section className="bg-paper">
-        <Container className="grid gap-12 lg:grid-cols-12">
-          <div className="lg:col-span-5">
-            <p className="eyebrow">Aanpak</p>
-            <Heading as="h2" className="mt-3">
-              Hoe het werkt
-            </Heading>
-            <p className="lead mt-4">
-              Van eerste vraag tot afronding. Planning en prijs volgen in het
-              persoonlijke voorstel, niet als vaste belofte op deze pagina.
-            </p>
-          </div>
-          <ol className="process-rail process-rail--vertical lg:col-span-7">
-            {service.process.map((item, index) => (
-              <li key={item.title} className="process-rail__item">
-                <div className="process-rail__marker" aria-hidden="true">
-                  <span className="process-rail__dot" />
-                </div>
-                <div className="grid grid-cols-[2.75rem_1fr] gap-4 border-b border-line pb-6">
-                  <p className="font-display text-2xl text-brand-dark">
-                    {String(index + 1).padStart(2, '0')}
-                  </p>
-                  <div>
-                    <h3 className="font-semibold tracking-[-0.015em]">{item.title}</h3>
-                    <p className="mt-1 text-sm leading-relaxed text-ink-muted">{item.text}</p>
+      <GreenFlowSection variant={flow} ambient className="bg-paper">
+        <Section className="!bg-transparent">
+          <Container className="grid gap-12 lg:grid-cols-12">
+            <div className="lg:col-span-5">
+              <p className="eyebrow">Aanpak</p>
+              <Heading as="h2" className="mt-3">
+                Hoe het werkt
+              </Heading>
+              <p className="lead mt-4">
+                Van eerste vraag tot afronding. Planning en prijs volgen in het
+                persoonlijke voorstel, niet als vaste belofte op deze pagina.
+              </p>
+            </div>
+            <ol className="process-rail process-rail--vertical lg:col-span-7">
+              {service.process.map((item, index) => (
+                <li key={item.title} className="process-rail__item">
+                  <div className="process-rail__marker" aria-hidden="true">
+                    <span className="process-rail__dot" />
                   </div>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </Container>
-      </Section>
+                  <div className="grid grid-cols-[2.75rem_1fr] gap-4 border-b border-line pb-6">
+                    <p className="font-display text-2xl text-brand-dark">
+                      {String(index + 1).padStart(2, '0')}
+                    </p>
+                    <div>
+                      <h3 className="font-semibold tracking-[-0.015em]">{item.title}</h3>
+                      <p className="mt-1 text-sm leading-relaxed text-ink-muted">{item.text}</p>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </Container>
+        </Section>
+      </GreenFlowSection>
 
-      <Section className="section-grain">
-        <Container className="grid gap-8 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-7">
-            <p className="eyebrow">Werkgebied</p>
-            <Heading as="h2" className="mt-3">
-              {service.shortName} in Noord-Nederland
-            </Heading>
-            <p className="lead mt-4">
-              {serviceArea.statement} Groningen is de thuisprovincie; daarnaast
-              Drenthe en Friesland.
-            </p>
-          </div>
-          <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold lg:col-span-5 lg:justify-end">
-            {serviceArea.provinces.map((province) => (
-              <li key={province.name} className="border-b border-brand/25 pb-1">
-                {province.name}
-              </li>
-            ))}
-          </ul>
-        </Container>
-      </Section>
+      <GreenFlowSection variant={flow} mask="left" className="section-grain">
+        <Section className="!bg-transparent">
+          <Container className="grid gap-8 lg:grid-cols-12 lg:items-end">
+            <div className="lg:col-span-7">
+              <p className="eyebrow">Werkgebied</p>
+              <Heading as="h2" className="mt-3">
+                {service.shortName} in Noord-Nederland
+              </Heading>
+              <p className="lead mt-4">
+                {serviceArea.statement} Groningen is de thuisprovincie; daarnaast
+                Drenthe en Friesland.
+              </p>
+            </div>
+            <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold lg:col-span-5 lg:justify-end">
+              {serviceArea.provinces.map((province) => (
+                <li key={province.name} className="border-b border-brand/25 pb-1">
+                  {province.name}
+                </li>
+              ))}
+            </ul>
+          </Container>
+        </Section>
+      </GreenFlowSection>
 
       <CrossLinks
         title="Meer informatie"
@@ -305,7 +318,7 @@ export function ServicePage({ slug }: ServicePageProps) {
       {slug === 'service-onderhoud' || slug === 'cv-ketel' ? (
         <EmergencyServiceBanner />
       ) : null}
-      <TrustSection />
+      <TrustSection flow={flow} />
       <PageFaq items={faqItems} />
       <RelatedServices services={related} />
       <RelatedArticles posts={articles} />

@@ -24,6 +24,8 @@ import { business } from '../data/business'
 import { serviceArea } from '../data/region'
 import { site } from '../data/site'
 import { cn } from '../lib/cn'
+import { GreenFlowSection } from '../components/greenflow/TechnicalBackdrop'
+import { PhotoFlowPath } from '../components/greenflow/PhotoFlowPath'
 
 const expect = [
   {
@@ -63,62 +65,65 @@ export function AboutPage() {
         actions={<CtaPair />}
       />
 
-      <Section className={cn(aboutSection, 'section-grain')}>
-        <Container>
-          <div className="grid gap-7 lg:grid-cols-12 lg:items-start lg:gap-10">
-            <Reveal className="lg:col-span-6">
-              <div className="max-w-xl">
-                <p className="eyebrow">Het bedrijf</p>
-                <Heading as="h2" className="mt-2.5 sm:mt-3">
-                  Vanuit Oude Pekela actief in Noord-Nederland
-                </Heading>
-                <p className="lead mt-4">
-                  De werkplaats en het adres liggen in Oude Pekela. Het werkgebied is
-                  Noord-Nederland, met Groningen als thuisprovincie en daarnaast
-                  Drenthe en Friesland.
-                </p>
-                <p className="mt-4 max-w-md text-sm leading-relaxed text-ink-muted sm:text-[0.95rem]">
-                  Cv-ketel, airco, warmtepomp en onderhoud: bereikbaar vanuit Oude
-                  Pekela.
-                </p>
-              </div>
-            </Reveal>
+      <GreenFlowSection variant="regional" ambient mask="right" className={cn(aboutSection, 'section-grain')}>
+        <Section className="!bg-transparent !py-0">
+          <Container>
+            <div className="grid gap-7 lg:grid-cols-12 lg:items-start lg:gap-10">
+              <Reveal className="lg:col-span-6">
+                <div className="max-w-xl">
+                  <p className="eyebrow">Het bedrijf</p>
+                  <Heading as="h2" className="mt-2.5 sm:mt-3">
+                    Vanuit Oude Pekela actief in Noord-Nederland
+                  </Heading>
+                  <p className="lead mt-4">
+                    De werkplaats en het adres liggen in Oude Pekela. Het werkgebied is
+                    Noord-Nederland, met Groningen als thuisprovincie en daarnaast
+                    Drenthe en Friesland.
+                  </p>
+                  <p className="mt-4 max-w-md text-sm leading-relaxed text-ink-muted sm:text-[0.95rem]">
+                    Cv-ketel, airco, warmtepomp en onderhoud: bereikbaar vanuit Oude
+                    Pekela.
+                  </p>
+                </div>
+              </Reveal>
 
-            <Reveal className="lg:col-span-6" delay={70}>
-              <RegionGlance />
-            </Reveal>
-          </div>
+              <Reveal className="lg:col-span-6" delay={70}>
+                <RegionGlance />
+              </Reveal>
+            </div>
 
-          <div className="mt-8 grid items-start gap-5 sm:mt-10 sm:grid-cols-2 sm:gap-6 lg:gap-7">
-            <Reveal delay={40} image>
-              <figure>
-                <MediaImage
-                  asset={pageImages.aboutHouse}
-                  variant="project"
-                  className="mx-auto w-fit max-w-full max-h-[18rem] rounded-md sm:max-h-[20rem] lg:max-h-[22rem]"
-                  sizes="(min-width: 640px) 42vw, 100vw"
-                />
-                <figcaption className="mt-2.5 text-sm text-ink-muted">
-                  Buitenunit aan de gevel op een beugel, met leidinggoot. Foto uit eigen werk.
-                </figcaption>
-              </figure>
-            </Reveal>
-            <Reveal delay={90} image className="sm:pt-6 lg:pt-10">
-              <figure>
-                <MediaImage
-                  asset={pageImages.aboutCraft}
-                  variant="project"
-                  className="mx-auto w-fit max-w-full max-h-[18rem] rounded-md sm:max-h-[20rem] lg:max-h-[22rem]"
-                  sizes="(min-width: 640px) 42vw, 100vw"
-                />
-                <figcaption className="mt-2.5 text-sm text-ink-muted">
-                  Afgewerkte buitenunit met leidinggoot en elektra aan de gevel. Foto uit eigen werk.
-                </figcaption>
-              </figure>
-            </Reveal>
-          </div>
-        </Container>
-      </Section>
+            <div className="relative mt-8 grid items-start gap-5 sm:mt-10 sm:grid-cols-2 sm:gap-6 lg:gap-7">
+              <PhotoFlowPath />
+              <Reveal delay={40} image>
+                <figure>
+                  <MediaImage
+                    asset={pageImages.aboutHouse}
+                    variant="project"
+                    className="mx-auto w-fit max-w-full max-h-[18rem] rounded-md sm:max-h-[20rem] lg:max-h-[22rem]"
+                    sizes="(min-width: 640px) 42vw, 100vw"
+                  />
+                  <figcaption className="mt-2.5 text-sm text-ink-muted">
+                    Buitenunit aan de gevel op een beugel, met leidinggoot. Foto uit eigen werk.
+                  </figcaption>
+                </figure>
+              </Reveal>
+              <Reveal delay={120} image className="sm:pt-6 lg:pt-10">
+                <figure>
+                  <MediaImage
+                    asset={pageImages.aboutCraft}
+                    variant="project"
+                    className="mx-auto w-fit max-w-full max-h-[18rem] rounded-md sm:max-h-[20rem] lg:max-h-[22rem]"
+                    sizes="(min-width: 640px) 42vw, 100vw"
+                  />
+                  <figcaption className="mt-2.5 text-sm text-ink-muted">
+                    Afgewerkte buitenunit met leidinggoot en elektra aan de gevel. Foto uit eigen werk.
+                  </figcaption>
+                </figure>
+              </Reveal>
+            </div>
+          </Container>
+        </Section>
+      </GreenFlowSection>
 
       <ProcessSteps numbered className={cn(aboutSection, 'bg-paper')} />
 

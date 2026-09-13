@@ -41,9 +41,10 @@ export function FAQItem({
         variant === 'panel'
           ? cn(
               'border border-line bg-paper transition-[border-color,background-color] duration-[var(--duration-fast)]',
-              open && 'border-ink/20 bg-surface',
+              open && 'border-brand/30 bg-surface',
+              'hover:border-brand/25',
             )
-          : 'border-b border-line',
+          : cn('faq-item-accent border-b border-line transition-[border-color] duration-[var(--duration-fast)]', open && 'is-open border-brand/20'),
         className,
       )}
     >
@@ -57,7 +58,8 @@ export function FAQItem({
             'flex w-full items-start justify-between gap-3 text-left font-semibold tracking-[-0.015em] transition-colors duration-[var(--duration-fast)]',
             variant === 'panel'
               ? 'min-h-12 px-3.5 py-3.5 text-[0.95rem] min-[390px]:px-4 min-[390px]:py-3.5 sm:text-[0.98rem]'
-              : 'min-h-12 py-3.5 text-[0.98rem] sm:py-4',
+              : 'min-h-12 py-3.5 pl-3 text-[0.98rem] sm:py-4',
+            'hover:text-brand-dark',
             'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
           )}
           onClick={() => setOpen(!open)}
@@ -65,7 +67,7 @@ export function FAQItem({
           <span className="pt-0.5 text-pretty">{item.question}</span>
           <ChevronDown
             className={cn(
-              'mt-0.5 size-5 shrink-0 text-brand-dark transition-transform duration-[var(--duration-base)] motion-reduce:transition-none',
+              'mt-0.5 size-5 shrink-0 text-brand-dark transition-transform duration-[280ms] motion-reduce:transition-none',
               open && 'rotate-180',
             )}
             aria-hidden="true"
@@ -78,10 +80,12 @@ export function FAQItem({
         aria-labelledby={buttonId}
         hidden={!open}
         className={cn(
-          'text-[0.95rem] leading-relaxed text-ink-muted',
+          'overflow-hidden text-[0.95rem] leading-relaxed text-ink-muted transition-[opacity] duration-[320ms] ease-out',
           variant === 'panel'
             ? 'border-t border-line/80 px-3.5 pb-4 pt-3 min-[390px]:px-4'
-            : 'pb-4',
+            : 'pb-4 pl-3',
+          !open && 'opacity-0',
+          open && 'opacity-100',
         )}
       >
         <p>{item.answer}</p>

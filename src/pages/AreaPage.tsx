@@ -20,6 +20,10 @@ import { serviceIcons } from '../data/serviceIcons'
 import { services } from '../data/services'
 import { site } from '../data/site'
 import { localBusinessJsonLd, serviceAreaPageJsonLd } from '../lib/jsonld'
+import {
+  GreenFlowSection,
+  TechnicalBackdrop,
+} from '../components/greenflow/TechnicalBackdrop'
 
 const areaServiceSummaries: Record<string, string> = {
   'cv-ketel': 'Plaatsen of vervangen van een cv-ketel, met aansluiting en uitleg.',
@@ -38,8 +42,9 @@ export function AreaIndexPage() {
         jsonLd={[localBusinessJsonLd(), serviceAreaPageJsonLd()]}
       />
 
-      <section className="border-b border-line bg-paper">
-        <Container className="py-6 sm:py-8 lg:py-9">
+      <section className="relative overflow-hidden border-b border-line bg-paper">
+        <TechnicalBackdrop variant="regional" ambient mask="right" />
+        <Container className="relative z-[1] py-6 sm:py-8 lg:py-9">
           <Breadcrumbs
             items={[
               { label: 'Home', href: '/' },
@@ -66,27 +71,30 @@ export function AreaIndexPage() {
         </Container>
       </section>
 
-      <Section className="!py-6 sm:!py-8 lg:!py-10">
-        <Container>
-          <div className="max-w-2xl">
-            <p className="eyebrow">Regio</p>
-            <Heading as="h2" className="mt-2.5 sm:mt-3">
-              Actief in Noord-Nederland
-            </Heading>
-            <p className="lead mt-3 sm:mt-3.5">{serviceArea.intro}</p>
-          </div>
-          <ProvinceHighlights className="mt-5 sm:mt-6" />
-        </Container>
-      </Section>
-
-      <Section className="bg-paper !py-6 sm:!py-8 lg:!py-10">
-        <Container>
-          <div className="grid gap-7 lg:grid-cols-12 lg:items-start lg:gap-10 xl:gap-12">
-            <div className="lg:col-span-5">
-              <p className="eyebrow">Vestiging</p>
+      <GreenFlowSection variant="regional" mask="right">
+        <Section className="!bg-transparent !py-6 sm:!py-8 lg:!py-10">
+          <Container>
+            <div className="max-w-2xl">
+              <p className="eyebrow">Regio</p>
               <Heading as="h2" className="mt-2.5 sm:mt-3">
-                Vanuit Oude Pekela door Noord-Nederland
+                Actief in Noord-Nederland
               </Heading>
+              <p className="lead mt-3 sm:mt-3.5">{serviceArea.intro}</p>
+            </div>
+            <ProvinceHighlights className="mt-5 sm:mt-6" />
+          </Container>
+        </Section>
+      </GreenFlowSection>
+
+      <GreenFlowSection variant="regional" ambient mask="left" className="bg-paper">
+        <Section className="!bg-transparent !py-6 sm:!py-8 lg:!py-10">
+          <Container>
+            <div className="grid gap-7 lg:grid-cols-12 lg:items-start lg:gap-10 xl:gap-12">
+              <div className="lg:col-span-5">
+                <p className="eyebrow">Vestiging</p>
+                <Heading as="h2" className="mt-2.5 sm:mt-3">
+                  Vanuit Oude Pekela door Noord-Nederland
+                </Heading>
               <p className="mt-3 text-[0.95rem] leading-relaxed text-ink-muted sm:mt-3.5 sm:text-base">
                 Green Installatie Noord is gevestigd in Oude Pekela. Vanuit hier
                 voeren we werkzaamheden uit voor klanten in Groningen, Drenthe en
@@ -135,11 +143,12 @@ export function AreaIndexPage() {
                 Vestiging in {business.address.city}. Werkgebied: Groningen,
                 Drenthe en Friesland.
               </p>
-              <NorthMap className="mt-4 sm:mt-5" />
+                <NorthMap className="mt-4 sm:mt-5" />
+              </div>
             </div>
-          </div>
-        </Container>
-      </Section>
+          </Container>
+        </Section>
+      </GreenFlowSection>
 
       <Section className="!py-6 sm:!py-8">
         <Container>

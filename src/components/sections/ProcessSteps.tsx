@@ -6,6 +6,7 @@ import { Container } from '../Container'
 import { Heading } from '../Heading'
 import { Reveal } from '../Reveal'
 import { Section } from '../Section'
+import { GreenFlowSection } from '../greenflow/TechnicalBackdrop'
 
 const icons: LucideIcon[] = [ClipboardCheck, Wrench, Headphones]
 
@@ -144,21 +145,23 @@ export function ProcessSteps({ className }: ProcessStepsProps) {
   const headingId = useId()
 
   return (
-    <Section className={className} aria-labelledby={headingId}>
-      <Container>
-        <Reveal>
-          <div className="max-w-2xl">
-            <p className="eyebrow">Werkwijze</p>
-            <Heading as="h2" id={headingId} className="mt-2.5 sm:mt-3">
-              Zo werkt het
-            </Heading>
-            <p className="lead mt-3 sm:mt-4">{site.copy.processIntro}</p>
-          </div>
-        </Reveal>
+    <GreenFlowSection variant="service" mask="right" className={className}>
+      <Section className="!bg-transparent" aria-labelledby={headingId}>
+        <Container>
+          <Reveal>
+            <div className="max-w-2xl">
+              <p className="eyebrow">Werkwijze</p>
+              <Heading as="h2" id={headingId} className="mt-2.5 sm:mt-3">
+                Zo werkt het
+              </Heading>
+              <p className="lead mt-3 sm:mt-4">{site.copy.processIntro}</p>
+            </div>
+          </Reveal>
 
-        <MobileProcessSteps />
-        <DesktopProcessSteps />
-      </Container>
-    </Section>
+          <MobileProcessSteps />
+          <DesktopProcessSteps />
+        </Container>
+      </Section>
+    </GreenFlowSection>
   )
 }
