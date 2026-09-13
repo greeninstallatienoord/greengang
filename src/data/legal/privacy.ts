@@ -190,7 +190,7 @@ export const privacy: LegalDocument = {
             {
               term: 'Cloudflare',
               description:
-                'Hosting van de website, Cloudflare Workers en Cloudflare D1 (opslag van aanvragen). Cloudflare kan technische gegevens verwerken die nodig zijn voor levering en beveiliging.',
+                'Hosting van de website, Cloudflare Workers, Cloudflare D1 (opslag van aanvragen) en — alleen bij inloggen op het beheerscherm — Cloudflare Turnstile voor botbescherming. Cloudflare kan technische gegevens verwerken die nodig zijn voor levering en beveiliging.',
             },
             {
               term: 'Resend',
@@ -314,7 +314,7 @@ export const privacy: LegalDocument = {
             ],
             [
               'Beheersessie (alleen medewerkers)',
-              'Sessiecookie gin_admin_session',
+              'Sessiecookie gin_admin_session; bij login Turnstile',
               'Beveiligde toegang beheer',
               '6.1.f',
             ],

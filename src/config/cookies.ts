@@ -148,15 +148,15 @@ export const cookieRegistry: CookieRegistryItem[] = [
     name: 'Cloudflare Turnstile',
     provider: 'Cloudflare',
     purpose:
-      'Was bedoeld voor botbescherming bij admin-login. Momenteel niet actief op deze website.',
+      'Botbescherming bij het inloggen op het beheerscherm. Laadt een script van Cloudflare Challenges. Niet gebruikt op openbare formulieren.',
     category: 'necessary',
     storage: 'script',
-    lifetime: 'Niet actief',
+    lifetime: 'Volgens Cloudflare; alleen tijdens/rond admin-login',
     consentRequired: false,
     party: 'third',
     privacyUrl: 'https://www.cloudflare.com/privacypolicy/',
     audience: 'admin',
-    active: false,
+    active: true,
   },
   {
     id: 'cloudflare-edge',

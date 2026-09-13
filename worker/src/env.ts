@@ -6,6 +6,10 @@ export type WorkerEnv = {
   ADMIN_BASE_PATH: string
   RESEND_API_KEY?: string
   ADMIN_SESSION_SECRET?: string
+  /** Cloudflare Turnstile secret — Worker only, never VITE_*. */
+  TURNSTILE_SECRET_KEY?: string
+  /** Optional override for Turnstile hostname checks (defaults include production domain). */
+  TURNSTILE_EXPECTED_HOSTNAME?: string
 }
 
 export const COOKIE_NAME = 'gin_admin_session'

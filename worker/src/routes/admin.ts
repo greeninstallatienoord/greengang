@@ -21,6 +21,7 @@ import {
   recordSecurityEvent,
   registerLoginFailure,
 } from '../security'
+import { verifyTurnstileToken } from '../turnstile'
 import {
   applyTemplate,
   assembleBodyText,
@@ -88,6 +89,7 @@ export async function login(env: WorkerEnv, request: Request, body: Record<strin
   }
 
   await assertLoginAllowed(env, request)
+  await verifyTurnstileToken(env, body.turnstileToken, request)
 
   const email = parseEmail(body.email)
   const password = text(body.password, 'Wachtwoord', 200)
@@ -1259,6 +1261,7 @@ export async function getSettings(env: WorkerEnv, request: Request) {
       siteUrl: env.PUBLIC_SITE_URL,
       adminPath: env.ADMIN_BASE_PATH,
       sessionConfigured: Boolean(env.ADMIN_SESSION_SECRET),
+      turnstileConfigured: Boolean(env.TURNSTILE_SECRET_KEY),
     },
   }
 }
