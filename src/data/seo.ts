@@ -17,7 +17,7 @@ export const pageSeo = {
   airco: {
     title: 'Airconditioning laten installeren',
     description:
-      'Airco laten installeren van merken als Mitsubishi, Kaisai, LG, Haier en Daikin. Green Installatie Noord bekijkt de ruimte voordat er een voorstel komt.',
+      'Airco laten installeren voor koelen én verwarmen. Merken als Mitsubishi, Kaisai, LG, Haier en Daikin. Green Installatie Noord bekijkt de ruimte voordat er een voorstel komt.',
     path: '/airco',
   },
   warmtepomp: {
@@ -103,9 +103,9 @@ export const blogCategorySeo: Record<
   airco: {
     title: 'Artikelen over airconditioning',
     description:
-      'Artikelen over airconditioning in huis: koelen, soms verwarmen, onderhoud en vragen vóór installatie.',
+      'Artikelen over airconditioning in huis: koelen én verwarmen, onderhoud en vragen vóór installatie.',
     intro:
-      'Praktische stukken over airconditioning: gebruik, onderhoud en de vragen die het advies scherp maken.',
+      'Praktische stukken over airconditioning: koelen én verwarmen, onderhoud en de vragen die het advies scherp maken.',
   },
   warmtepomp: {
     title: 'Artikelen over warmtepompen',

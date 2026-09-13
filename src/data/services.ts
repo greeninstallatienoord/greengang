@@ -77,14 +77,14 @@ export const services: ServiceRecord[] = [
     navLabel: 'Airco',
     href: '/airco',
     summary:
-      'Airconditioning voor koelen en, waar dat past, bijverwarmen in huis of op kantoor.',
+      'Airconditioning voor koelen én verwarmen in huis of op kantoor.',
     benefit: 'Een aangenamer binnenklimaat in de ruimte die u wilt verbeteren.',
     heroEyebrow: 'Klimaat in huis',
     heroTitle: 'Airconditioning installatie',
     heroText:
       'Green Installatie Noord installeert airconditioning. We kijken naar de ruimte, het gebruik en een nette plaatsing binnen en buiten.',
     explanation: [
-      'Airconditioning kan een woning of werkruimte koelen en, afhankelijk van het systeem, ook verwarmen. Belangrijk is dat het toestel past bij de ruimte en dat binnen- en buitenunit zorgvuldig worden geplaatst.',
+      'Moderne airconditioning koelt én verwarmt. Belangrijk is dat het toestel past bij de ruimte en dat binnen- en buitenunit zorgvuldig worden geplaatst.',
       'Welk type het beste past, hangt af van uw situatie. Dat bespreken we in het voortraject, voordat er een voorstel komt.',
     ],
     benefits: [
@@ -98,12 +98,12 @@ export const services: ServiceRecord[] = [
       },
       {
         title: 'Koelen én verwarmen',
-        text: 'Veel systemen kunnen beide. Of dat in uw geval zinvol is, bespreken we per situatie.',
+        text: 'De airco’s die wij plaatsen, kunnen koelen én warmte geven. Hoe u ze inzet, stemmen we af op de ruimte en uw wensen.',
       },
     ],
     suitableFor: [
-      'Woningen of ruimtes die in de zomer te warm worden',
-      'Wie één of meerdere ruimtes gericht wil koelen of bijverwarmen',
+      'Woningen of ruimtes die in de zomer te warm of in de winter te koud aanvoelen',
+      'Wie één of meerdere ruimtes gericht wil koelen én verwarmen',
       'Wie eerst wil weten wat er technisch mogelijk is',
     ],
     process: [

@@ -127,15 +127,15 @@ const corePosts: BlogPost[] = [
   },
   {
     slug: 'airco-koelen-en-verwarmen',
-    title: 'Airconditioning: koelen, en soms ook verwarmen',
+    title: 'Airconditioning: koelen én verwarmen',
     excerpt:
       'Wat airconditioning kan betekenen in huis, en welke vragen u kunt stellen vóór installatie.',
     intro:
-      'Airconditioning is vooral een oplossing per ruimte. Veel systemen kunnen koelen en, afhankelijk van het toestel, ook bijverwarmen. Dat maakt ze niet automatisch tot vervanger van de hele cv-installatie.',
+      'Airconditioning is vooral een oplossing per ruimte. Moderne systemen koelen én verwarmen. Dat maakt ze niet automatisch tot vervanger van de hele cv-installatie voor de hele woning.',
     category: 'airco',
-    tags: ['airco', 'koelen', 'installatie'],
+    tags: ['airco', 'koelen', 'verwarmen', 'installatie'],
     publishedAt: '2026-09-01',
-    updatedAt: '2026-09-12',
+    updatedAt: '2026-09-14',
     imageKey: 'aircoPraktijk',
     imageAlt: 'Binnenunit van een airconditioner aan een muur, ter illustratie',
     relatedServiceSlugs: ['airco'],
@@ -144,16 +144,16 @@ const corePosts: BlogPost[] = [
     sections: [
       {
         id: 'gebruik',
-        heading: 'Meer dan alleen koelen',
+        heading: 'Koelen én verwarmen',
         paragraphs: [
-          'Voor één slaapkamer of een warme zolder kan airconditioning gericht comfort geven. Of verwarmen in het tussenseizoen zinvol is, hangt af van het systeem en hoe de rest van de woning wordt verwarmd.',
+          'Voor één slaapkamer, woonkamer of een warme zolder geeft airconditioning gericht comfort: koelen in de zomer én warmte in het tussenseizoen of de winter. Hoe zwaar u op de airco leunt voor verwarming, hangt af van de ruimte en hoe de rest van de woning wordt verwarmd — niet van of het toestel “ook” kan verwarmen. Dat kan het.',
         ],
       },
       {
         id: 'vragen',
         heading: 'Vragen vóór installatie',
         paragraphs: [
-          'Welke ruimte wilt u aanpakken? Waar kan de buitenunit staan? Is er een logische leidingweg? En wilt u vooral koelen, of ook bijverwarmen?',
+          'Welke ruimte wilt u aanpakken? Waar kan de buitenunit staan? Is er een logische leidingweg? En wilt u de airco vooral inzetten voor koelen, voor verwarmen, of voor beide?',
           'Green Installatie Noord installeert airconditioning en helpt die vragen vertalen naar een voorstel. Plaatsing is maatwerk; daarom eerst de ruimte, dan de offerte.',
         ],
         links: [
@@ -253,11 +253,11 @@ const corePosts: BlogPost[] = [
     excerpt:
       'Drie verschillende vragen. Een korte leidraad om de juiste dienst te openen.',
     intro:
-      'Begin bij de vraag, niet bij het product. Vervanging van verwarming, koelen van één ruimte of een andere manier van verwarmen van de woning zijn drie verschillende startpunten.',
+      'Begin bij de vraag, niet bij het product. Vervanging van de centrale verwarming, comfort per ruimte (koelen én verwarmen met airco) of een andere manier van verwarmen van de hele woning zijn drie verschillende startpunten.',
     category: 'praktische-tips',
     tags: ['advies', 'cv-ketel', 'airco', 'warmtepomp'],
     publishedAt: '2026-09-01',
-    updatedAt: '2026-09-12',
+    updatedAt: '2026-09-14',
     imageKey: 'aircoTerras',
     imageAlt: 'Buitenunit bij een woning, ter illustratie van klimaat- en verwarmingskeuzes',
     relatedServiceSlugs: ['cv-ketel', 'airco', 'warmtepomp'],
@@ -272,7 +272,7 @@ const corePosts: BlogPost[] = [
         id: 'start',
         heading: 'Kies het startpunt dat bij de vraag past',
         paragraphs: [
-          'Wilt u de bestaande verwarming vervangen of herstellen? Begin bij cv-ketelinstallatie of onderhoud. Wilt u een ruimte koelen? Dan is airconditioning het logische begin. Overweegt u een andere manier van verwarmen van de hele woning? Dan hoort een warmtepompgesprek daarbij.',
+          'Wilt u de bestaande centrale verwarming vervangen of herstellen? Begin bij cv-ketelinstallatie of onderhoud. Wilt u één of enkele ruimtes koelen én verwarmen? Dan is airconditioning het logische begin. Overweegt u een andere manier van verwarmen van de hele woning? Dan hoort een warmtepompgesprek daarbij.',
         ],
       },
       {
@@ -296,11 +296,11 @@ const corePosts: BlogPost[] = [
     excerpt:
       'Comfort is meer dan één apparaat. Dit helpt om de vraag scherp te krijgen.',
     intro:
-      'Een woning die ’s winters koud is, vraagt iets anders dan een zolder die in augustus onbruikbaar is. Energiegebruik hangt af van isolatie, gedrag en het systeem. Dat meten we hier niet; we helpen wél de vraag te ordenen.',
+      'Een woning die ’s winters koud is, vraagt iets anders dan een zolder die in augustus onbruikbaar is. Moderne airconditioning koelt én verwarmt per ruimte. Energiegebruik hangt verder af van isolatie, gedrag en het totale systeem. Dat meten we hier niet; we helpen wél de vraag te ordenen.',
     category: 'energie-comfort',
     tags: ['comfort', 'verwarmen', 'koelen'],
     publishedAt: '2026-09-12',
-    updatedAt: '2026-09-12',
+    updatedAt: '2026-09-14',
     imageKey: 'aircoVloer',
     imageAlt: 'Klimaatunit in huis, ter illustratie van comfortvragen',
     relatedServiceSlugs: ['cv-ketel', 'airco', 'warmtepomp'],
@@ -311,14 +311,14 @@ const corePosts: BlogPost[] = [
         id: 'vraag',
         heading: 'Benoem het probleem, niet het product',
         paragraphs: [
-          'Te koud, te warm, of beide in verschillende seizoenen: dat zijn verschillende routes. Eén airconditioner lost niet automatisch het hele huis op. Een nieuwe ketel lost geen zomerse oververhitting op.',
+          'Te koud, te warm, of beide in verschillende seizoenen: dat zijn verschillende routes. Een airco koelt én geeft warmte in de gekozen ruimte, maar lost niet automatisch het hele huis op. Een nieuwe ketel lost geen zomerse oververhitting op.',
         ],
       },
       {
         id: 'volgende-stap',
         heading: 'De volgende stap zonder overdrijven',
         paragraphs: [
-          'Als het om de hele woning en de winter gaat, start u bij de cv-ketel of een warmtepompgesprek. Gaat het om één ruimte in de zomer, dan is airconditioning meestal het gesprek. Twijfelt u, gebruik dan Advies & kennis of het contactformulier.',
+          'Gaat het om de hele woning en vooral de winterverwarming, start u bij de cv-ketel of een warmtepompgesprek. Gaat het om comfort in één of enkele ruimtes — koelen én verwarmen — dan is airconditioning meestal het gesprek. Twijfelt u, gebruik dan Advies & kennis of het contactformulier.',
         ],
         links: [
           { label: 'Kiezen tussen systemen', href: '/blog/kiezen-tussen-systemen' },

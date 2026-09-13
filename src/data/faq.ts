@@ -83,7 +83,7 @@ export const faqs: FaqItem[] = [
     relatedServiceSlug: 'airco',
     question: 'Kan airconditioning ook verwarmen?',
     answer:
-      'Veel systemen kunnen koelen én verwarmen. Of dat in uw situatie zinvol is, hangt af van het toestel, de ruimte en hoe u de woning verder verwarmt. Dat bespreken we in het advies.',
+      'Ja. De airco’s die wij plaatsen, kunnen koelen én verwarmen. Of de airco in uw situatie de hoofdverwarming is of vooral voor comfort per ruimte, hangt af van de woning en hoe de rest wordt verwarmd. Dat bespreken we in het advies.',
   },
   {
     id: 'airco-plaatsing',

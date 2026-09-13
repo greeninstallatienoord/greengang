@@ -23,7 +23,7 @@ import { localBusinessJsonLd, serviceAreaPageJsonLd } from '../lib/jsonld'
 
 const areaServiceSummaries: Record<string, string> = {
   'cv-ketel': 'Plaatsen of vervangen van een cv-ketel, met aansluiting en uitleg.',
-  airco: 'Koelen (en soms verwarmen) met een voorstel dat bij de ruimte past.',
+  airco: 'Koelen én verwarmen, met een voorstel dat bij de ruimte past.',
   warmtepomp: 'Hybride of all-electric: eerst beoordelen, daarna adviseren en installeren.',
   'service-onderhoud': business.emergencyService.available
     ? 'Onderhoud, service en 24/7 storingsdienst.'

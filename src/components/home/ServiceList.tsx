@@ -20,7 +20,7 @@ const listSummaries: Record<ServiceSlug, string> = {
   'cv-ketel':
     'Plaatsen of vervangen van een cv-ketel, inclusief aansluiting en uitleg.',
   airco:
-    'Koelen in huis, met een voorstel dat past bij de ruimte en het gebruik.',
+    'Koelen én verwarmen in huis, met een voorstel dat past bij de ruimte en het gebruik.',
   warmtepomp:
     'Hybride of all-electric: eerst beoordelen, daarna adviseren en installeren.',
   'service-onderhoud': business.emergencyService.available

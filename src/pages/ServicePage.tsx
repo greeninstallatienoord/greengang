@@ -52,9 +52,9 @@ const serviceStory: Record<
     photos: [],
   },
   airco: {
-    contextTitle: 'Koelen begint bij de ruimte',
+    contextTitle: 'Comfort begint bij de ruimte',
     context:
-      'Een airco werkt alleen goed als binnenunit, buitenunit en leidingweg bij de woning passen. Daarom kijken we naar de ruimte en de gevel voordat er een voorstel komt.',
+      'Een airco koelt én verwarmt. Hij werkt alleen goed als binnenunit, buitenunit en leidingweg bij de woning passen. Daarom kijken we naar de ruimte en de gevel voordat er een voorstel komt.',
     photos: [
       {
         asset: pageImages.aircoOutdoor,
