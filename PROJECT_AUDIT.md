@@ -3,8 +3,10 @@
 | Field | Value |
 |--------|--------|
 | **Auditdatum** | 2026-09-13 |
-| **Branch** | `main` (working tree) |
-| **Commit hash** | *Niet beschikbaar* — repository heeft nog geen commits (`git` toont “No commits yet on main”; alle bestanden untracked) |
+| **Repository** | https://github.com/greeninstallatienoord/greengang |
+| **Branch** | `main` |
+| **Commit hash** | `b7d91583a251bc73babe7cc0bfc57f61a3ede5a7` (pushed to `origin/main`) |
+| **Deployment** | Live on Cloudflare Worker `greengang` (Version ID `a88f8d7a-d074-49c8-9115-7091ae59ba87`); D1 migrations 0006–0008 applied |
 | **Node** | v24.18.0 |
 | **npm** | 11.16.0 |
 | **Productiedomein** | https://greeninstallatienoord.nl |
@@ -30,7 +32,7 @@ Green Installatie Noord is een **Vite + React 19** marketing- en leadwebsite met
 - Legal pages + consent UI aanwezig; productie-build + lint + Worker typecheck slagen.
 
 **Risico’s / beperkingen**
-- Geen git-historie → recente wijzigingen alleen uit codebase + sessiewerk af te leiden, niet uit commits.
+- Git history hersteld en gekoppeld aan `greeninstallatienoord/greengang` (`main` @ `b7d9158`); productie-Worker deploy stond nog open op Turnstile public build key.
 - Publieke form POSTs **zonder Turnstile**; alleen in-isolate rate limits (zwakker dan D1-backed login throttle).
 - Live inbox delivery, echte admin-login, echte form→D1→mail **niet** in deze auditomgeving end-to-end geverifieerd.
 - Postcode/BTW/rechtsvorm nog owner-confirmatiepunten (`LEGAL_REVIEW.md` / `business.ts` TODO).
@@ -456,6 +458,6 @@ Code-path review van forms, Worker routes, auth, email escaping: **uitgevoerd**.
 | SEO | **7.5/10** | Meta/LD/sitemap/robots aanwezig; kleine inconsistenties |
 | Performance | **7/10** | Goede hero pipeline; geen CWV-meting |
 | Accessibility | **7/10** | Focus/ARIA/basis; geen formele audittool-run |
-| Maintainability | **7.5/10** | Duidelijke modules; nog geen git-historie/commits |
+| Maintainability | **7.5/10** | Duidelijke modules; GitHub `main` history hersteld |
 
 **Eindoordeel:** klaar om productie te zetten na checklist §23 en een korte live smoke (forms + mail + admin). Geen reden tot “NOT PRODUCTION READY” op basis van aangetroffen architectuurfouten of secret leaks; wel expliciet “minor issues” door niet-live-geverifieerde ops en public-form spam surface.
