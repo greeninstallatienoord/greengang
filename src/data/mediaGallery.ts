@@ -11,8 +11,7 @@ function shot(
  * Portfolio entries for /werk.
  *
  * Classification notes (verified against asset + filename + visible branding):
- * - cv-intergas: Intergas boiler is the clear primary subject → cv-ketel.
- *   A narrower nevenunit sits beside it; we do not claim a specific hybrid model.
+ * - cv-intergas: Intergas ketel + hybride warmtepomp-binnenunit → warmtepomp (hybride).
  * - cv-opstelling: Nefit ketel + Remeha Elga Ace (visible) → warmtepomp (hybride).
  * - warmtepomp-intergas: Intergas outdoor heat-pump unit (visible logo) → warmtepomp.
  * - airco-platdak: outdoor heat-pump unit on spring dampers (not airco) → warmtepomp.
@@ -35,10 +34,10 @@ export const workShots: WorkShot[] = [
     {
       id: 'cv-intergas',
       asset: workPhotos.cvIntergas,
-      title: 'Intergas cv-ketel binnenopstelling',
-      caption: 'Intergas-ketel met nevenunit en leidingwerk in de technische ruimte.',
-      category: 'cv-ketel',
-      href: '/cv-ketel',
+      title: 'Intergas cv-ketel / hybride warmtepomp binnenopstelling',
+      caption: 'Intergas cv-ketel met hybride warmtepomp-binnenunit en leidingwerk in de technische ruimte.',
+      category: 'warmtepomp',
+      href: '/warmtepomp',
     },
     { kind: 'technische-installatie' },
   ),
