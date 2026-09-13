@@ -28,11 +28,11 @@ export function HomeHero() {
             {site.copy.heroText}
           </p>
 
-          <div className="mt-5 flex w-full max-w-[21.5rem] flex-col gap-2 min-[360px]:flex-row min-[360px]:flex-wrap sm:mt-7 sm:max-w-none">
+          <div className="mt-5 flex w-full max-w-md flex-col gap-2 min-[390px]:max-w-none min-[390px]:flex-row min-[390px]:flex-wrap min-[390px]:items-stretch sm:mt-7">
             <ButtonLink
               to="/offerte-aanvragen"
               size="md"
-              className="min-h-11 px-4 text-[0.875rem] min-[360px]:min-w-0 min-[360px]:flex-1 sm:min-h-12 sm:min-w-[12.5rem] sm:flex-none sm:px-6 sm:text-[0.9375rem]"
+              className="min-h-11 w-full whitespace-nowrap px-4 text-[0.875rem] min-[390px]:w-auto min-[390px]:flex-none min-[390px]:px-3.5 min-[390px]:text-[0.8125rem] min-[430px]:px-4 min-[430px]:text-[0.875rem] sm:min-h-12 sm:min-w-[12.5rem] sm:px-6 sm:text-[0.9375rem]"
             >
               {site.copy.ctaQuote}
             </ButtonLink>
@@ -40,7 +40,7 @@ export function HomeHero() {
               to="/afspraak-maken"
               variant="ghost"
               size="md"
-              className="min-h-11 border border-white/45 bg-white/8 px-4 text-[0.875rem] text-white hover:border-white hover:bg-white/16 min-[360px]:min-w-0 min-[360px]:flex-1 sm:min-h-12 sm:min-w-[12.5rem] sm:flex-none sm:px-6 sm:text-[0.9375rem]"
+              className="min-h-11 w-full whitespace-nowrap border border-white/45 bg-white/8 px-4 text-[0.875rem] text-white hover:border-white hover:bg-white/16 min-[390px]:w-auto min-[390px]:flex-none min-[390px]:px-3.5 min-[390px]:text-[0.8125rem] min-[430px]:px-4 min-[430px]:text-[0.875rem] sm:min-h-12 sm:min-w-[12.5rem] sm:px-6 sm:text-[0.9375rem]"
             >
               {site.copy.ctaAppointment}
             </ButtonLink>

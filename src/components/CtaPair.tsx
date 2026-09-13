@@ -32,15 +32,19 @@ export function CtaPair({
     <div
       className={cn(
         equal
-          ? 'grid grid-cols-2 gap-2'
-          : 'flex flex-col items-stretch gap-2.5 min-[400px]:flex-row min-[400px]:flex-wrap min-[400px]:items-center',
+          ? 'grid grid-cols-1 gap-2 min-[390px]:grid-cols-2'
+          : 'flex flex-col items-stretch gap-2.5 min-[390px]:flex-row min-[390px]:flex-wrap min-[390px]:items-center',
         className,
       )}
     >
       <ButtonLink
         to={quoteTo}
         size={resolvedSize}
-        className={equal ? 'w-full px-2 text-center text-[0.8125rem] leading-tight sm:text-[0.9rem]' : undefined}
+        className={
+          equal
+            ? 'w-full whitespace-nowrap px-3 text-center text-[0.8125rem] sm:px-3.5 sm:text-[0.9rem]'
+            : 'whitespace-nowrap'
+        }
       >
         {site.copy.ctaQuote}
       </ButtonLink>
@@ -50,7 +54,9 @@ export function CtaPair({
         size={resolvedSize}
         className={
           cn(
-            equal && 'w-full px-2 text-center text-[0.8125rem] leading-tight sm:text-[0.9rem]',
+            equal
+              ? 'w-full whitespace-nowrap px-3 text-center text-[0.8125rem] sm:px-3.5 sm:text-[0.9rem]'
+              : 'whitespace-nowrap',
             onDark
               ? 'border-white/80 bg-white/12 text-white hover:border-white hover:bg-white/22'
               : undefined,
