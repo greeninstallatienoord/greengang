@@ -1,7 +1,10 @@
+import { useId, useState } from 'react'
 import {
   ClipboardCheck,
   Headphones,
   MapPin,
+  Minus,
+  Plus,
   ShieldCheck,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
@@ -45,26 +48,47 @@ function BenefitCard({
   )
 }
 
-function WhyBenefitList() {
+function WhyBenefitAccordion() {
+  const baseId = useId()
+  const [openIndex, setOpenIndex] = useState<number | null>(null)
+
   return (
-    <ul className="home-usp-list lg:hidden" aria-label="Voordelen">
+    <ul className="home-why-accordion lg:hidden" aria-label="Voordelen">
       {site.copy.trust.map((item, index) => {
         const Icon = icons[index] ?? Headphones
+        const open = openIndex === index
+        const panelId = `${baseId}-panel-${index}`
+        const buttonId = `${baseId}-btn-${index}`
+
         return (
-          <li key={item.title}>
-            <Reveal delay={index * 70}>
-              <div className="home-usp-list__row">
-                <span className="home-usp-list__icon" aria-hidden="true">
-                  <Icon size={18} strokeWidth={1.65} />
+          <li key={item.title} className="home-why-accordion__item">
+            <h3 className="m-0">
+              <button
+                id={buttonId}
+                type="button"
+                className="home-why-accordion__trigger"
+                aria-expanded={open}
+                aria-controls={panelId}
+                onClick={() => setOpenIndex(open ? null : index)}
+              >
+                <span className="home-why-accordion__icon" aria-hidden="true">
+                  <Icon size={17} strokeWidth={1.7} />
                 </span>
-                <div className="min-w-0">
-                  <h3 className="text-[0.98rem] font-semibold tracking-[-0.015em] text-ink">
-                    {item.title}
-                  </h3>
-                  <p className="mt-1 text-sm leading-relaxed text-ink-muted">{item.text}</p>
-                </div>
-              </div>
-            </Reveal>
+                <span className="home-why-accordion__title">{item.title}</span>
+                <span className="home-why-accordion__toggle" aria-hidden="true">
+                  {open ? <Minus size={16} strokeWidth={2} /> : <Plus size={16} strokeWidth={2} />}
+                </span>
+              </button>
+            </h3>
+            <div
+              id={panelId}
+              role="region"
+              aria-labelledby={buttonId}
+              className={cn('home-why-accordion__panel', open && 'is-open')}
+              inert={!open ? true : undefined}
+            >
+              <p>{item.text}</p>
+            </div>
           </li>
         )
       })}
@@ -97,8 +121,8 @@ export function WhyHome() {
               </div>
             </Reveal>
 
-            <div className="mt-7 min-[390px]:mt-8 lg:col-span-7 lg:mt-0">
-              <WhyBenefitList />
+            <div className="mt-6 min-[390px]:mt-7 lg:col-span-7 lg:mt-0">
+              <WhyBenefitAccordion />
               <ul className="hidden gap-3.5 lg:grid lg:grid-cols-2">
                 {site.copy.trust.map((item, index) => {
                   const Icon = icons[index] ?? Headphones

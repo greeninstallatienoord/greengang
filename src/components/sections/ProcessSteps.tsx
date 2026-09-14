@@ -10,8 +10,14 @@ import { GreenFlowSection } from '../greenflow/TechnicalBackdrop'
 
 const icons: LucideIcon[] = [ClipboardCheck, Wrench, Headphones]
 
+/** Shorter mobile blurbs — same meaning as desktop copy. */
+const mobileProcessText: Record<string, string> = {
+  Advies: 'We beoordelen eerst wat technisch past.',
+  Installatie: 'Daarna plannen en installeren we verzorgd.',
+  Service: 'Na oplevering blijven we bereikbaar — ook 24/7 bij storing.',
+}
+
 type ProcessStepsProps = {
-  /** Kept for callers; step numbers are always shown. */
   numbered?: boolean
   className?: string
 }
@@ -52,27 +58,49 @@ function ProcessStepBody({
 
 function MobileProcessSteps() {
   const steps = site.copy.process
+  const listRef = useRef<HTMLOListElement>(null)
+
+  useEffect(() => {
+    const node = listRef.current
+    if (!node) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      node.classList.add('is-visible')
+      return
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          node.classList.add('is-visible')
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.35 },
+    )
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [])
 
   return (
-    <ol className="process-rail process-rail--vertical mt-6 lg:hidden">
-      {steps.map((item, index) => {
-        const Icon = icons[index] ?? ClipboardCheck
-        return (
-          <li key={item.title} className="process-rail__item">
-            <div className="process-rail__marker" aria-hidden="true">
-              <span className="process-rail__dot" />
-            </div>
-            <Reveal delay={index * 80} className="min-w-0 pt-0.5 pb-7">
-              <ProcessStepBody
-                step={item.step}
-                title={item.title}
-                text={item.text}
-                Icon={Icon}
-              />
-            </Reveal>
-          </li>
-        )
-      })}
+    <ol
+      ref={listRef}
+      className="home-process-mobile mt-6 lg:hidden"
+      aria-label="Werkwijze in drie stappen"
+    >
+      {steps.map((item) => (
+        <li key={item.title} className="home-process-mobile__item">
+          <span className="home-process-mobile__node" aria-hidden="true">
+            {item.step}
+          </span>
+          <div className="min-w-0">
+            <h3 className="text-[1.02rem] font-semibold tracking-[-0.015em] text-ink">
+              {item.title}
+            </h3>
+            <p className="mt-0.5 text-sm leading-snug text-ink-muted">
+              {mobileProcessText[item.title] ?? item.text}
+            </p>
+          </div>
+        </li>
+      ))}
     </ol>
   )
 }
@@ -145,7 +173,13 @@ export function ProcessSteps({ className }: ProcessStepsProps) {
   const headingId = useId()
 
   return (
-    <GreenFlowSection variant="service" ambient mask="left" intensity="strong" className={className}>
+    <GreenFlowSection
+      variant="service"
+      ambient
+      mask="left"
+      intensity="strong"
+      className={className}
+    >
       <Section className="!bg-transparent" aria-labelledby={headingId}>
         <Container>
           <Reveal>

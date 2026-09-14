@@ -13,16 +13,19 @@ const trustPoints = [
   {
     title: 'Advies op locatie',
     text: 'We kijken eerst wat er speelt voordat er een voorstel komt.',
+    mobileText: 'Eerst beoordelen we de situatie.',
     icon: ClipboardCheck,
   },
   {
     title: 'Netjes gemonteerd',
     text: 'Leidingwerk en montage worden verzorgd uitgevoerd.',
+    mobileText: 'Verzorgde installatie en afwerking.',
     icon: ShieldCheck,
   },
   {
     title: 'Service na oplevering',
     text: 'Bereikbaar voor onderhoud en vragen — en bij storingen via de 24/7 storingsdienst.',
+    mobileText: 'Ook bereikbaar na installatie — 24/7 bij storing.',
     icon: Headphones,
   },
 ] as const
@@ -40,13 +43,15 @@ function PracticeStoryList() {
               style={{ ['--practice-delay' as string]: `${80 + index * 70}ms` }}
             >
               <span className="home-practice-list__icon" aria-hidden="true">
-                <Icon size={18} strokeWidth={1.65} />
+                <Icon size={17} strokeWidth={1.7} />
               </span>
               <div className="min-w-0">
                 <h3 className="text-[0.98rem] font-semibold tracking-[-0.015em] text-ink">
                   {point.title}
                 </h3>
-                <p className="mt-1 text-sm leading-relaxed text-ink-muted">{point.text}</p>
+                <p className="mt-0.5 text-sm leading-snug text-ink-muted">
+                  {point.mobileText}
+                </p>
               </div>
             </li>
           )
@@ -107,7 +112,7 @@ export function ExperienceSection() {
                 })}
               </ul>
 
-              <Reveal delay={280} className="mt-6 sm:mt-7">
+              <Reveal delay={280} className="home-secondary-cta mt-6 sm:mt-7">
                 <ButtonLink
                   to="/werk"
                   variant="secondary"

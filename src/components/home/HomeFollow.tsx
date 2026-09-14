@@ -63,12 +63,13 @@ export function HomeFollow() {
                 <li>
                   <a
                     href={item.url}
-                    className="flex min-h-14 items-center gap-2.5 border border-line bg-surface px-3 py-2.5 transition-[background-color,border-color] duration-[var(--duration-base)] hover:border-ink/25 hover:bg-paper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand min-[390px]:min-h-[4.75rem] min-[390px]:gap-3 min-[390px]:px-3.5 min-[390px]:py-3"
+                    className="flex min-h-14 items-center gap-2.5 border border-line bg-surface px-3 py-2.5 transition-[background-color,border-color,transform] duration-[var(--duration-base)] hover:border-ink/25 hover:bg-paper active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-safe:hover:-translate-y-px min-[390px]:min-h-[4.75rem] min-[390px]:gap-3 min-[390px]:px-3.5 min-[390px]:py-3"
                     rel="noopener noreferrer"
                     target="_blank"
+                    aria-label={`${labels[item.key]} — ${actions[item.key]}`}
                   >
-                    <span className="inline-flex size-9 shrink-0 items-center justify-center border border-line bg-paper text-ink min-[390px]:size-10">
-                      <Icon size={17} />
+                    <span className="inline-flex size-9 shrink-0 items-center justify-center border border-line bg-paper min-[390px]:size-10">
+                      <Icon size={18} />
                     </span>
                     <span className="min-w-0">
                       <span className="block text-sm font-semibold tracking-[-0.01em]">
