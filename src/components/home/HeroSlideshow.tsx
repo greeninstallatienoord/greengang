@@ -7,40 +7,77 @@ import {
 } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import {
-  heroSlides,
-  heroSlideshowTiming,
+  HOMEPAGE_HERO_LARGE_MIN_WIDTH,
+  HOMEPAGE_HERO_VARIANT,
+  resolveHomepageHeroSlides,
   type HeroSlide,
   type HeroSlideVariant,
 } from '../../data/heroSlideshow'
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
 import { cn } from '../../lib/cn'
 
-function sourcesFor(slide: HeroSlide, desktop: boolean): HeroSlideVariant {
-  if (desktop && slide.desktop) return slide.desktop
+function sourcesFor(
+  slide: HeroSlide,
+  mode: 'mobile' | 'legacy-desktop' | 'large-desktop',
+): HeroSlideVariant {
+  if (mode !== 'mobile' && slide.desktop) return slide.desktop
   return slide.mobile
 }
 
-function preloadImage(href: string) {
-  if (typeof window === 'undefined') return
-  const img = new Image()
-  img.decoding = 'async'
-  img.src = href
+function preloadImage(href: string): Promise<void> {
+  if (typeof window === 'undefined') return Promise.resolve()
+  return new Promise((resolve) => {
+    const img = new Image()
+    img.decoding = 'async'
+    const done = () => resolve()
+    img.onload = done
+    img.onerror = done
+    img.src = href
+    if (img.complete) done()
+  })
+}
+
+async function warmSlide(
+  slide: HeroSlide | undefined,
+  mode: 'mobile' | 'legacy-desktop' | 'large-desktop',
+  cache: Set<string>,
+) {
+  if (!slide) return
+  const sources = sourcesFor(slide, mode)
+  const hrefs = [sources.jpg, sources.webp, sources.avif]
+  await Promise.all(
+    hrefs.map(async (href) => {
+      if (cache.has(href)) return
+      cache.add(href)
+      await preloadImage(href)
+    }),
+  )
 }
 
 type LayerProps = {
   slide: HeroSlide
-  desktop: boolean
+  mode: 'mobile' | 'legacy-desktop' | 'large-desktop'
+  pictureMinWidth: number | null
   active: boolean
   eager: boolean
 }
 
-function SlidePicture({ slide, desktop, active, eager }: LayerProps) {
-  const sources = sourcesFor(slide, desktop)
+function SlidePicture({
+  slide,
+  mode,
+  pictureMinWidth,
+  active,
+  eager,
+}: LayerProps) {
+  const sources = sourcesFor(slide, mode)
   const positionStyle = {
     '--hero-pos-mobile': slide.mobilePosition,
     '--hero-pos-laptop': slide.laptopPosition,
     '--hero-pos-desktop': slide.desktopPosition,
   } as CSSProperties
+
+  const desktopSources =
+    mode !== 'mobile' && slide.desktop ? slide.desktop : null
 
   return (
     <div
@@ -48,30 +85,34 @@ function SlidePicture({ slide, desktop, active, eager }: LayerProps) {
       aria-hidden="true"
     >
       <picture className="absolute inset-0">
-        {desktop && slide.desktop ? (
+        {desktopSources && pictureMinWidth != null ? (
           <>
             <source
-              media="(min-width: 768px)"
+              media={`(min-width: ${pictureMinWidth}px)`}
               type="image/avif"
-              srcSet={slide.desktop.avif}
+              srcSet={desktopSources.avif}
             />
             <source
-              media="(min-width: 768px)"
+              media={`(min-width: ${pictureMinWidth}px)`}
               type="image/webp"
-              srcSet={slide.desktop.webp}
+              srcSet={desktopSources.webp}
             />
           </>
         ) : null}
-        <source
-          media="(max-width: 767px)"
-          type="image/avif"
-          srcSet={slide.mobile.avif}
-        />
-        <source
-          media="(max-width: 767px)"
-          type="image/webp"
-          srcSet={slide.mobile.webp}
-        />
+        {mode === 'mobile' || mode === 'legacy-desktop' ? (
+          <>
+            <source
+              media="(max-width: 767px)"
+              type="image/avif"
+              srcSet={slide.mobile.avif}
+            />
+            <source
+              media="(max-width: 767px)"
+              type="image/webp"
+              srcSet={slide.mobile.webp}
+            />
+          </>
+        ) : null}
         <source type="image/avif" srcSet={sources.avif} />
         <source type="image/webp" srcSet={sources.webp} />
         <img
@@ -95,14 +136,25 @@ function SlidePicture({ slide, desktop, active, eager }: LayerProps) {
   )
 }
 
+type Timing = { displayMs: number; transitionMs: number }
+
 type RotatorProps = {
   slides: HeroSlide[]
-  desktop: boolean
+  mode: 'mobile' | 'legacy-desktop' | 'large-desktop'
+  pictureMinWidth: number | null
+  timing: Timing
   reducedMotion: boolean
   lockedIndex: number | null
 }
 
-function HeroRotator({ slides, desktop, reducedMotion, lockedIndex }: RotatorProps) {
+function HeroRotator({
+  slides,
+  mode,
+  pictureMinWidth,
+  timing,
+  reducedMotion,
+  lockedIndex,
+}: RotatorProps) {
   const [active, setActive] = useState(0)
   const [outgoing, setOutgoing] = useState<number | null>(null)
   const activeRef = useRef(0)
@@ -111,15 +163,8 @@ function HeroRotator({ slides, desktop, reducedMotion, lockedIndex }: RotatorPro
   const shownActive = lockedIndex ?? active
 
   useEffect(() => {
-    const first = slides[0]
-    if (!first) return
-    const sources = sourcesFor(first, desktop)
-    for (const href of [sources.jpg, sources.webp, sources.avif]) {
-      if (preloaded.current.has(href)) continue
-      preloaded.current.add(href)
-      preloadImage(href)
-    }
-  }, [slides, desktop])
+    void warmSlide(slides[0], mode, preloaded.current)
+  }, [slides, mode])
 
   useEffect(() => {
     if (reducedMotion || lockedIndex != null || slides.length < 2) return
@@ -128,35 +173,28 @@ function HeroRotator({ slides, desktop, reducedMotion, lockedIndex }: RotatorPro
     let timeoutId = 0
     let pruneId = 0
     let resumeAt = 0
-    let remaining: number = heroSlideshowTiming.displayMs
-
-    const warm = (index: number) => {
-      const slide = slides[index % slides.length]
-      if (!slide) return
-      const sources = sourcesFor(slide, desktop)
-      for (const href of [sources.jpg, sources.webp, sources.avif]) {
-        if (preloaded.current.has(href)) continue
-        preloaded.current.add(href)
-        preloadImage(href)
-      }
-    }
+    let remaining: number = timing.displayMs
 
     const schedule = (delay: number) => {
       window.clearTimeout(timeoutId)
       resumeAt = Date.now() + delay
       timeoutId = window.setTimeout(() => {
-        if (cancelled || document.hidden) return
-        const next = (activeRef.current + 1) % slides.length
-        setOutgoing(activeRef.current)
-        activeRef.current = next
-        setActive(next)
-        warm(next + 1)
-        window.clearTimeout(pruneId)
-        pruneId = window.setTimeout(() => {
-          if (!cancelled) setOutgoing(null)
-        }, heroSlideshowTiming.transitionMs + 80)
-        remaining = heroSlideshowTiming.displayMs
-        schedule(heroSlideshowTiming.displayMs)
+        void (async () => {
+          if (cancelled || document.hidden) return
+          const next = (activeRef.current + 1) % slides.length
+          await warmSlide(slides[next], mode, preloaded.current)
+          if (cancelled || document.hidden) return
+          setOutgoing(activeRef.current)
+          activeRef.current = next
+          setActive(next)
+          void warmSlide(slides[(next + 1) % slides.length], mode, preloaded.current)
+          window.clearTimeout(pruneId)
+          pruneId = window.setTimeout(() => {
+            if (!cancelled) setOutgoing(null)
+          }, timing.transitionMs + 80)
+          remaining = timing.displayMs
+          schedule(timing.displayMs)
+        })()
       }, delay)
     }
 
@@ -171,8 +209,8 @@ function HeroRotator({ slides, desktop, reducedMotion, lockedIndex }: RotatorPro
 
     const startId = window.setTimeout(() => {
       if (cancelled) return
-      warm(1)
-      schedule(heroSlideshowTiming.displayMs)
+      void warmSlide(slides[1], mode, preloaded.current)
+      schedule(timing.displayMs)
     }, 900)
 
     document.addEventListener('visibilitychange', onVisibility)
@@ -183,7 +221,7 @@ function HeroRotator({ slides, desktop, reducedMotion, lockedIndex }: RotatorPro
       window.clearTimeout(startId)
       document.removeEventListener('visibilitychange', onVisibility)
     }
-  }, [reducedMotion, lockedIndex, slides, desktop])
+  }, [reducedMotion, lockedIndex, slides, mode, timing])
 
   if (!slides[0]) return null
 
@@ -206,7 +244,8 @@ function HeroRotator({ slides, desktop, reducedMotion, lockedIndex }: RotatorPro
           <SlidePicture
             key={slide.id}
             slide={slide}
-            desktop={desktop}
+            mode={mode}
+            pictureMinWidth={pictureMinWidth}
             active={index === shownActive}
             eager={index === 0}
           />
@@ -219,47 +258,73 @@ function HeroRotator({ slides, desktop, reducedMotion, lockedIndex }: RotatorPro
 /**
  * Calm photographic crossfade for the homepage hero.
  * Slideshow state stays local so unrelated homepage updates do not reset it.
+ *
+ * Variant switch: see HOMEPAGE_HERO_VARIANT in src/data/heroSlideshow.ts
  */
 export function HeroSlideshow() {
   const reducedMotion = usePrefersReducedMotion()
-  const [desktop, setDesktop] = useState(() => {
-    if (typeof window === 'undefined' || !window.matchMedia) return false
-    return window.matchMedia('(min-width: 768px)').matches
+  const [viewportWidth, setViewportWidth] = useState(() => {
+    if (typeof window === 'undefined') return 390
+    return window.innerWidth
   })
   const [params] = useSearchParams()
 
   useEffect(() => {
-    const media = window.matchMedia('(min-width: 768px)')
-    const onChange = () => setDesktop(media.matches)
-    media.addEventListener('change', onChange)
-    return () => media.removeEventListener('change', onChange)
+    const onResize = () => setViewportWidth(window.innerWidth)
+    window.addEventListener('resize', onResize)
+    // Also track the large-screen media query for cleaner flips near 1024.
+    const media = window.matchMedia(
+      `(min-width: ${HOMEPAGE_HERO_LARGE_MIN_WIDTH}px)`,
+    )
+    const onMedia = () => setViewportWidth(window.innerWidth)
+    media.addEventListener('change', onMedia)
+    const legacy = window.matchMedia('(min-width: 768px)')
+    legacy.addEventListener('change', onMedia)
+    return () => {
+      window.removeEventListener('resize', onResize)
+      media.removeEventListener('change', onMedia)
+      legacy.removeEventListener('change', onMedia)
+    }
   }, [])
 
-  const slides = useMemo(() => {
-    return desktop
-      ? heroSlides.filter((slide) => slide.desktop != null)
-      : heroSlides
-  }, [desktop])
+  const resolved = useMemo(
+    () => resolveHomepageHeroSlides(viewportWidth),
+    [viewportWidth],
+  )
 
   const lockedIndex = useMemo(() => {
     const raw = params.get('hero')
     if (raw == null || raw === '') return null
     const asNumber = Number(raw)
-    if (Number.isInteger(asNumber) && asNumber >= 0 && asNumber < slides.length) {
+    if (
+      Number.isInteger(asNumber) &&
+      asNumber >= 0 &&
+      asNumber < resolved.slides.length
+    ) {
       return asNumber
     }
-    const byId = slides.findIndex(
+    const byId = resolved.slides.findIndex(
       (slide) => slide.id === raw || slide.id.includes(raw),
     )
     return byId >= 0 ? byId : null
-  }, [params, slides])
+  }, [params, resolved.slides])
+
+  const fadeSeconds = `${resolved.timing.transitionMs / 1000}s`
 
   return (
-    <div className="absolute inset-0 overflow-hidden bg-brand-deep" aria-hidden="true">
+    <div
+      className="absolute inset-0 overflow-hidden bg-brand-deep"
+      aria-hidden="true"
+      style={{ ['--hero-fade-ms' as string]: fadeSeconds }}
+      data-hero-variant={HOMEPAGE_HERO_VARIANT}
+      data-hero-mode={resolved.mode}
+    >
       <HeroRotator
-        key={desktop ? 'desktop' : 'mobile'}
-        slides={slides}
-        desktop={desktop}
+        key={resolved.mode}
+        slides={resolved.slides}
+        mode={resolved.mode}
+        pictureMinWidth={resolved.pictureMinWidth}
+        timing={resolved.timing}
         reducedMotion={reducedMotion}
         lockedIndex={lockedIndex}
       />
@@ -277,7 +342,14 @@ export function HeroSlideshow() {
       <div
         className="pointer-events-none absolute inset-0 hidden md:block"
         style={{
-          background: `linear-gradient(90deg,
+          background:
+            resolved.mode === 'large-desktop'
+              ? `linear-gradient(90deg,
+            rgba(16,36,24,0.9) 0%,
+            rgba(16,36,24,0.72) 34%,
+            rgba(16,36,24,0.34) 68%,
+            rgba(16,36,24,0.16) 100%)`
+              : `linear-gradient(90deg,
             rgba(16,36,24,0.92) 0%,
             rgba(16,36,24,0.76) 36%,
             rgba(16,36,24,0.4) 70%,
@@ -288,7 +360,7 @@ export function HeroSlideshow() {
         className="pointer-events-none absolute inset-0 hidden md:block"
         style={{
           background:
-            'linear-gradient(180deg, rgba(16,36,24,0.2) 0%, transparent 42%, rgba(16,36,24,0.4) 100%)',
+            'linear-gradient(180deg, rgba(16,36,24,0.18) 0%, transparent 42%, rgba(16,36,24,0.36) 100%)',
         }}
       />
     </div>

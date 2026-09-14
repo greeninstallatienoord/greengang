@@ -1,0 +1,60 @@
+{
+  "generatedAt": "2026-09-14T00:24:35.928Z",
+  "results": [
+    {
+      "id": "hero-large-warmtepomp-patio-01",
+      "file": "ChatGPT Image 14 sep 2026, 02_07_30 (1).png",
+      "width": 1672,
+      "height": 941,
+      "sizes": {
+        "webp": 282958,
+        "avif": 191796,
+        "jpg": 454103
+      }
+    },
+    {
+      "id": "hero-large-warmtepomp-tuin-01",
+      "file": "ChatGPT Image 14 sep 2026, 02_07_30 (2).png",
+      "width": 1672,
+      "height": 941,
+      "sizes": {
+        "webp": 281322,
+        "avif": 190973,
+        "jpg": 432146
+      }
+    },
+    {
+      "id": "hero-large-cv-ketel-binnen-01",
+      "file": "ChatGPT Image 14 sep 2026, 02_07_31 (3).png",
+      "width": 1672,
+      "height": 941,
+      "sizes": {
+        "webp": 96296,
+        "avif": 69065,
+        "jpg": 199697
+      }
+    },
+    {
+      "id": "hero-large-service-buitenunit-01",
+      "file": "ChatGPT Image 14 sep 2026, 02_07_31 (4).png",
+      "width": 1672,
+      "height": 941,
+      "sizes": {
+        "webp": 195816,
+        "avif": 131577,
+        "jpg": 321649
+      }
+    },
+    {
+      "id": "hero-large-warmtepomp-mitsubishi-01",
+      "file": "ChatGPT Image 14 sep 2026, 02_07_31 (5).png",
+      "width": 1672,
+      "height": 941,
+      "sizes": {
+        "webp": 244210,
+        "avif": 162070,
+        "jpg": 411507
+      }
+    }
+  ]
+}
