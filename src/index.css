@@ -762,10 +762,11 @@
 
   .greenflow-path,
   .greenflow-node,
-  .greenflow-pulse,
+  .greenflow-traveler,
   .greenflow-check,
   .photo-flow__path,
   .photo-flow__node,
+  .photo-flow__traveler,
   .trust-facts__rail,
   .home-practice-list::before {
     animation: none !important;
@@ -778,175 +779,112 @@
   }
 
   .greenflow-node,
+  .greenflow-traveler,
   .photo-flow__node,
+  .photo-flow__traveler,
   .greenflow-check {
-    opacity: 1 !important;
+    opacity: 0.85 !important;
   }
 }
 
 /* ——— GreenFlow ambient technical system ——— */
 .greenflow {
   color: var(--color-brand-dark);
-  opacity: 0.055;
+  opacity: 1;
 }
 
-.greenflow--airflow {
-  opacity: 0.05;
+.greenflow-grid {
+  opacity: 0.07;
+  color: var(--color-brand);
 }
 
-.greenflow--hydronic {
-  opacity: 0.048;
+.greenflow-paths {
+  opacity: 0.14;
+  color: var(--color-brand-dark);
 }
 
-.greenflow--thermal {
-  opacity: 0.05;
+.greenflow--strong .greenflow-paths {
+  opacity: 0.17;
 }
 
-.greenflow--service {
-  opacity: 0.045;
+.greenflow--airflow .greenflow-paths {
+  opacity: 0.15;
 }
 
-.greenflow--regional {
-  opacity: 0.06;
+.greenflow--hydronic .greenflow-paths {
+  opacity: 0.145;
 }
 
-.greenflow-mask-left {
-  mask-image: linear-gradient(90deg, transparent 0%, black 42%, black 100%);
+.greenflow--thermal .greenflow-paths {
+  opacity: 0.15;
 }
 
-.greenflow-mask-right {
-  mask-image: linear-gradient(90deg, black 0%, black 58%, transparent 100%);
+.greenflow--service .greenflow-paths {
+  opacity: 0.14;
 }
 
-.greenflow-mask-center {
-  mask-image: radial-gradient(ellipse 70% 65% at 70% 45%, black, transparent 78%);
-}
-
-.greenflow-path {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  pathLength: 1;
-}
-
-.greenflow.is-visible .greenflow-path {
-  transition: stroke-dashoffset 1.45s cubic-bezier(0.22, 1, 0.36, 1);
-  stroke-dashoffset: 0;
-}
-
-.greenflow.is-visible .greenflow-path--b {
-  transition-delay: 120ms;
-}
-
-.greenflow.is-visible .greenflow-path--c {
-  transition-delay: 220ms;
-}
-
-.greenflow.is-visible .greenflow-path--d {
-  transition-delay: 300ms;
+.greenflow--regional .greenflow-paths {
+  opacity: 0.155;
 }
 
 .greenflow-node {
-  fill: currentColor;
   opacity: 0;
+  color: var(--color-brand);
 }
 
-.greenflow.is-visible .greenflow-node {
-  transition: opacity 480ms ease 700ms;
-  opacity: 0.9;
-}
-
-.greenflow-node--hub {
+.greenflow-traveler {
   opacity: 0;
-}
-
-.greenflow.is-visible .greenflow-node--hub {
-  transition-delay: 400ms;
+  color: var(--color-brand);
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--color-brand) 55%, transparent));
 }
 
 .greenflow-check {
   opacity: 0;
+  color: var(--color-brand-dark);
 }
 
-.greenflow.is-visible .greenflow-check {
-  transition: opacity 400ms ease 900ms;
-  opacity: 1;
+.greenflow-mask-left {
+  mask-image: linear-gradient(90deg, transparent 0%, black 28%, black 100%);
 }
 
-.greenflow-pulse {
-  fill: currentColor;
-  opacity: 0;
+.greenflow-mask-right {
+  mask-image: linear-gradient(90deg, black 0%, black 72%, transparent 100%);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .greenflow--ambient.is-visible .greenflow-path--a {
-    animation: greenflow-dash 22s linear infinite;
-  }
-
-  .greenflow--ambient.is-visible .greenflow-path--b {
-    animation: greenflow-dash 28s linear infinite reverse;
-  }
-
-  .greenflow--hydronic.is-visible .greenflow-pulse {
-    animation: greenflow-pulse 4.8s ease-in-out infinite;
-    animation-delay: 1.2s;
-  }
-}
-
-@keyframes greenflow-dash {
-  to {
-    stroke-dashoffset: -1;
-  }
-}
-
-@keyframes greenflow-pulse {
-  0%,
-  100% {
-    opacity: 0;
-    transform: scale(0.7);
-  }
-  35% {
-    opacity: 0.85;
-    transform: scale(1);
-  }
-  70% {
-    opacity: 0;
-    transform: scale(1.6);
-  }
+.greenflow-mask-center {
+  mask-image: radial-gradient(ellipse 75% 70% at 68% 45%, black, transparent 80%);
 }
 
 @media (max-width: 767px) {
-  .greenflow {
-    opacity: 0.032;
+  .greenflow-grid {
+    opacity: 0.045;
   }
 
-  .greenflow--ambient .greenflow-path {
-    animation: none !important;
+  .greenflow-paths {
+    opacity: 0.11;
+  }
+
+  .greenflow--strong .greenflow-paths {
+    opacity: 0.13;
+  }
+
+  .greenflow-traveler {
+    filter: none;
   }
 }
 
 .photo-flow {
-  color: color-mix(in srgb, var(--color-brand) 55%, var(--color-brand-dark));
-  opacity: 0.35;
+  color: var(--color-brand-dark);
+  opacity: 0.55;
 }
 
 .photo-flow__path {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  pathLength: 1;
+  opacity: 0.55;
 }
 
-.photo-flow.is-visible .photo-flow__path {
-  transition: stroke-dashoffset 1.35s cubic-bezier(0.22, 1, 0.36, 1);
-  stroke-dashoffset: 0;
-}
-
-.photo-flow__node {
-  opacity: 0;
-}
-
-.photo-flow.is-visible .photo-flow__node {
-  transition: opacity 400ms ease 900ms;
-  opacity: 1;
+.photo-flow__node,
+.photo-flow__traveler {
+  opacity: 0.85;
 }
 
 .trust-facts {

@@ -230,7 +230,7 @@ export function ServicePage({ slug }: ServicePageProps) {
         </Container>
       </Section>
 
-      <GreenFlowSection variant={flow} ambient className="bg-paper">
+      <GreenFlowSection variant={flow} ambient intensity="strong" className="bg-paper">
         <Section className="!bg-transparent">
           <Container className="grid gap-12 lg:grid-cols-12">
             <div className="lg:col-span-5">
@@ -265,7 +265,7 @@ export function ServicePage({ slug }: ServicePageProps) {
         </Section>
       </GreenFlowSection>
 
-      <GreenFlowSection variant={flow} mask="left" className="section-grain">
+      <GreenFlowSection variant={flow} ambient mask="left" intensity="strong" className="section-grain">
         <Section className="!bg-transparent">
           <Container className="grid gap-8 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-7">

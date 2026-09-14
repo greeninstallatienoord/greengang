@@ -43,7 +43,7 @@ export function AreaIndexPage() {
       />
 
       <section className="relative overflow-hidden border-b border-line bg-paper">
-        <TechnicalBackdrop variant="regional" ambient mask="right" />
+        <TechnicalBackdrop variant="regional" ambient mask="left" intensity="strong" />
         <Container className="relative z-[1] py-6 sm:py-8 lg:py-9">
           <Breadcrumbs
             items={[
@@ -71,7 +71,7 @@ export function AreaIndexPage() {
         </Container>
       </section>
 
-      <GreenFlowSection variant="regional" mask="right">
+      <GreenFlowSection variant="regional" ambient mask="left" intensity="strong">
         <Section className="!bg-transparent !py-6 sm:!py-8 lg:!py-10">
           <Container>
             <div className="max-w-2xl">
@@ -86,7 +86,7 @@ export function AreaIndexPage() {
         </Section>
       </GreenFlowSection>
 
-      <GreenFlowSection variant="regional" ambient mask="left" className="bg-paper">
+      <GreenFlowSection variant="regional" ambient mask="left" intensity="strong" className="bg-paper">
         <Section className="!bg-transparent !py-6 sm:!py-8 lg:!py-10">
           <Container>
             <div className="grid gap-7 lg:grid-cols-12 lg:items-start lg:gap-10 xl:gap-12">

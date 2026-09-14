@@ -58,7 +58,7 @@ export function CrossLinks({
   if (links.length === 0) return null
 
   return (
-    <GreenFlowSection variant="service" mask="right" className={cn('bg-paper', className)}>
+    <GreenFlowSection variant="service" ambient mask="left" className={cn('bg-paper', className)}>
       <Section className="!bg-transparent">
         <Container>
           <Reveal>

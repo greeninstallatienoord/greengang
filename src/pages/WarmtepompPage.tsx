@@ -86,7 +86,7 @@ export function WarmtepompPage() {
       <HeatPumpIsde />
       <BrandShowcase category="warmtepomp" brands={heatPumpBrands} />
 
-      <GreenFlowSection variant="thermal" ambient className="section-soft">
+      <GreenFlowSection variant="thermal" ambient intensity="strong" className="section-soft">
         <Section className="!bg-transparent">
           <Container className="grid gap-10 lg:grid-cols-12">
             <div className="lg:col-span-5">
@@ -123,7 +123,7 @@ export function WarmtepompPage() {
         </Section>
       </GreenFlowSection>
 
-      <GreenFlowSection variant="thermal" mask="left" className="bg-paper section-grain">
+      <GreenFlowSection variant="thermal" ambient mask="left" intensity="strong" className="bg-paper section-grain">
         <Section className="!bg-transparent">
           <Container className="grid gap-8 lg:grid-cols-12 lg:items-start">
             <div className="lg:col-span-6">

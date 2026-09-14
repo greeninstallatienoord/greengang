@@ -46,7 +46,7 @@ export function TrustSection({ flow = 'service' }: TrustSectionProps) {
       notes.length > 1)
 
   return (
-    <GreenFlowSection variant={flow} ambient mask="right" className="bg-paper">
+    <GreenFlowSection variant={flow} ambient mask="left" intensity="strong" className="bg-paper">
       <Section className="!bg-transparent">
         <Container>
           <div className="grid gap-8 lg:grid-cols-12 lg:items-start lg:gap-12">

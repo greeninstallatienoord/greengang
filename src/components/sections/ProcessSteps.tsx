@@ -145,7 +145,7 @@ export function ProcessSteps({ className }: ProcessStepsProps) {
   const headingId = useId()
 
   return (
-    <GreenFlowSection variant="service" mask="right" className={className}>
+    <GreenFlowSection variant="service" ambient mask="left" intensity="strong" className={className}>
       <Section className="!bg-transparent" aria-labelledby={headingId}>
         <Container>
           <Reveal>

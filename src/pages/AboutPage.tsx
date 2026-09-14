@@ -65,7 +65,7 @@ export function AboutPage() {
         actions={<CtaPair />}
       />
 
-      <GreenFlowSection variant="regional" ambient mask="right" className={cn(aboutSection, 'section-grain')}>
+      <GreenFlowSection variant="regional" ambient mask="left" intensity="strong" className={cn(aboutSection, 'section-grain')}>
         <Section className="!bg-transparent !py-0">
           <Container>
             <div className="grid gap-7 lg:grid-cols-12 lg:items-start lg:gap-10">

@@ -8,6 +8,7 @@ import type { LucideIcon } from 'lucide-react'
 import { site } from '../../data/site'
 import { cn } from '../../lib/cn'
 import { Container } from '../Container'
+import { GreenFlowSection } from '../greenflow/TechnicalBackdrop'
 import { Heading } from '../Heading'
 import { Reveal } from '../Reveal'
 import { Section } from '../Section'
@@ -28,7 +29,7 @@ function BenefitCard({
   return (
     <article
       className={cn(
-        'flex h-full flex-col border border-line bg-surface p-5 transition-[border-color,transform,box-shadow] duration-[var(--duration-fast)]',
+        'flex h-full flex-col border border-line bg-surface/90 p-5 transition-[border-color,transform,box-shadow] duration-[var(--duration-fast)]',
         'motion-safe:hover:-translate-y-0.5 motion-safe:hover:border-ink/20 motion-safe:hover:shadow-[var(--shadow-card)]',
         className,
       )}
@@ -73,37 +74,45 @@ function WhyBenefitList() {
 
 export function WhyHome() {
   return (
-    <Section className="bg-paper">
-      <Container>
-        <div className="lg:grid lg:grid-cols-12 lg:items-start lg:gap-10 xl:gap-12">
-          <Reveal className="lg:col-span-5">
-            <div className="max-w-xl">
-              <p className="eyebrow">Waarom wij</p>
-              <Heading
-                as="h2"
-                className="mt-2.5 text-balance text-[clamp(1.35rem,5.2vw,2.15rem)] sm:mt-3 sm:text-[clamp(1.4rem,2.8vw,2.15rem)]"
-              >
-                Waarom Green Installatie Noord
-              </Heading>
-              <p className="lead mt-3 sm:mt-4">{site.copy.whyIntro}</p>
-            </div>
-          </Reveal>
+    <GreenFlowSection
+      variant="airflow"
+      ambient
+      mask="left"
+      intensity="strong"
+      className="bg-paper"
+    >
+      <Section className="!bg-transparent">
+        <Container>
+          <div className="lg:grid lg:grid-cols-12 lg:items-start lg:gap-10 xl:gap-12">
+            <Reveal className="lg:col-span-5">
+              <div className="max-w-xl">
+                <p className="eyebrow">Waarom wij</p>
+                <Heading
+                  as="h2"
+                  className="mt-2.5 text-balance text-[clamp(1.35rem,5.2vw,2.15rem)] sm:mt-3 sm:text-[clamp(1.4rem,2.8vw,2.15rem)]"
+                >
+                  Waarom Green Installatie Noord
+                </Heading>
+                <p className="lead mt-3 sm:mt-4">{site.copy.whyIntro}</p>
+              </div>
+            </Reveal>
 
-          <div className="mt-7 min-[390px]:mt-8 lg:col-span-7 lg:mt-0">
-            <WhyBenefitList />
-            <ul className="hidden gap-3.5 lg:grid lg:grid-cols-2">
-              {site.copy.trust.map((item, index) => {
-                const Icon = icons[index] ?? Headphones
-                return (
-                  <li key={item.title}>
-                    <BenefitCard title={item.title} text={item.text} Icon={Icon} />
-                  </li>
-                )
-              })}
-            </ul>
+            <div className="mt-7 min-[390px]:mt-8 lg:col-span-7 lg:mt-0">
+              <WhyBenefitList />
+              <ul className="hidden gap-3.5 lg:grid lg:grid-cols-2">
+                {site.copy.trust.map((item, index) => {
+                  const Icon = icons[index] ?? Headphones
+                  return (
+                    <li key={item.title}>
+                      <BenefitCard title={item.title} text={item.text} Icon={Icon} />
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
           </div>
-        </div>
-      </Container>
-    </Section>
+        </Container>
+      </Section>
+    </GreenFlowSection>
   )
 }

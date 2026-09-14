@@ -10,7 +10,7 @@ import { Section } from '../Section'
 
 export function LocalSection() {
   return (
-    <GreenFlowSection variant="regional" ambient mask="left" className="bg-paper section-grain">
+    <GreenFlowSection variant="regional" ambient mask="left" intensity="strong" className="bg-paper section-grain">
       <Section className="!bg-transparent">
         <Container>
           <Reveal>

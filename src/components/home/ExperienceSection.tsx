@@ -58,7 +58,7 @@ function PracticeStoryList() {
 
 export function ExperienceSection() {
   return (
-    <GreenFlowSection variant="thermal" ambient mask="left" className="bg-paper">
+    <GreenFlowSection variant="thermal" ambient mask="left" intensity="strong" className="bg-paper">
       <Section className="!bg-transparent">
         <Container>
           <div className="grid items-center gap-5 min-[390px]:gap-6 lg:grid-cols-12 lg:gap-10 xl:gap-12">
