@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { cn } from '../../lib/cn'
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
-import { gsap, registerGreenFlowGsap, ScrollTrigger } from './gsapSetup'
 
 type PhotoFlowPathProps = {
   className?: string
@@ -18,64 +17,75 @@ export function PhotoFlowPath({ className }: PhotoFlowPathProps) {
   useEffect(() => {
     const root = rootRef.current
     if (!root) return
-    registerGreenFlowGsap()
+    let cancelled = false
+    let revert: (() => void) | undefined
 
-    const path = root.querySelector<SVGPathElement>('.photo-flow__path')
-    const node = root.querySelector<SVGCircleElement>('.photo-flow__node')
-    const traveler = root.querySelector<SVGCircleElement>('.photo-flow__traveler')
-    if (!path || !node || !traveler) return
+    void import('./gsapSetup').then(({ gsap, registerGreenFlowGsap, ScrollTrigger }) => {
+      if (cancelled || !rootRef.current) return
+      registerGreenFlowGsap()
 
-    const length = path.getTotalLength()
-    const ctx = gsap.context(() => {
-      if (reduced) {
-        gsap.set(path, { strokeDasharray: length, strokeDashoffset: 0, opacity: 1 })
-        gsap.set([node, traveler], { opacity: 0.85 })
-        return
-      }
+      const path = root.querySelector<SVGPathElement>('.photo-flow__path')
+      const node = root.querySelector<SVGCircleElement>('.photo-flow__node')
+      const traveler = root.querySelector<SVGCircleElement>('.photo-flow__traveler')
+      if (!path || !node || !traveler) return
 
-      gsap.set(path, { strokeDasharray: length, strokeDashoffset: length, opacity: 1 })
-      gsap.set(node, { opacity: 0, scale: 0.5 })
-      gsap.set(traveler, { opacity: 0 })
+      const length = path.getTotalLength()
+      const ctx = gsap.context(() => {
+        if (reduced) {
+          gsap.set(path, { strokeDasharray: length, strokeDashoffset: 0, opacity: 1 })
+          gsap.set([node, traveler], { opacity: 0.85 })
+          return
+        }
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: root,
-          start: 'top 75%',
-          once: true,
-        },
-      })
+        gsap.set(path, { strokeDasharray: length, strokeDashoffset: length, opacity: 1 })
+        gsap.set(node, { opacity: 0, scale: 0.5 })
+        gsap.set(traveler, { opacity: 0, visibility: 'hidden' })
 
-      tl.to(path, { strokeDashoffset: 0, duration: 1.4, ease: 'power2.out' })
-        .to(node, { opacity: 1, scale: 1, duration: 0.35 }, '-=0.35')
-        .add(() => {
-          gsap.set(traveler, { opacity: 0.95 })
-          gsap.to(traveler, {
-            motionPath: {
-              path,
-              align: path,
-              alignOrigin: [0.5, 0.5],
-            },
-            duration: 7.5,
-            ease: 'none',
-            repeat: -1,
-          })
-          gsap.set(path, {
-            strokeDasharray: `${Math.max(40, length * 0.12)} ${length}`,
-          })
-          gsap.to(path, {
-            strokeDashoffset: -length,
-            duration: 14,
-            ease: 'none',
-            repeat: -1,
-          })
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: root,
+            start: 'top 75%',
+            once: true,
+          },
         })
-    }, root)
+
+        tl.to(path, { strokeDashoffset: 0, duration: 1.4, ease: 'power2.out' })
+          .to(node, { opacity: 1, scale: 1, duration: 0.35 }, '-=0.35')
+          .add(() => {
+            gsap.set(traveler, { opacity: 0.95, visibility: 'visible' })
+            gsap.to(traveler, {
+              motionPath: {
+                path,
+                align: path,
+                alignOrigin: [0.5, 0.5],
+              },
+              duration: 7.5,
+              ease: 'none',
+              repeat: -1,
+            })
+            gsap.set(path, {
+              strokeDasharray: `${Math.max(40, length * 0.12)} ${length}`,
+            })
+            gsap.to(path, {
+              strokeDashoffset: -length,
+              duration: 14,
+              ease: 'none',
+              repeat: -1,
+            })
+          })
+      }, root)
+
+      revert = () => {
+        ctx.revert()
+        ScrollTrigger.getAll().forEach((trigger) => {
+          if (trigger.trigger === root) trigger.kill()
+        })
+      }
+    })
 
     return () => {
-      ctx.revert()
-      ScrollTrigger.getAll().forEach((trigger) => {
-        if (trigger.trigger === root) trigger.kill()
-      })
+      cancelled = true
+      revert?.()
     }
   }, [reduced])
 

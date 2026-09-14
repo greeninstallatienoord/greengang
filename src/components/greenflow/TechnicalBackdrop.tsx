@@ -1,7 +1,6 @@
 import { useEffect, useId, useRef, type ReactNode } from 'react'
 import { cn } from '../../lib/cn'
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion'
-import { gsap, registerGreenFlowGsap, ScrollTrigger } from './gsapSetup'
 
 export type GreenFlowVariant =
   | 'airflow'
@@ -42,157 +41,163 @@ export function TechnicalBackdrop({
   useEffect(() => {
     const root = rootRef.current
     if (!root) return
+    let cancelled = false
+    let revert: (() => void) | undefined
 
-    registerGreenFlowGsap()
+    void import('./gsapSetup').then(({ gsap, registerGreenFlowGsap, ScrollTrigger }) => {
+      if (cancelled || !rootRef.current) return
+      registerGreenFlowGsap()
 
-    const paths = Array.from(
-      root.querySelectorAll<SVGPathElement>('.greenflow-path'),
-    )
-    const nodes = Array.from(
-      root.querySelectorAll<SVGCircleElement>('.greenflow-node'),
-    )
-    const travelers = Array.from(
-      root.querySelectorAll<SVGCircleElement>('.greenflow-traveler'),
-    )
-    const check = root.querySelector<SVGPathElement>('.greenflow-check')
-    const hub = root.querySelector<SVGCircleElement>('.greenflow-node--hub')
+      const paths = Array.from(
+        root.querySelectorAll<SVGPathElement>('.greenflow-path'),
+      )
+      const nodes = Array.from(
+        root.querySelectorAll<SVGCircleElement>('.greenflow-node'),
+      )
+      const travelers = Array.from(
+        root.querySelectorAll<SVGCircleElement>('.greenflow-traveler'),
+      )
+      const check = root.querySelector<SVGPathElement>('.greenflow-check')
+      const hub = root.querySelector<SVGCircleElement>('.greenflow-node--hub')
 
-    const ctx = gsap.context(() => {
-      // Prepare draw state
-      paths.forEach((path) => {
-        const length = path.getTotalLength()
-        gsap.set(path, {
-          strokeDasharray: length,
-          strokeDashoffset: draw && !reduced ? length : 0,
-          opacity: 1,
+      const ctx = gsap.context(() => {
+        paths.forEach((path) => {
+          const length = path.getTotalLength()
+          gsap.set(path, {
+            strokeDasharray: length,
+            strokeDashoffset: draw && !reduced ? length : 0,
+            opacity: 1,
+          })
         })
-      })
-      gsap.set(nodes, { opacity: reduced ? 0.85 : 0, scale: reduced ? 1 : 0.6 })
-      gsap.set(travelers, { opacity: 0, visibility: 'hidden' })
-      if (check) gsap.set(check, { opacity: reduced ? 0.9 : 0 })
+        gsap.set(nodes, { opacity: reduced ? 0.85 : 0, scale: reduced ? 1 : 0.6 })
+        gsap.set(travelers, { opacity: 0, visibility: 'hidden' })
+        if (check) gsap.set(check, { opacity: reduced ? 0.9 : 0 })
 
-      if (reduced) {
-        gsap.set(paths, { strokeDashoffset: 0 })
-        return
-      }
+        if (reduced) {
+          gsap.set(paths, { strokeDashoffset: 0 })
+          return
+        }
 
-      const isMobile = window.matchMedia('(max-width: 767px)').matches
-      const travelerCount = isMobile
-        ? Math.min(2, travelers.length)
-        : travelers.length
-      const activeTravelers = travelers.slice(0, travelerCount)
+        const isMobile = window.matchMedia('(max-width: 767px)').matches
+        const activeTravelers = travelers.slice(0, isMobile ? 2 : travelers.length)
 
-      const entry = gsap.timeline({
-        scrollTrigger: {
-          trigger: root,
-          start: 'top 78%',
-          once: true,
-        },
-      })
+        const entry = gsap.timeline({
+          scrollTrigger: {
+            trigger: root,
+            start: 'top 78%',
+            once: true,
+          },
+        })
 
-      paths.forEach((path, index) => {
+        paths.forEach((path, index) => {
+          entry.to(
+            path,
+            {
+              strokeDashoffset: 0,
+              duration: 1.25,
+              ease: 'power2.out',
+            },
+            index * 0.12,
+          )
+        })
+
         entry.to(
-          path,
+          nodes,
           {
-            strokeDashoffset: 0,
-            duration: 1.25,
+            opacity: 0.9,
+            scale: 1,
+            duration: 0.45,
+            stagger: 0.08,
             ease: 'power2.out',
           },
-          index * 0.12,
+          '-=0.55',
         )
-      })
 
-      entry.to(
-        nodes,
-        {
-          opacity: 0.9,
-          scale: 1,
-          duration: 0.45,
-          stagger: 0.08,
-          ease: 'power2.out',
-        },
-        '-=0.55',
-      )
-
-      if (check) {
-        entry.to(check, { opacity: 1, duration: 0.35 }, '-=0.2')
-      }
-
-      if (!ambient) return
-
-      const startAmbient = () => {
-        paths.forEach((path, index) => {
-          const length = path.getTotalLength()
-          const dash = Math.max(36, length * 0.1)
-          gsap.set(path, {
-            strokeDasharray: `${dash} ${length}`,
-            strokeDashoffset: 0,
-          })
-          gsap.to(path, {
-            strokeDashoffset: -length,
-            duration: variant === 'airflow' ? 12 + index * 1.4 : 10 + index * 1.2,
-            ease: 'none',
-            repeat: -1,
-          })
-        })
-
-        activeTravelers.forEach((dot, index) => {
-          const path = paths[index % paths.length]
-          if (!path) return
-          gsap.set(dot, {
-            opacity: intensity === 'strong' ? 0.9 : 0.75,
-            visibility: 'visible',
-          })
-          gsap.to(dot, {
-            motionPath: {
-              path,
-              align: path,
-              alignOrigin: [0.5, 0.5],
-              autoRotate: false,
-            },
-            duration:
-              variant === 'service'
-                ? 8 + index * 1.5
-                : variant === 'airflow'
-                  ? 11 + index * 1.8
-                  : 9 + index * 1.4,
-            ease: 'none',
-            repeat: -1,
-            delay: index * 0.9,
-          })
-        })
-
-        if (hub) {
-          gsap.to(hub, {
-            scale: 1.5,
-            opacity: 0.4,
-            duration: 1.7,
-            yoyo: true,
-            repeat: -1,
-            ease: 'sine.inOut',
-            transformOrigin: '50% 50%',
-          })
+        if (check) {
+          entry.to(check, { opacity: 1, duration: 0.35 }, '-=0.2')
         }
 
-        if (check && variant === 'service') {
-          gsap.to(check, {
-            opacity: 0.4,
-            duration: 1.15,
-            yoyo: true,
-            repeat: -1,
-            ease: 'sine.inOut',
-          })
-        }
-      }
+        if (!ambient) return
 
-      entry.eventCallback('onComplete', startAmbient)
-    }, root)
+        const startAmbient = () => {
+          paths.forEach((path, index) => {
+            const length = path.getTotalLength()
+            const dash = Math.max(36, length * 0.1)
+            gsap.set(path, {
+              strokeDasharray: `${dash} ${length}`,
+              strokeDashoffset: 0,
+            })
+            gsap.to(path, {
+              strokeDashoffset: -length,
+              duration: variant === 'airflow' ? 12 + index * 1.4 : 10 + index * 1.2,
+              ease: 'none',
+              repeat: -1,
+            })
+          })
+
+          activeTravelers.forEach((dot, index) => {
+            const path = paths[index % paths.length]
+            if (!path) return
+            gsap.set(dot, {
+              opacity: intensity === 'strong' ? 0.9 : 0.75,
+              visibility: 'visible',
+            })
+            gsap.to(dot, {
+              motionPath: {
+                path,
+                align: path,
+                alignOrigin: [0.5, 0.5],
+                autoRotate: false,
+              },
+              duration:
+                variant === 'service'
+                  ? 8 + index * 1.5
+                  : variant === 'airflow'
+                    ? 11 + index * 1.8
+                    : 9 + index * 1.4,
+              ease: 'none',
+              repeat: -1,
+              delay: index * 0.9,
+            })
+          })
+
+          if (hub) {
+            gsap.to(hub, {
+              scale: 1.5,
+              opacity: 0.4,
+              duration: 1.7,
+              yoyo: true,
+              repeat: -1,
+              ease: 'sine.inOut',
+              transformOrigin: '50% 50%',
+            })
+          }
+
+          if (check && variant === 'service') {
+            gsap.to(check, {
+              opacity: 0.4,
+              duration: 1.15,
+              yoyo: true,
+              repeat: -1,
+              ease: 'sine.inOut',
+            })
+          }
+        }
+
+        entry.eventCallback('onComplete', startAmbient)
+      }, root)
+
+      revert = () => {
+        ctx.revert()
+        ScrollTrigger.getAll().forEach((trigger) => {
+          if (trigger.trigger === root) trigger.kill()
+        })
+      }
+    })
 
     return () => {
-      ctx.revert()
-      ScrollTrigger.getAll().forEach((trigger) => {
-        if (trigger.trigger === root) trigger.kill()
-      })
+      cancelled = true
+      revert?.()
     }
   }, [ambient, draw, intensity, reduced, variant])
 
