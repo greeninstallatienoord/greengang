@@ -44,6 +44,7 @@ const serviceFlow: Record<ServiceSlug, GreenFlowVariant> = {
 type ServiceShot = {
   asset: MediaAsset
   caption: string
+  fit?: 'cover' | 'contain'
 }
 
 const serviceStory: Record<
@@ -60,8 +61,9 @@ const serviceStory: Record<
       'Vervanging speelt als de ketel storingen geeft, het einde van de levensduur nadert, of de woning een andere opstelling vraagt. We beginnen bij de bestaande situatie.',
     photos: [
       {
-        asset: pageImages.cvHero,
-        caption: 'Cv-ketelopstelling uit eigen installatiewerk.',
+        asset: pageImages.cvContext,
+        caption: 'Controle van een bestaande cv-ketel en installatie.',
+        fit: 'cover',
       },
     ],
   },
@@ -88,7 +90,7 @@ const serviceStory: Record<
       'Soms is een controle genoeg. Soms is er een storing. En soms is vervanging logischer dan nog een reparatie. U hoort wat we zien en wat de vervolgstap is.',
     photos: [
       {
-        asset: pageImages.serviceHero,
+        asset: pageImages.serviceContext,
         caption: 'Service en onderhoud aan een bestaande installatie. Foto uit eigen werk.',
       },
     ],
@@ -131,6 +133,7 @@ export function ServicePage({ slug }: ServicePageProps) {
         intro={service.heroText}
         image={serviceImage(slug)}
         imageVariant="project"
+        imageFit={slug === 'service-onderhoud' ? 'cover' : undefined}
         actions={
           <CtaPair quoteTo={quoteTo} appointmentTo={appointmentTo} showCall />
         }
@@ -177,21 +180,29 @@ export function ServicePage({ slug }: ServicePageProps) {
           </div>
           {story.photos.length > 0 ? (
             <div className="grid gap-8 lg:col-span-6">
-              {story.photos.map((shot) => (
-                <Reveal key={shot.caption} image>
-                  <figure>
-                    <MediaImage
-                      asset={shot.asset}
-                      variant="project"
-                      className="mx-auto w-fit max-w-full max-h-[22rem] rounded-none sm:max-h-[24rem] lg:max-h-[26rem]"
-                      sizes="(min-width: 1024px) 42vw, 100vw"
-                    />
-                    <figcaption className="mt-3 text-sm text-ink-muted">
-                      {shot.caption}
-                    </figcaption>
-                  </figure>
-                </Reveal>
-              ))}
+              {story.photos.map((shot) => {
+                const cover = shot.fit === 'cover'
+                return (
+                  <Reveal key={shot.caption} image>
+                    <figure className={cover ? 'w-full' : 'w-fit max-w-full'}>
+                      <MediaImage
+                        asset={shot.asset}
+                        variant="project"
+                        fit={shot.fit}
+                        className={
+                          cover
+                            ? 'w-full max-h-[22rem] rounded-none sm:max-h-[24rem] lg:max-h-[26rem]'
+                            : 'w-fit max-w-full max-h-[22rem] rounded-none sm:max-h-[24rem] lg:max-h-[26rem]'
+                        }
+                        sizes="(min-width: 1024px) 42vw, 100vw"
+                      />
+                      <figcaption className="mt-2.5 text-left text-sm leading-snug text-ink-muted">
+                        {shot.caption}
+                      </figcaption>
+                    </figure>
+                  </Reveal>
+                )
+              })}
             </div>
           ) : null}
         </Container>

@@ -97,10 +97,13 @@ export function PageHero({
               asset={image}
               alt={imageAlt}
               variant={variant}
+              fit={imageFit}
               className={cn(
                 documentPhoto
                   ? cn(
-                      'mx-auto w-fit max-w-full',
+                      imageFit === 'cover'
+                        ? 'mx-auto w-full max-w-full'
+                        : 'mx-auto w-fit max-w-full',
                       compact
                         ? 'max-h-[17.5rem] sm:max-h-[20rem] lg:max-h-[24rem]'
                         : 'max-h-[18.5rem] sm:max-h-[22rem] lg:max-h-[26rem]',

@@ -14,7 +14,10 @@ import aircoNok from '../assets/images/display/airco-nok.jpg'
 import aircoPlatdak from '../assets/images/display/airco-platdak.jpg'
 import aircoMuur from '../assets/images/display/airco-muur.jpg'
 import cvIntergas from '../assets/images/display/cv-intergas.jpg'
+import cvKetelControle from '../assets/images/display/cv-ketel-controle.jpg'
 import cvOpstelling from '../assets/images/display/cv-opstelling.jpg'
+import serviceOnderhoud from '../assets/images/display/service-onderhoud.jpg'
+import serviceOnderhoudHero from '../assets/images/display/service-onderhoud-hero.jpg'
 import warmtepompIntergas from '../assets/images/display/warmtepomp-intergas.jpg'
 import brl100Logo from '../assets/images/trust/brl100-logo.avif'
 import covrijLogo from '../assets/images/trust/covrij-logo.avif'
@@ -188,6 +191,30 @@ export const workPhotos = {
     '50% 42%',
     '50% 40%',
   ),
+  cvKetelControle: photo(
+    cvKetelControle,
+    1122,
+    1402,
+    'Monteur controleert een wandhangende cv-ketel met koperen leidingwerk en rood expansievat',
+    '46% 48%',
+    '42% 50%',
+  ),
+  serviceOnderhoud: photo(
+    serviceOnderhoud,
+    1122,
+    1402,
+    'Monteur voert onderhoud uit aan een wandhangende cv-ketel met meetapparatuur en open gereedschapskoffer',
+    '58% 42%',
+    '55% 40%',
+  ),
+  serviceOnderhoudHero: photo(
+    serviceOnderhoudHero,
+    1122,
+    1402,
+    'Monteur controleert een wandhangende cv-ketel met tablet, gereedschapstas en expansievat',
+    '52% 40%',
+    '50% 38%',
+  ),
 } as const satisfies Record<string, MediaAsset>
 
 export const pageImages = {
@@ -200,10 +227,12 @@ export const pageImages = {
   aboutHouse: workPhotos.aircoBeugel,
   aboutCraft: workPhotos.aircoMuur,
   cvHero: workPhotos.cvIntergas,
+  cvContext: workPhotos.cvKetelControle,
   aircoHero: workPhotos.aircoZolder,
   aircoOutdoor: workPhotos.aircoGevel,
   warmtepompHero: workPhotos.cvOpstelling,
-  serviceHero: workPhotos.cvOpstelling,
+  serviceHero: workPhotos.serviceOnderhoudHero,
+  serviceContext: workPhotos.serviceOnderhoud,
 } as const
 
 export const serviceImages: Record<ServiceSlug, MediaAsset> = {

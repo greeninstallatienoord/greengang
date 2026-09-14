@@ -41,7 +41,7 @@ export const site = {
   },
   copy: {
     eyebrow: serviceArea.eyebrow,
-    heroTitle: 'CV-ketel, airco en warmtepomp.',
+    heroTitle: 'WARMTEPOMP, CV‑KETEL EN AIRCO.',
     heroTitleLead: 'CV-ketel, airco',
     heroTitleLeadRest: 'en warmtepomp.',
     heroTitleSupport: '',
