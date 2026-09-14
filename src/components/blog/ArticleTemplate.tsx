@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import {
   blogCategoryLabels,
@@ -20,20 +21,76 @@ import { Heading } from '../Heading'
 import { postImage } from '../../data/media'
 import { MediaImage } from '../media/MediaImage'
 import { PageFaq } from '../page/PageFaq'
-import { PageHero } from '../page/PageHero'
 import { RelatedArticles } from '../page/RelatedArticles'
 import { RelatedServices } from '../page/RelatedServices'
 import { Reveal } from '../Reveal'
 import { ArticleWorkNote } from './ArticleWorkNote'
+import { ArticleReadingProgress, ArticleToc } from './ArticleToc'
+import { Breadcrumbs } from '../Breadcrumbs'
 import { CTASection } from '../sections/CTASection'
-import { Section } from '../Section'
 import { PageMeta } from '../seo/PageMeta'
+import { cn } from '../../lib/cn'
 
 type ArticleTemplateProps = {
   post: BlogPost
 }
 
+function workNoteSubject(category: BlogPost['category']): string {
+  switch (category) {
+    case 'cv-ketel':
+      return 'cv-ketelinstallaties'
+    case 'airco':
+      return 'airco-installaties'
+    case 'warmtepomp':
+      return 'warmtepompinstallaties'
+    case 'onderhoud':
+      return 'onderhoudsprojecten'
+    default:
+      return 'installaties'
+  }
+}
+
+function articleCtaCopy(serviceSlug: string | undefined): {
+  title: string
+  text: string
+  quoteTo: string
+} {
+  switch (serviceSlug) {
+    case 'cv-ketel':
+      return {
+        title: 'Hulp nodig bij uw cv-ketel?',
+        text: 'Twijfelt u over vervanging of de staat van uw ketel? We kijken graag naar uw situatie.',
+        quoteTo: '/offerte-aanvragen?dienst=cv-ketel',
+      }
+    case 'airco':
+      return {
+        title: 'Hulp nodig bij airconditioning?',
+        text: 'Twijfelt u over een airco voor koelen én verwarmen? We kijken graag naar uw situatie.',
+        quoteTo: '/offerte-aanvragen?dienst=airco',
+      }
+    case 'warmtepomp':
+      return {
+        title: 'Hulp nodig bij een warmtepomp?',
+        text: 'Twijfelt u of een warmtepomp bij uw woning past? We kijken graag mee.',
+        quoteTo: '/offerte-aanvragen?dienst=warmtepomp',
+      }
+    case 'service-onderhoud':
+      return {
+        title: 'Hulp nodig bij service of onderhoud?',
+        text: 'Voor onderhoud of een storing kunt u bij ons terecht — ook buiten kantooruren via de storingsdienst.',
+        quoteTo: '/offerte-aanvragen?dienst=service-onderhoud',
+      }
+    default:
+      return {
+        title: 'Hulp nodig bij uw installatie?',
+        text: 'Twijfelt u over uw cv-ketel, warmtepomp of airco? We kijken graag naar uw situatie.',
+        quoteTo: '/offerte-aanvragen',
+      }
+  }
+}
+
 export function ArticleTemplate({ post }: ArticleTemplateProps) {
+  const bodyRef = useRef<HTMLDivElement>(null)
   const related = blogPosts
     .filter((item) => post.relatedArticleSlugs.includes(item.slug))
     .slice(0, 3)
@@ -42,6 +99,14 @@ export function ArticleTemplate({ post }: ArticleTemplateProps) {
   const categoryLabel = blogCategoryLabels[post.category]
   const path = `/blog/${post.slug}`
   const minutes = estimateReadingMinutes(post)
+  const image = postImage(post)
+  const portrait = image.height >= image.width
+  const tocSections = post.sections.map((section) => ({
+    id: section.id,
+    heading: section.heading,
+  }))
+  const primaryService = relatedServices[0]
+  const cta = articleCtaCopy(primaryService?.slug)
   const jsonLd = [
     localBusinessJsonLd(),
     articleJsonLd(post),
@@ -60,145 +125,143 @@ export function ArticleTemplate({ post }: ArticleTemplateProps) {
         modifiedTime={post.updatedAt}
         jsonLd={jsonLd}
       />
-      <PageHero
-        compact
-        narrow
-        crumbs={[
-          { label: 'Home', href: '/' },
-          { label: 'Advies & kennis', href: '/blog' },
-          { label: categoryLabel, href: `/blog/categorie/${post.category}` },
-          { label: post.title, href: path },
-        ]}
-        eyebrow={categoryLabel}
-        title={post.title}
-        titleClassName="text-[clamp(1.45rem,3.2vw,2.35rem)]"
-        intro={post.intro}
-      >
-        <p className="mt-4 text-sm text-ink-muted">
-          Door {site.name} · bijgewerkt {formatNlDate(post.updatedAt)} · circa{' '}
-          {minutes} {minutes === 1 ? 'minuut' : 'minuten'} lezen
-        </p>
-      </PageHero>
 
-      <Section className="!py-7 sm:!py-9 lg:!py-11">
-        <Container>
-          <div className="mx-auto grid max-w-3xl gap-10 lg:mx-0 lg:max-w-none lg:grid-cols-[minmax(0,1fr)_minmax(12rem,15rem)] lg:gap-12 xl:grid-cols-[minmax(0,42rem)_minmax(12rem,15rem)] xl:justify-between">
-            <Reveal>
-              <div>
-                <MediaImage
-                  asset={postImage(post)}
-                  alt={post.imageAlt}
-                  variant="project"
-                  className="mb-8 mx-auto w-fit max-h-[min(70vw,22rem)] max-w-full sm:max-h-[26rem] lg:max-h-[30rem]"
-                  sizes="(min-width: 768px) 42rem, 100vw"
-                  priority
+      <ArticleReadingProgress targetRef={bodyRef} />
+
+      <article>
+        <header className="article-header border-b border-line bg-paper">
+          <Container className="article-shell">
+            <Breadcrumbs
+              items={[
+                { label: 'Home', href: '/' },
+                { label: 'Advies & kennis', href: '/blog' },
+                {
+                  label: categoryLabel,
+                  href: `/blog/categorie/${post.category}`,
+                },
+                { label: post.title, href: path },
+              ]}
+            />
+            <p className="eyebrow mt-5 sm:mt-6">{categoryLabel}</p>
+            <Heading as="h1" className="article-title mt-2.5 text-balance sm:mt-3">
+              {post.title}
+            </Heading>
+            <p className="article-dek mt-4 sm:mt-5">{post.intro}</p>
+            <p className="article-meta mt-4 sm:mt-5">
+              <span>Door {site.name}</span>
+              <span aria-hidden="true"> · </span>
+              <span>Bijgewerkt {formatNlDate(post.updatedAt)}</span>
+              <span aria-hidden="true"> · </span>
+              <span>
+                Circa {minutes} {minutes === 1 ? 'minuut' : 'minuten'} lezen
+              </span>
+            </p>
+          </Container>
+        </header>
+
+        <div className="article-body-band">
+          <Container className="article-shell py-7 sm:py-9 lg:py-11">
+            <div className="article-grid">
+              <div ref={bodyRef} className="article-main">
+                <Reveal image>
+                  <figure
+                    className={cn(
+                      'article-figure',
+                      portrait
+                        ? 'article-figure--portrait'
+                        : 'article-figure--landscape',
+                    )}
+                  >
+                    <MediaImage
+                      asset={image}
+                      alt={post.imageAlt}
+                      variant="project"
+                      className="article-figure__media"
+                      sizes="(min-width: 1024px) 48rem, 100vw"
+                      priority
+                    />
+                    <figcaption className="article-figure__caption">
+                      {post.imageAlt}
+                    </figcaption>
+                  </figure>
+                </Reveal>
+
+                <ArticleToc
+                  sections={tocSections}
+                  variant="mobile"
+                  className="mt-7 lg:hidden"
                 />
-                {post.sections.length > 1 ? (
-                  <nav
-                    aria-label="Inhoudsopgave"
-                    className="mb-8 border border-line bg-paper p-5 lg:hidden"
-                  >
-                    <h2 className="text-base font-semibold">Inhoud</h2>
-                    <ol className="mt-3 grid gap-2 text-sm">
-                      {post.sections.map((section) => (
-                        <li key={section.id}>
-                          <a
-                            href={`#${section.id}`}
-                            className="underline underline-offset-2"
-                          >
-                            {section.heading}
-                          </a>
-                        </li>
+
+                <div className="article-prose">
+                  {post.sections.map((section) => (
+                    <section
+                      key={section.id}
+                      id={section.id}
+                      className="article-section"
+                    >
+                      <Heading as="h2" className="article-prose__h2">
+                        {section.heading}
+                      </Heading>
+                      {section.paragraphs.map((paragraph) => (
+                        <p key={paragraph}>{paragraph}</p>
                       ))}
-                    </ol>
-                  </nav>
-                ) : null}
-                {post.sections.map((section) => (
-                  <article
-                    key={section.id}
-                    id={section.id}
-                    className="mb-8 scroll-mt-[calc(var(--header-offset)+0.75rem)]"
-                  >
-                    <Heading
-                      as="h2"
-                      className="!text-[clamp(1.25rem,2.2vw,1.65rem)]"
-                    >
-                      {section.heading}
-                    </Heading>
-                    {section.paragraphs.map((paragraph) => (
-                      <p key={paragraph} className="mt-3 text-ink-muted">
-                        {paragraph}
-                      </p>
-                    ))}
-                    {section.links ? <ContentLinks items={section.links} /> : null}
-                  </article>
-                ))}
-                <ArticleWorkNote />
+                      {section.links ? (
+                        <ContentLinks items={section.links} variant="resources" />
+                      ) : null}
+                    </section>
+                  ))}
+                </div>
+
+                <ArticleWorkNote subject={workNoteSubject(post.category)} />
+
                 {post.resources && post.resources.length > 0 ? (
-                  <aside className="mt-10 border border-line bg-paper p-5">
-                    <Heading
-                      as="h2"
-                      className="!text-[clamp(1.2rem,2vw,1.45rem)]"
-                    >
-                      Officiële bronnen
-                    </Heading>
-                    <p className="mt-2 text-sm text-ink-muted">
-                      Verwijzingen naar overheids- of vakbronnen bij dit onderwerp.
-                    </p>
-                    <ContentLinks items={post.resources} />
-                  </aside>
+                  <ContentLinks
+                    items={post.resources}
+                    variant="sources"
+                    className="mt-10"
+                    intro="Voor dit onderwerp verwijzen we naar onafhankelijke overheids- en vakbronnen."
+                  />
                 ) : null}
               </div>
-            </Reveal>
 
-            {post.sections.length > 1 ? (
-              <Reveal delay={50} className="hidden lg:block">
-                <aside className="sticky top-28">
-                  <nav
-                    aria-label="Inhoudsopgave"
-                    className="border border-line bg-paper p-5"
-                  >
-                    <h2 className="text-base font-semibold">Inhoud</h2>
-                    <ol className="mt-3 grid gap-2 text-sm">
-                      {post.sections.map((section) => (
-                        <li key={section.id}>
-                          <a
-                            href={`#${section.id}`}
-                            className="underline underline-offset-2"
-                          >
-                            {section.heading}
-                          </a>
-                        </li>
-                      ))}
-                    </ol>
-                  </nav>
-                  <p className="mt-4 text-sm">
+              <aside className="article-sidebar hidden lg:block">
+                <div className="article-sidebar__sticky">
+                  <ArticleToc sections={tocSections} variant="sidebar" />
+                  <p className="mt-5 text-sm">
                     <Link
                       to={`/blog/categorie/${post.category}`}
-                      className="font-semibold underline underline-offset-2"
+                      className="inline-flex items-center gap-1 font-semibold text-brand-dark transition-colors hover:text-ink"
                     >
                       Meer over {categoryLabel.toLowerCase()}
                     </Link>
                   </p>
-                </aside>
-              </Reveal>
-            ) : null}
-          </div>
-        </Container>
-      </Section>
+                </div>
+              </aside>
+            </div>
+          </Container>
+        </div>
+      </article>
 
-      <PageFaq items={faqItems} title="Vragen bij dit onderwerp" />
+      <PageFaq
+        items={faqItems}
+        title="Vragen bij dit onderwerp"
+        tone="paper"
+        compact
+        className="article-faq"
+      />
       <RelatedServices services={relatedServices} />
-      <RelatedArticles posts={related} title="Gerelateerde artikelen" />
+      <RelatedArticles
+        posts={related}
+        title={`Meer over ${categoryLabel.toLowerCase()}`}
+        compact
+      />
       <CTASection
         eyebrow="Advies"
-        title="Advies nodig over uw installatie?"
-        text="Bespreek uw situatie met Green Installatie Noord."
-        quoteTo={
-          relatedServices[0]
-            ? `/offerte-aanvragen?dienst=${relatedServices[0].slug}`
-            : '/offerte-aanvragen'
-        }
+        title={cta.title}
+        text={cta.text}
+        quoteTo={cta.quoteTo}
+        primaryLabel="Offerte aanvragen"
+        secondaryLabel="Afspraak aanvragen"
       />
     </>
   )

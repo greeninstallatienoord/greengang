@@ -1,18 +1,23 @@
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
-export function ArticleWorkNote() {
+type ArticleWorkNoteProps = {
+  /** Optional service-specific label, e.g. "cv-ketelinstallaties". */
+  subject?: string
+}
+
+export function ArticleWorkNote({ subject }: ArticleWorkNoteProps) {
   return (
-    <p className="mt-10 border-t border-line pt-6 text-sm leading-relaxed text-ink-muted">
-      Foto’s van plaatsingen staan bij elkaar op{' '}
-      <Link
-        to="/werk"
-        className="inline-flex items-center gap-1 font-semibold text-ink hover:text-brand-dark"
-      >
-        Werk uit de praktijk
-        <ArrowRight size={14} strokeWidth={1.75} aria-hidden="true" />
+    <aside className="article-work-note" aria-label="Werk uit de praktijk">
+      <p className="article-work-note__label">Uit de praktijk</p>
+      <p className="article-work-note__text">
+        Bekijk echte {subject ?? 'installaties'} van Green Installatie Noord.
+        Geen stockbeelden.
+      </p>
+      <Link to="/werk" className="article-work-note__link">
+        Bekijk projecten
+        <ArrowRight size={15} strokeWidth={2} aria-hidden="true" />
       </Link>
-      . Geen stockbeelden.
-    </p>
+    </aside>
   )
 }

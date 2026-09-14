@@ -32,7 +32,10 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
                 {item.label}
               </Link>
             ) : (
-              <span className="text-ink" aria-current="page">
+              <span
+                className="max-w-[min(100%,22rem)] text-ink sm:max-w-none"
+                aria-current="page"
+              >
                 {item.label}
               </span>
             )}
